@@ -25,7 +25,7 @@ return(
           <div className="bg-blue-600 p-1.5 rounded-lg text-white">
             <Plus size={20} className="rotate-45" />
           </div>
-          HealthOS
+          LifeMarkers
         </div>
 
         <div className="px-4 mb-8">
@@ -39,10 +39,7 @@ return(
         </div>
 
         <nav className="flex-1 px-3 space-y-1">
-          <NavItem icon={<LayoutDashboard size={20}/>} label="Dashboard" />
           <NavItem icon={<Users size={20}/>} label="Patients" active />
-          <NavItem icon={<Calendar size={20}/>} label="Appointments" />
-          <NavItem icon={<MessageSquare size={20}/>} label="Messages" />
         </nav>
 
         <div className="p-4 border-t border-slate-100">
@@ -59,7 +56,7 @@ return(
             <h1 className="text-2xl font-bold text-slate-800">Patients</h1>
             <p className="text-slate-500 text-sm">Manage and track patient care profiles</p>
           </div>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+          <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
             <Plus size={18} /> Add Patient
           </button>
         </header>
@@ -115,7 +112,7 @@ return(
                   <td className="px-4 py-4 text-slate-600">{patient.lastVisit}</td>
                   <td className="px-4 py-4 text-slate-600">{patient.dept}</td>
                   <td className="px-6 py-4 text-right">
-                    <button className="text-blue-600 font-bold hover:underline">View Profile</button>
+                    <button className="text-blue-600 font-bold hover:underline cursor-pointer">View Profile</button>
                   </td>
                 </tr>
               ))}
