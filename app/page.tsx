@@ -1,20 +1,52 @@
+'use client';
 import Image from "next/image";
 import LocalNavbar from "./components/LocalNavbar";
- import React from 'react';
-import { LayoutDashboard, Users, Calendar, MessageSquare, Settings, Search, Plus, Filter, ChevronDown, MoreHorizontal } from 'lucide-react';
+ import React, { use } from 'react';
+import { FolderDown,LayoutDashboard, Users, Calendar, MessageSquare, Settings, Search, Plus, Filter, ChevronDown, MoreHorizontal } from 'lucide-react';
 import FilterSelect from "./components/FilterSelect";
 import NavItem from "./components/NavItem";
 import PaginationBtn from "./components/PaginationBtn";
+import { useEffect,useState } from "react";
+import Dragdrop from "./components/Dragdrop";
+interface Patient {
+  name: string;
+  sub: string;
+
+  id: string;
+  status: string;
+  statusColor: string;
+  lastVisit: string;
+  dept: string;
+  avatar: string;
+}
+
 export default function Home() {
-   
+const [patientsfetch, setPatientsfetch] = useState<Patient[]>([]);
+
+useEffect(() => {
+  async function fetchPatients() {
+    try {
+      const res = await fetch('http://localhost:2710/patient');
+      const data = await res.json();
+      
+      // If your API returns { patients: [...] }, use data.patients
+      // Otherwise, check if it's an array directly
+      if (Array.isArray(data)) {
+        setPatientsfetch(data);
+      } else if (data && Array.isArray(data.patients)) {
+        setPatientsfetch(data.patients);
+      } else {
+       
+      }
+    } catch (error) {
+      
+      setPatientsfetch([]); // Fallback on network error
+    }
+  }
+  fetchPatients();
+}, []);
 // Mock Data
-const patients = [
-  { name: 'Alice Henderson', sub: 'Female, 34 yrs', id: '#PT-82731', status: 'Stable', statusColor: 'bg-emerald-100 text-emerald-700', lastVisit: 'Oct 12, 2023', dept: 'Cardiology', avatar: 'https://i.pravatar.cc/150?u=alice' },
-  { name: 'James Wilson', sub: 'Male, 62 yrs', id: '#PT-82745', status: 'Critical', statusColor: 'bg-rose-100 text-rose-700', lastVisit: 'Oct 21, 2023', dept: 'Neurology', avatar: 'https://i.pravatar.cc/150?u=james' },
-  { name: 'Sarah Miller', sub: 'Female, 28 yrs', id: '#PT-82752', status: 'Active', statusColor: 'bg-blue-100 text-blue-700', lastVisit: 'Oct 20, 2023', dept: 'Pediatrics', avatar: 'https://i.pravatar.cc/150?u=sarah' },
-  { name: 'Robert Chen', sub: 'Male, 45 yrs', id: '#PT-82760', status: 'Stable', statusColor: 'bg-emerald-100 text-emerald-700', lastVisit: 'Oct 15, 2023', dept: 'Oncology', avatar: 'https://i.pravatar.cc/150?u=robert' },
-  { name: 'Emily Davis', sub: 'Female, 51 yrs', id: '#PT-82768', status: 'Active', statusColor: 'bg-blue-100 text-blue-700', lastVisit: 'Oct 22, 2023', dept: 'Cardiology', avatar: 'https://i.pravatar.cc/150?u=emily' },
-];
+
 
 return(
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
@@ -39,7 +71,7 @@ return(
         </div>
 
         <nav className="flex-1 px-3 space-y-1">
-          <NavItem icon={<Users size={20}/>} label="Patients" active />
+          <NavItem icon={<Users size={20}/>} label="Upload Result File" active />
         </nav>
 
         <div className="p-4 border-t border-slate-100">
@@ -53,13 +85,19 @@ return(
         {/* Header */}
         <header className="flex justify-between items-end mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Patients</h1>
-            <p className="text-slate-500 text-sm">Manage and track patient care profiles</p>
+            <h1 className="text-2xl font-bold text-slate-800">Upload Result File</h1>
+            <p className="text-slate-500 text-sm">Manage and upload result files</p>
           </div>
-          <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
-            <Plus size={18} /> Add Patient
-          </button>
+       
         </header>
+       
+       {/* Upload Section */}
+      <div className="p-6 bg-white rounded-xl border border-slate-200 mb-8">
+<Dragdrop />
+      </div>
+       
+        
+         
 
         {/* Filters */}
         <div className="bg-white p-4 rounded-xl border border-slate-200 flex gap-4 mb-6 items-center">
@@ -92,7 +130,8 @@ return(
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {patients.map((patient, i) => (
+
+              {patientsfetch?.map((patient, i) => (
                 <tr key={i} className="hover:bg-slate-50/50 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -116,6 +155,7 @@ return(
                   </td>
                 </tr>
               ))}
+
             </tbody>
           </table>
 
