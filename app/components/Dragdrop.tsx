@@ -40,21 +40,111 @@ const Dragdrop: React.FC<DragdropProps> = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  
+  const [result, setResult] = useState<any>(null);
+  const prompt = `Extract information from the provided image/file and map it into the following JSON structure. If data is missing for a field, use null. Return strictly the JSON object without any Markdown formatting or extra text.
+  {
+  "name": "string",
+  "age": "int",
+  "historical": "string",
+  "height": "double",
+  "weight": "double",
+  "bmi": "double",
+  "vital_signs": {
+    "temperature": "double",
+    "heart_rate": "int",
+    "blood_pressure": "string",
+    "respiratory_rate": "int",
+    "oxygen_saturation": "int"
+  },
+  "blood_test": {
+    "cbc": {
+      "wbc": "double",
+      "rbc": "double",
+      "hemoglobin": "double",
+      "hematocrit": "double",
+      "platelets": "double",
+      "mcv": "double"
+    },
+    "fasting_blood_sugar": "double",
+    "lipid_profile": {
+      "total_cholesterol": "double",
+      "hdl": "double",
+      "ldl": "double",
+      "triglycerides": "double"
+    },
+    "liver_function_test": {
+      "ast": "double",
+      "alt": "double",
+      "alp": "double",
+      "total_bilirubin": "double",
+      "albumin": "double",
+      "ggt": "double",
+      "direct_bilirubin": "double"
+    },
+    "kidney_function_test": {
+      "bun": "double",
+      "creatinine": "double",
+      "egfr": "double"
+    },
+    "uric_acid": "double"
+  },
+  "urinalysis": {
+    "color": "string",
+    "clarity": "string",
+    "specific_gravity": "double",
+    "ph": "double",
+    "protein": "string",
+    "glucose": "string",
+    "ketones": "string",
+    "wbc": "int",
+    "rbc": "int"
+  },
+  "stool_examination": {
+    "macroscopic": "string",
+    "occult_blood": "string"
+  },
+  "chest_xray": {
+    "lung_opacity": "string",
+    "heart": {
+      "ctr": "double",
+      "cardiomegaly": "string"
+    }
+  },
+  "electrocardiogram": {
+    "rhythm": "string",
+    "heart_rate": "int",
+    "st_segment": "string",
+    "t_wave": "string"
+  },
+  "ultrasound": {
+    "upper_abdomen": "string",
+    "lower_abdomen": "string"
+  }
+}
+  `;
 
   const handleConfirmAnalyze =async () => {
-    const formdata = new FormData();
+  try{
+const formdata = new FormData();
     formdata.append("file", selectedFiles[0]);
+    formdata.append('prompt', prompt);
     const res = await fetch("http://localhost:2710/ai", {
       method: "POST",
       body: formdata,
     });
-    if (!res.ok) {
-      setError("Failed to upload file");
-      return;
-    }
+
     const data = await res.json();
-    console.log("Analysis result:", data);
+   
+
+    
+
+    setResult(data);
+    console.log("Analysis Result:", data);
+ 
+  }catch(err){
+    console.error("Error during analysis:", err);
+  }
+    
     
   }
   const handleDrag = (e: React.DragEvent) => {
