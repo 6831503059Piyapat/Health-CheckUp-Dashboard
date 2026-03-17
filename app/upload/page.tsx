@@ -1,15 +1,14 @@
 'use client';
 import Image from "next/image";
-import LocalNavbar from "./components/LocalNavbar";
+import LocalNavbar from "../components/LocalNavbar";
  import React, { use } from 'react';
 import { FolderDown,LayoutDashboard, Users, Calendar, MessageSquare, Settings, Search, Plus, Filter, ChevronDown, MoreHorizontal } from 'lucide-react';
-import FilterSelect from "./components/FilterSelect";
-import NavItem from "./components/NavItem";
-import PaginationBtn from "./components/PaginationBtn";
+import FilterSelect from "../components/FilterSelect";
+import NavItem from "../components/NavItem";
+import PaginationBtn from "../components/PaginationBtn";
 import { useEffect,useState } from "react";
-import Dragdrop from "./upload/components/Dragdrop";
-import { useRouter } from "next/navigation";
-import Navbar from "./components/Navbar";
+import Dragdrop from "./components/Dragdrop";
+import Navbar from "../components/Navbar";
 interface Patient {
   name: string;
   sub: string;
