@@ -9,6 +9,7 @@ import PaginationBtn from "../components/PaginationBtn";
 import { useEffect,useState } from "react";
 import Dragdrop from "./components/Dragdrop";
 import Navbar from "../components/Navbar";
+import FormInput from "./components/FormInput";
 interface Patient {
   name: string;
   sub: string;
@@ -22,33 +23,31 @@ interface Patient {
 }
 
 export default function Home() {
+
 const [patientsfetch, setPatientsfetch] = useState<Patient[]>([]);
+const [typeUpload,setTypeUpload] = useState<string>("dragdrop");
 
-useEffect(() => {
-  async function fetchPatients() {
-    try {
-      const res = await fetch('http://localhost:2710/patient');
-      const data = await res.json();
-      
-      // If your API returns { patients: [...] }, use data.patients
-      // Otherwise, check if it's an array directly
-      if (Array.isArray(data)) {
-        setPatientsfetch(data);
-      } else if (data && Array.isArray(data.patients)) {
-        setPatientsfetch(data.patients);
-      } else {
-       
-      }
-    } catch (error) {
-      
-      setPatientsfetch([]); // Fallback on network error
-    }
-  }
-  fetchPatients();
-}, []);
+
 // Mock Data
-
-
+const getFileIcon = (type: string) => {
+  if (type.startsWith("image/")) return "🖼️";
+  if (type.startsWith("video/")) return "🎬";
+  if (type.startsWith("audio/")) return "🎵";
+  if (type.includes("pdf")) return "📄";
+  if (type.includes("zip") || type.includes("tar") || type.includes("gzip")) return "🗜️";
+  if (type.includes("spreadsheet") || type.includes("excel") || type.includes("csv")) return "📊";
+  if (type.includes("word") || type.includes("document")) return "📝";
+  return "📁";
+};
+function choiceTypeUpload(){
+  if(typeUpload === "dragdrop"){
+setTypeUpload("manual");
+  }
+  else{
+    setTypeUpload("dragdrop");
+  }
+  
+}
 return(
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
       
@@ -68,15 +67,11 @@ return(
         </header>
        
        {/* Upload Section */}
-      <div className="p-6 bg-white rounded-xl border border-slate-200 mb-8">
-<Dragdrop />
-      </div>
+     
+    <FormInput/>
        
-        
-         
-
         {/* Filters */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 flex gap-4 mb-6 items-center">
+        {/* <div className="bg-white p-4 rounded-xl border border-slate-200 flex gap-4 mb-6 items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
@@ -90,54 +85,42 @@ return(
           <button className="p-2.5 bg-slate-50 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors">
             <Filter size={18} />
           </button>
-        </div>
+        </div> */}
 
         {/* Table Container */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        {/* <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="bg-slate-50/50 text-slate-400 uppercase text-[11px] font-bold tracking-widest border-b border-slate-100">
-                <th className="px-6 py-4">Patient Name</th>
-                <th className="px-4 py-4">Patient ID</th>
-                <th className="px-4 py-4">Status</th>
-                <th className="px-4 py-4">Last Visit</th>
-                <th className="px-4 py-4">Department</th>
-                <th className="px-6 py-4 text-right">Action</th>
-              </tr>
+            <thead className="w-full border-b border-slate-100">
+              <h1 className=" text-slate-400 uppercase text-[16px] font-bold p-5 pl-10 ">History</h1>
+             
             </thead>
             <tbody className="divide-y divide-slate-50">
 
-              {patientsfetch?.map((patient, i) => (
-                <tr key={i} className="hover:bg-slate-50/50 transition-colors group">
+             
+                <tr className="hover:bg-slate-50/50 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <img src={patient.avatar} className="w-9 h-9 rounded-full object-cover" />
-                      <div>
-                        <p className="font-bold text-slate-800">{patient.name}</p>
-                        <p className="text-xs text-slate-500">{patient.sub}</p>
-                      </div>
+                      
+                        <p className="font-bold text-slate-800">FileName</p>
+                     
                     </div>
                   </td>
-                  <td className="px-4 py-4 font-mono text-xs text-slate-500">{patient.id}</td>
-                  <td className="px-4 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${patient.statusColor}`}>
-                      {patient.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4 text-slate-600">{patient.lastVisit}</td>
-                  <td className="px-4 py-4 text-slate-600">{patient.dept}</td>
+                  <td className="px-4 py-4 font-mono text-xs text-slate-500">FileID</td>
+                
+                  <td className="px-4 py-4 text-slate-600">18 Otc 2026</td>
+                  <td className="px-4 py-4 text-slate-600">Type File</td>
                   <td className="px-6 py-4 text-right">
                     <button className="text-blue-600 font-bold hover:underline cursor-pointer">View Profile</button>
                   </td>
                 </tr>
-              ))}
+            
 
             </tbody>
-          </table>
+          </table> */}
 
           {/* Pagination */}
-          <div className="px-6 py-4 bg-slate-50/30 flex justify-between items-center border-t border-slate-100">
-            <p className="text-xs text-slate-400 font-medium">Showing 1 to 5 of 1,240 patients</p>
+          {/* <div className="px-6 py-4 bg-slate-50/30 flex justify-between items-center border-t border-slate-100">
+            <p className="text-xs text-slate-400 font-medium">Showing 0 to 0 of 0 File</p>
             <div className="flex gap-2">
               <PaginationBtn label="Previous" disabled />
               <PaginationBtn label="1" active />
@@ -146,7 +129,7 @@ return(
               <PaginationBtn label="Next" />
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,Dispatch,SetStateAction } from "react";
 
 interface DragdropProps {
   onFileSelect?: (files: FileList) => void;
@@ -9,6 +9,8 @@ interface DragdropProps {
   className?: string;
   pending?: boolean;
   pendingText?: string;
+  setFileUpload:(value:any)=>void;
+  fileUpload:any;
 }
 
 const formatBytes = (bytes: number) => {
@@ -35,13 +37,16 @@ const Dragdrop: React.FC<DragdropProps> = ({
   className,
   pending = false,
   pendingText = "Uploading...",
+  setFileUpload,
+  fileUpload
 }) => {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [result, setResult] = useState<any>(null);
-  const prompt = `Extract information from the provided image/file and map it into the following JSON structure. If data is missing for a field, use null. Return strictly the JSON object without any Markdown formatting or extra text.
+  // Do not edit the prompt below, it is used for AI analysis of the uploaded file
+  const prompt = `Extract information from the provided image/file and map it into the following JSON structure. If data is missing for a field, use zero if it's number or double if it's text use text minus sign . Return strictly the JSON object without any Markdown formatting or extra text.
   {
   "name": "string",
   "age": "int",
@@ -66,6 +71,7 @@ const Dragdrop: React.FC<DragdropProps> = ({
       "mcv": "double"
     },
     "fasting_blood_sugar": "double",
+    "hba1c":"int",
     "lipid_profile": {
       "total_cholesterol": "double",
       "hdl": "double",
@@ -134,11 +140,9 @@ const formdata = new FormData();
     });
 
     const data = await res.json();
-   
-
-    
-
+  
     setResult(data);
+    setFileUpload(data);
     console.log("Analysis Result:", data);
  
   }catch(err){
@@ -277,7 +281,7 @@ const formdata = new FormData();
           disabled={pending}
         />
 
-        <div className="relative flex flex-col items-center gap-3">
+        <div className="relative flex flex-col items-center gap-2">
           {pending ? (
             <>
               <div className="relative w-10 h-10 flex items-center justify-center">
@@ -335,8 +339,8 @@ const formdata = new FormData();
                 {dragActive
                   ? "Release to upload"
                   : multiple
-                  ? "Drag & drop files here or click to upload"
-                  : "Drag & drop a file here or click to upload"}
+                  ? "Drag & drop file here to auto fill form"
+                  : "Drag & drop file here to auto fill form"}
               </p>
             </>
           )}
@@ -383,7 +387,7 @@ const formdata = new FormData();
           onClick={handleConfirmAnalyze}
           className="btn btn-primary px-6 py-2 text-sm font-medium transition-colors disabled:bg-primary/50 disabled:text-primary/30 disabled:cursor-not-allowed bg-blue-500/80 rounded-md p-1 text-white hover:bg-blue-500/100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:hover:bg-blue-500/80 disabled:hover:text-white/80"
         >
-          Confirm & Analyze
+         Upload
         </button>
       </div>
       )}
