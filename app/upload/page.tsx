@@ -61,7 +61,6 @@ return(
         <header className="flex justify-between items-end mb-8">
           <div>
             <h1 className="text-2xl font-bold text-slate-800">Upload Result File</h1>
-            <p className="text-slate-500 text-sm">Manage and upload result files</p>
           </div>
        
         </header>

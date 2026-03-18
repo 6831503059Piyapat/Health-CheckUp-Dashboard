@@ -239,6 +239,7 @@ const formdata = new FormData();
   }
   const handleDrag = (e: React.DragEvent) => {
     if (pending) return;
+    
     e.preventDefault();
     e.stopPropagation();
     setDragActive(e.type === "dragenter" || e.type === "dragover");
