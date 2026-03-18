@@ -6,7 +6,8 @@ import FormSection from "./FormSection";
 import VitalSigns from "./VitalSign";
 import RowInput from "./RowInput";
 import Dragdrop from "./Dragdrop";
-import { useState,useEffect,Dispatch,SetStateAction } from "react"
+import { useState,useEffect,Dispatch,SetStateAction,useRef } from "react"
+import ConfirmSubmit from "./ConfirmSubmit";
 import React from "react";
 interface FileProps {
   name: String;
@@ -93,8 +94,8 @@ export default function FormInput(){
     const [weight, setWeight] = useState(0);
     const [bmi, setBmi] = useState(0);
     const [fileUpload,setFileUpload] = useState<FileProps>();
-    const { register, handleSubmit, watch,reset } = useForm();
-    const onSubmit = (data: any) => console.log(data);
+    const [onConfirm,setOnConfirm] = useState(false);
+    const { register, handleSubmit, watch,reset,formState:{isSubmitting} } = useForm();
     const calculateBMI = () => {
         if (height > 0 && weight > 0) {
             const heightInMeters = height / 100;
@@ -102,6 +103,21 @@ export default function FormInput(){
             setBmi(bmiValue);
         }
     };
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const onSubmit = (data:any)=>{
+      console.log(data)
+    }
+    const triggerSubmit=()=>{
+      if(formRef.current){
+        formRef.current.requestSubmit();
+      }
+    }
+ 
+    function onCancelSubmit(){
+      setOnConfirm(false)
+    }
+    
 //  Use for update BMI
 useEffect(() => {
   calculateBMI();
@@ -134,11 +150,12 @@ useEffect(() => {
       });
     }
   }, [fileUpload, reset]);
+ 
     return(
       <main className="max-w-5xl mx-auto my-8 bg-white overflow-hidden font-sans">
       
-
-      <form onSubmit={handleSubmit(onSubmit)}  className="p-6 md:p-8 space-y-10">
+      <ConfirmSubmit formId="ConfirmSubm  it_FormInput" isSubmitting={isSubmitting} onConfirm={triggerSubmit} onClose={onCancelSubmit} isOpen={onConfirm} title="Are you sure?" message="Please make sure that all information is match with file or paper"/>
+      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}  className="p-6 md:p-8 space-y-10">
         
         {/* 1. Patient Information */}
         <FormSection title="1. Patient Information">
@@ -212,7 +229,7 @@ useEffect(() => {
           <p className="text-xs text-slate-500 italic">Ensure data matches laboratory reports.</p>
           <div className="flex gap-4">
             <button type="reset" className="px-6 py-2 border border-slate-300 rounded-md hover:bg-slate-50 transition-colors font-semibold">Clear</button>
-            <button type="submit" className="px-8 py-2 bg-[#137fec] text-white rounded-md hover:bg-blue-600 transition-colors font-bold shadow-lg shadow-blue-200">Submit Record</button>
+            <button type="button" onClick={()=>setOnConfirm(true)} className="px-8 py-2 bg-[#137fec] text-white rounded-md hover:bg-blue-600 transition-colors font-bold shadow-lg shadow-blue-200">Submit Record</button>
           </div>
         </footer>
       </form>
