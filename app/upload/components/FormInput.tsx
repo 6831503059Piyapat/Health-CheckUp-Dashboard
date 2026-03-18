@@ -93,7 +93,8 @@ export default function FormInput(){
     const [weight, setWeight] = useState(0);
     const [bmi, setBmi] = useState(0);
     const [fileUpload,setFileUpload] = useState<FileProps>();
-const { register, handleSubmit, watch } = useForm();
+    const { register, handleSubmit, watch,reset } = useForm();
+    const onSubmit = (data: any) => console.log(data);
     const calculateBMI = () => {
         if (height > 0 && weight > 0) {
             const heightInMeters = height / 100;
@@ -101,10 +102,38 @@ const { register, handleSubmit, watch } = useForm();
             setBmi(bmiValue);
         }
     };
- const onSubmit = (data: any) => console.log(data);
+//  Use for update BMI
 useEffect(() => {
   calculateBMI();
 }, [height, weight]);
+
+useEffect(() => {
+    if (fileUpload) {
+      // Use reset for Update field
+           reset({
+        name: fileUpload.name,
+        age:fileUpload.age,
+        height:fileUpload.height,
+        weight:fileUpload.weight,
+        bmi:fileUpload.bmi,
+        history:fileUpload.historical,
+       hemoglobin:fileUpload.blood_test.cbc.hemoglobin,
+       wbc:fileUpload.blood_test.cbc.wbc,
+       platelets:fileUpload.blood_test.cbc.platelets,
+       hba1c:fileUpload.blood_test.hba1c,
+       fbs:fileUpload.blood_test.fasting_blood_sugar,
+       cholesterol:fileUpload.blood_test.lipid_profile.total_cholesterol,
+       hdl:fileUpload.blood_test.lipid_profile.hdl,
+       sgot:fileUpload.blood_test.liver_function_test.ast,
+       sgpt:fileUpload.blood_test.liver_function_test.alt,
+       temperature:fileUpload.vital_signs.temperature,
+       heartRate:fileUpload.vital_signs.heart_rate,
+       respiratoryRate:fileUpload.vital_signs.respiratory_rate,
+       bloodPressure:fileUpload.vital_signs.blood_pressure,
+       spo2:fileUpload.vital_signs.oxygen_saturation
+      });
+    }
+  }, [fileUpload, reset]);
     return(
       <main className="max-w-5xl mx-auto my-8 bg-white overflow-hidden font-sans">
       
@@ -118,7 +147,7 @@ useEffect(() => {
         </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
             <div className="md:col-span-2">
-              <InputField label="Full Name" registration={register("fullName",{value:fileUpload?.name})} placeholder="John Doe" />
+              <InputField label="Full Name" registration={register("fullName",{value:fileUpload?.name})} placeholder="John Doe"  />
             </div>
             <InputField label="Age" type="number" registration={register("age",{value:fileUpload?.age})} placeholder="Years" />
             <InputField label="Height (cm)" type="number" registration={register("height",{onChange:(e) => setHeight(parseFloat(e.target.value)),value:fileUpload?.height})} />
@@ -130,7 +159,7 @@ useEffect(() => {
             <div className="md:col-span-3">
               <label className="block text-sm font-semibold mb-1">Medical History</label>
               <textarea 
-                {...register("history")}
+                {...register("history",{value:fileUpload?.historical})}
                 className="w-full p-2 rounded-md border border-slate-200 focus:ring-2 focus:ring-[#137fec] outline-none" 
                 rows={3} 
               />

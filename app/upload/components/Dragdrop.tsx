@@ -1,6 +1,86 @@
 "use client";
 
 import React, { useState, useRef,Dispatch,SetStateAction } from "react";
+interface FileProps {
+  name: String;
+  age: Number;
+  historical: String;
+  height: Number;
+  weight: Number;
+  bmi: Number;
+  vital_signs: {
+    temperature: Number;
+    heart_rate: Number;
+    blood_pressure:String;
+    respiratory_rate: Number;
+    oxygen_saturation: Number;
+  };
+  blood_test: {
+    cbc: {
+      wbc: Number;
+      rbc: Number;
+      hemoglobin: Number;
+      hematocrit: Number;
+      platelets: Number;
+      mcv: Number;
+    };
+    fasting_blood_sugar: Number;
+    hba1c:Number;
+    lipid_profile: {
+      total_cholesterol: Number;
+      hdl: Number;
+      ldl: Number;
+      triglycerides: Number;
+    };
+    liver_function_test: {
+      ast: Number;
+      alt: Number;
+      alp: Number;
+      total_bilirubin: Number;
+      albumin: Number;
+      ggt: Number;
+      direct_bilirubin: Number;
+    };
+    kidney_function_tes: {
+      bun: Number;
+      creatinine: Number;
+      egfr: Number;
+    };
+    uric_acid: Number;
+  };
+  urinalysis: {
+    color: String;
+    clarity: String;
+    specific_gravity: Number;
+    ph: Number;
+    protein: String;
+    glucose: String;
+    ketones: String;
+    wbc: Number;
+    rbc: Number;
+  };
+  stool_examination: {
+    macroscopic:String;
+    occult_blood: String;
+  };
+  chest_xray: {
+    lung_opacity: String;
+    heart: {
+      ctr: String;
+      cardiomegaly: String;
+    }
+  };
+   electrocardiogram: {
+    rhythm: String;
+    heart_rate: Number;
+    st_segment: String;
+    t_wave:String;
+  };
+  ultrasound: {
+    upper_abdomen: String;
+    lower_abdomen: String;
+  }
+}
 
 interface DragdropProps {
   onFileSelect?: (files: FileList) => void;
@@ -9,15 +89,17 @@ interface DragdropProps {
   className?: string;
   pending?: boolean;
   pendingText?: string;
-  setFileUpload:(value:any)=>void;
+  setFileUpload:(value:FileProps)=>void;
   fileUpload:any;
 }
-
+// File Size format
 const formatBytes = (bytes: number) => {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
+
+// File Icon Type
 
 const getFileIcon = (type: string) => {
   if (type.startsWith("image/")) return "🖼️";
@@ -30,6 +112,7 @@ const getFileIcon = (type: string) => {
   return "📁";
 };
 
+// export default function 
 const Dragdrop: React.FC<DragdropProps> = ({
   onFileSelect = () => {},
   multiple = true,
@@ -45,6 +128,7 @@ const Dragdrop: React.FC<DragdropProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [result, setResult] = useState<any>(null);
+  const [onAnalyze,setOnAnalyze] = useState(false);
   // Do not edit the prompt below, it is used for AI analysis of the uploaded file
   const prompt = `Extract information from the provided image/file and map it into the following JSON structure. If data is missing for a field, use zero if it's number or double if it's text use text minus sign . Return strictly the JSON object without any Markdown formatting or extra text.
   {
@@ -134,6 +218,7 @@ const Dragdrop: React.FC<DragdropProps> = ({
 const formdata = new FormData();
     formdata.append("file", selectedFiles[0]);
     formdata.append('prompt', prompt);
+    setOnAnalyze(true);
     const res = await fetch("http://localhost:2710/ai", {
       method: "POST",
       body: formdata,
@@ -143,6 +228,7 @@ const formdata = new FormData();
   
     setResult(data);
     setFileUpload(data);
+    setOnAnalyze(false);
     console.log("Analysis Result:", data);
  
   }catch(err){
@@ -382,13 +468,26 @@ const formdata = new FormData();
       )}
       {selectedFiles.length > 0 && !pending && (
          <div className="flex justify-center mt-4">
-        <button
+          {!onAnalyze &&(
+            <button
           type="button"
           onClick={handleConfirmAnalyze}
           className="btn btn-primary px-6 py-2 text-sm font-medium transition-colors disabled:bg-primary/50 disabled:text-primary/30 disabled:cursor-not-allowed bg-blue-500/80 rounded-md p-1 text-white hover:bg-blue-500/100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:hover:bg-blue-500/80 disabled:hover:text-white/80"
         >
          Upload
         </button>
+          )}
+          {onAnalyze && (
+            <button
+          type="button"
+          disabled
+          
+          className="btn btn-primary px-6 py-2 text-sm font-medium transition-colors disabled:bg-primary/50 disabled:text-primary/30 disabled:cursor-not-allowed bg-slate-500/80 rounded-md p-1 text-white  "
+        >
+         Analyzing.....
+        </button>
+          )}
+        
       </div>
       )}
      
