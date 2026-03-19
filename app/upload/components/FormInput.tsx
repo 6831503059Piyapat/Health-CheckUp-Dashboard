@@ -9,6 +9,7 @@ import Dragdrop from "./Dragdrop";
 import { useState,useEffect,Dispatch,SetStateAction,useRef } from "react"
 import ConfirmSubmit from "./ConfirmSubmit";
 import React from "react";
+
 interface FileProps {
   name: String;
   provide:String;
@@ -81,7 +82,7 @@ interface FileProps {
       cardiomegaly: String;
     }
   };
-   electrocardiogram: {
+  electrocardiogram: {
     rhythm: String;
     heart_rate: Number;
     st_segment: String;
@@ -130,26 +131,45 @@ useEffect(() => {
     if (fileUpload) {
       // Use reset for Update field
            reset({
+        
         name: fileUpload.name,
         age:fileUpload.age,
+        provide:fileUpload.provide,
         height:fileUpload.height,
+        gender:fileUpload.gender,
         weight:fileUpload.weight,
         bmi:fileUpload.bmi,
         history:fileUpload.historical,
+//     cbc
        hemoglobin:fileUpload.blood_test.cbc.hemoglobin,
        wbc:fileUpload.blood_test.cbc.wbc,
+       rbc:fileUpload.blood_test.cbc.rbc,
+       hematocrit:fileUpload.blood_test.cbc.hematocrit,
+       mcv:fileUpload.blood_test.cbc.mcv,
        platelets:fileUpload.blood_test.cbc.platelets,
+
        hba1c:fileUpload.blood_test.hba1c,
        fbs:fileUpload.blood_test.fasting_blood_sugar,
+      //  Lipid Profile
        cholesterol:fileUpload.blood_test.lipid_profile.total_cholesterol,
        hdl:fileUpload.blood_test.lipid_profile.hdl,
+       ldl:fileUpload.blood_test.lipid_profile.ldl,
+       triglycerides:fileUpload.blood_test.lipid_profile.triglycerides,
+      // Liver function
        sgot:fileUpload.blood_test.liver_function_test.ast,
        sgpt:fileUpload.blood_test.liver_function_test.alt,
+       alp:fileUpload.blood_test.liver_function_test.alp,
+       total_bilirubin:fileUpload.blood_test.liver_function_test.total_bilirubin,
+       albumin:fileUpload.blood_test.liver_function_test.albumin,
+       ggt:fileUpload.blood_test.liver_function_test.ggt,
+       direct_bilirubin:fileUpload.blood_test.liver_function_test.direct_bilirubin,
+            // Vital Signs
        temperature:fileUpload.vital_signs.temperature,
        heartRate:fileUpload.vital_signs.heart_rate,
        respiratoryRate:fileUpload.vital_signs.respiratory_rate,
        bloodPressure:fileUpload.vital_signs.blood_pressure,
-       spo2:fileUpload.vital_signs.oxygen_saturation
+       spo2:fileUpload.vital_signs.oxygen_saturation,
+       pulse:fileUpload.vital_signs.pulse,
       });
     }
   }, [fileUpload, reset]);
