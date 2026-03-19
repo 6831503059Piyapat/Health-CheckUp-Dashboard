@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
-import { Search,Filter,ArrowDown } from "lucide-react";
+import { Search,Filter,ArrowDown,ArrowUp } from "lucide-react";
 import FilterSelect from "../components/FilterSelect";
+import Historyitem from "./components/historyitem";
 const patients = [
   { name: 'Alice Henderson', id: '#PT-82731', lastVisit: 'Oct 12, 2023', type: 'pdf', avatar: 'https://i.pravatar.cc/150?u=alice' },
   { name: 'James Wilson', id: '#PT-82745',  lastVisit: 'Oct 21, 2023', type: 'jpeg', avatar: 'https://i.pravatar.cc/150?u=james' },
@@ -34,33 +35,20 @@ export default function History(){
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead className="w-full border-b border-slate-100 bg-slate-100 ">
-             <td className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Date</td>
-             <td className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Provider</td>
-             <td className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Status</td>
-             <td></td>
-
+              <tr>
+                 <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Date</th>
+             <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Provider</th>
+             <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Status</th>
+             <th></th>
+              </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
 
              {patients.map((data,i)=>
-              <tr className="hover:bg-slate-50/50 transition-colors group">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      
-                        <p className="font-bold text-slate-800">{data.lastVisit}</p>
-                     
-                    </div>
-                  </td>
-                
-                
-                  <td className="px-4 py-4 text-slate-600 pl-10 font-bld">{data.name}</td>
-                  <td className="px-4 py-4 text-slate-600 pl-10 font-bold w-[10px] text-center">
-                    <h1 className=" rounded-full text-yellow-600 p-1">Pending</h1>
-                  </td>
-                  <td className="px-6 py-4 text-right justify-end flex">
-                    <button className=" text-slate-600 font-bold flex cursor-default items-center gap-3 pr-10">View <ArrowDown size={15}/></button>
-                  </td>
-                </tr>
+              
+                  <Historyitem key={i} data={data}/>
+             
+            
             )}
                 
             

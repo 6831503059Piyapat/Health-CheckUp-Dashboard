@@ -1,53 +1,8 @@
-'use client';
-import Image from "next/image";
-import LocalNavbar from "../components/LocalNavbar";
- import React, { use } from 'react';
-import { FolderDown,LayoutDashboard, Users, Calendar, MessageSquare, Settings, Search, Plus, Filter, ChevronDown, MoreHorizontal } from 'lucide-react';
-import FilterSelect from "../components/FilterSelect";
-import NavItem from "../components/NavItem";
-import PaginationBtn from "../components/PaginationBtn";
-import { useEffect,useState } from "react";
-import Dragdrop from "./components/Dragdrop";
 import Navbar from "../components/Navbar";
 import FormInput from "./components/FormInput";
-interface Patient {
-  name: string;
-  sub: string;
-
-  id: string;
-  status: string;
-  statusColor: string;
-  lastVisit: string;
-  dept: string;
-  avatar: string;
-}
 
 export default function Home() {
 
-const [patientsfetch, setPatientsfetch] = useState<Patient[]>([]);
-const [typeUpload,setTypeUpload] = useState<string>("dragdrop");
-
-
-// Mock Data
-const getFileIcon = (type: string) => {
-  if (type.startsWith("image/")) return "🖼️";
-  if (type.startsWith("video/")) return "🎬";
-  if (type.startsWith("audio/")) return "🎵";
-  if (type.includes("pdf")) return "📄";
-  if (type.includes("zip") || type.includes("tar") || type.includes("gzip")) return "🗜️";
-  if (type.includes("spreadsheet") || type.includes("excel") || type.includes("csv")) return "📊";
-  if (type.includes("word") || type.includes("document")) return "📝";
-  return "📁";
-};
-function choiceTypeUpload(){
-  if(typeUpload === "dragdrop"){
-setTypeUpload("manual");
-  }
-  else{
-    setTypeUpload("dragdrop");
-  }
-  
-}
 return(
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
       

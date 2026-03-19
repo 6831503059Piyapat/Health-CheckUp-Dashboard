@@ -12,6 +12,7 @@ return(
       
       {/* SIDEBAR */}
       <Navbar />
+      {/* DASHBOARD PAGE */}
     <main className="ml-64 flex-1 p-8">
      
     </main>
