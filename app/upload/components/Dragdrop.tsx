@@ -3,6 +3,8 @@
 import React, { useState, useRef,Dispatch,SetStateAction } from "react";
 interface FileProps {
   name: String;
+  provide:String;
+  gender:String;
   age: Number;
   historical: String;
   height: Number;
@@ -14,6 +16,7 @@ interface FileProps {
     blood_pressure:String;
     respiratory_rate: Number;
     oxygen_saturation: Number;
+    pulse:Number;
   };
   blood_test: {
     cbc: {
@@ -133,7 +136,9 @@ const Dragdrop: React.FC<DragdropProps> = ({
   const prompt = `Extract information from the provided image/file and map it into the following JSON structure. If data is missing for a field, use zero if it's number or double if it's text use text minus sign . Return strictly the JSON object without any Markdown formatting or extra text.
   {
   "name": "string",
+  "provide":"string",
   "age": "int",
+  "gender":"string",
   "historical": "string",
   "height": "double",
   "weight": "double",
@@ -143,7 +148,8 @@ const Dragdrop: React.FC<DragdropProps> = ({
     "heart_rate": "int",
     "blood_pressure": "string",
     "respiratory_rate": "int",
-    "oxygen_saturation": "int"
+    "oxygen_saturation": "int",
+    "pulse":"int",
   },
   "blood_test": {
     "cbc": {

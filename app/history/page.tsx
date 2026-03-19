@@ -2,12 +2,16 @@ import Navbar from "../components/Navbar";
 import { Search,Filter,ArrowDown,ArrowUp } from "lucide-react";
 import FilterSelect from "../components/FilterSelect";
 import Historyitem from "./components/historyitem";
+
 const patients = [
-  { name: 'Alice Henderson', id: '#PT-82731', lastVisit: 'Oct 12, 2023', type: 'pdf', avatar: 'https://i.pravatar.cc/150?u=alice' },
-  { name: 'James Wilson', id: '#PT-82745',  lastVisit: 'Oct 21, 2023', type: 'jpeg', avatar: 'https://i.pravatar.cc/150?u=james' },
-  { name: 'Sarah Miller', id: '#PT-82752', lastVisit: 'Oct 20, 2023', type: 'png', avatar: 'https://i.pravatar.cc/150?u=sarah' },
-  { name: 'Robert Chen',id: '#PT-82760', lastVisit: 'Oct 15, 2023', type: 'pdf', avatar: 'https://i.pravatar.cc/150?u=robert' },
-  { name: 'Emily Davis', id: '#PT-82768', lastVisit: 'Oct 22, 2023', type: 'pdf', avatar: 'https://i.pravatar.cc/150?u=emily' },
+ {provide:'Spider Man', name: 'Robert Chen',pulse: 86, lastVisit: 'Oct 15, 2023', triglyceride: 80,
+                         gender:'Female',fasting_blood_sugar:76 ,creatinine:0.9 ,age:20 ,total_cholesterol: 120,alanine_transaminase:23,
+                         height:180, hdl:72, hemoglobin:13, weight:60,ldl:60,white_blood_cell:9250,bmi:18.5 , blood_pressure:'118/80 mmHg',
+                         platelet:400000,historical:"Nothing commnet" },
+{provide:'Lord Voldermor', name: 'Robert Chen',pulse: 86, lastVisit: 'Oct 15, 2023', triglyceride: 80,
+                         gender:'Female',fasting_blood_sugar:76 ,creatinine:0.9 ,age:20 ,total_cholesterol: 120,alanine_transaminase:23,
+                         height:180, hdl:72, hemoglobin:13, weight:60,ldl:60,white_blood_cell:9250,bmi:18.5 , blood_pressure:'118/80 mmHg',
+                         platelet:400000,historical:"OMG So FATTTT" },
 ];
 export default function History(){
     return(

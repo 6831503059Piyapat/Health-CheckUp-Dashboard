@@ -25,6 +25,10 @@ export default function VitalSign({ register,fileUpload }: any) {
 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">SpO2 (%RA)</label>
 <input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="text" {...register("spo2",{value:fileUpload?.vital_signs.oxygen_saturation})} />
 </div>
+<div>
+<label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Pulse. Rate (min)</label>
+<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="text" {...register("pulse",{value:fileUpload?.vital_signs.pulse})} />
+</div>
 </div>
 </section>
     )

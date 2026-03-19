@@ -11,6 +11,8 @@ import ConfirmSubmit from "./ConfirmSubmit";
 import React from "react";
 interface FileProps {
   name: String;
+  provide:String;
+  gender:String;
   age: Number;
   historical: String;
   height: Number;
@@ -22,6 +24,7 @@ interface FileProps {
     blood_pressure:String;
     respiratory_rate: Number;
     oxygen_saturation: Number;
+    pulse:Number;
   };
   blood_test: {
     cbc: {
@@ -164,11 +167,13 @@ useEffect(() => {
         </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
             <div className="md:col-span-2">
-              <InputField label="Full Name" registration={register("fullName",{value:fileUpload?.name})} placeholder="John Doe"  />
+              <InputField label="Full Name" registration={register("fullName",{value:fileUpload?.name})} placeholder="example:John Doe"  />
             </div>
             <InputField label="Age" type="number" registration={register("age",{value:fileUpload?.age})} placeholder="Years" />
             <InputField label="Height (cm)" type="number" registration={register("height",{onChange:(e) => setHeight(parseFloat(e.target.value)),value:fileUpload?.height})} />
             <InputField label="Weight (kg)" type="number" registration={register("weight",{onChange:(e) => setWeight(parseFloat(e.target.value)),value:fileUpload?.weight})} />
+            <InputField label="Gender" type="text" registration={register("gender",{value:fileUpload?.gender})} placeholder="example:Female" />
+
             <div className="space-y-1">
               <label className="block text-sm font-semibold">BMI</label>
               <input className="w-full p-2 rounded-md border border-slate-200 bg-slate-50" {...register("bmi")} disabled value={bmi.toFixed(2)} />
@@ -194,7 +199,11 @@ useEffect(() => {
               <div className="space-y-3 bg-slate-50 p-4 rounded-lg">
                 <RowInput label="Hemoglobin (g/dL)" registration={register("hemoglobin",{value:fileUpload?.blood_test.cbc.hemoglobin})} />
                 <RowInput label="WBC Count (cells/µL)" registration={register("wbc",{value:fileUpload?.blood_test.cbc.wbc})} />
+                <RowInput label="RBC Count (cells/µL)" registration={register("rbc",{value:fileUpload?.blood_test.cbc.rbc})} />
                 <RowInput label="Platelet Count" registration={register("platelets",{value:fileUpload?.blood_test.cbc.platelets})} />
+                <RowInput label="hematocrit (cells/µL)" registration={register("hematocrit",{value:fileUpload?.blood_test.cbc.hematocrit})} />
+                <RowInput label="mcv (cells/µL)" registration={register("mcv",{value:fileUpload?.blood_test.cbc.mcv})} />
+
               </div>
             </FormSection>
             
@@ -212,6 +221,9 @@ useEffect(() => {
               <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg">
                 <InputField label="Cholesterol" registration={register("cholesterol",{value:fileUpload?.blood_test.lipid_profile.total_cholesterol})} size="sm" />
                 <InputField label="HDL" registration={register("hdl",{value:fileUpload?.blood_test.lipid_profile.hdl})} size="sm" />
+                <InputField label="LDL" registration={register("ldl",{value:fileUpload?.blood_test.lipid_profile.ldl})} size="sm" />
+                <InputField label="Triglycerides" registration={register("triglycerides",{value:fileUpload?.blood_test.lipid_profile.triglycerides})} size="sm" />
+
               </div>
             </FormSection>
 
@@ -219,6 +231,12 @@ useEffect(() => {
               <div className="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-lg">
                 <InputField label="SGOT" registration={register("sgot",{value:fileUpload?.blood_test.liver_function_test.ast})} size="sm" />
                 <InputField label="SGPT" registration={register("sgpt",{value:fileUpload?.blood_test.liver_function_test.alt})} size="sm" />
+                <InputField label="ALP" registration={register("alp",{value:fileUpload?.blood_test.liver_function_test.alp})} size="sm" />
+                <InputField label="Total bilirubin" registration={register("total_bilirubin",{value:fileUpload?.blood_test.liver_function_test.total_bilirubin})} size="sm" />
+                <InputField label="Albumin" registration={register("albumin",{value:fileUpload?.blood_test.liver_function_test.albumin})} size="sm" />
+                <InputField label="GGT" registration={register("ggt",{value:fileUpload?.blood_test.liver_function_test.ggt})} size="sm" />
+                <InputField label="Direct Bilirubin" registration={register("direct_bilirubin",{value:fileUpload?.blood_test.liver_function_test.direct_bilirubin})} size="sm" />
+
               </div>
             </FormSection>
           </div>
