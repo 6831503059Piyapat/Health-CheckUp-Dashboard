@@ -2,8 +2,10 @@
 
 import React, { useState, useRef,Dispatch,SetStateAction } from "react";
 interface FileProps {
-  name: String;
+  fullName: String;
   provide:String;
+  dateFile:string;
+  dateUpload:string;
   gender:String;
   age: Number;
   historical: String;
@@ -135,7 +137,7 @@ const Dragdrop: React.FC<DragdropProps> = ({
   // Do not edit the prompt below, it is used for AI analysis of the uploaded file
   const prompt = `Extract information from the provided image/file and map it into the following JSON structure. If data is missing for a field, use zero if it's number or double if it's text use text minus sign . Return strictly the JSON object without any Markdown formatting or extra text.
   {
-  "name": "string",
+  "fullName": "string", // Just name patient in paper or File
   "provide":"string",
   "age": "int",
   "gender":"string",

@@ -2,6 +2,8 @@
 import { Plus, Users, LayoutDashboard, Settings,History,ArrowDownToLine } from "lucide-react";
 import NavItem from "./NavItem";
 import { useRouter,usePathname } from "next/navigation";
+import { useState,useEffect } from "react";
+import { useSafeLayoutEffect } from "@heroui/react";
 
 export default function Navbar() {
   // router for got to another page
@@ -9,7 +11,28 @@ export default function Navbar() {
   // pathname for ui sidebar 
   // check pathname if current pathname match with current sidebar  
     const pathname = usePathname();
+    const [userData,setUserData] = useState<any>();
+    useEffect(()=>{
+      const token = localStorage.getItem('token');
+    
+    const fetcProfile = async ()=>{
+    const res = await fetch('http://localhost:2710/users/me ',{
+      headers:{
+        'Authorization':`Bearer ${token}`,
+        'Content-Type':'application/json'
+      }
+    });
+    const data = await res.json();
+    if(res.ok){     
+      setUserData(data);
+    }
+  
 
+  };
+  fetcProfile();
+    },[pathname])
+
+  
    
 
     return (
@@ -28,7 +51,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
             <img src="https://i.pravatar.cc/150?u=drsmith" className="w-10 h-10 rounded-full border border-white" alt="Doctor" />
             <div>
-              <p className="text-sm font-bold">Name</p>
+              <p className="text-sm font-bold">{userData?.name}</p>
               <p className="text-[10px] text-slate-500 uppercase tracking-wider">Role</p>
             </div>
           </div>

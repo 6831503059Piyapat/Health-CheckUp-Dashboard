@@ -49,7 +49,6 @@ export default function ConfirmSubmit({
           form={formId}
             onClick={() => {
               onConfirm();
-             
             }}
             disabled={isSubmitting}
             type="submit"

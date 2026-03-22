@@ -9,10 +9,13 @@ import Dragdrop from "./Dragdrop";
 import { useState,useEffect,Dispatch,SetStateAction,useRef } from "react"
 import ConfirmSubmit from "./ConfirmSubmit";
 import React from "react";
-
+import Pendingsubmit from "./Pendingsubmit";
+import { useRouter } from "next/navigation";
 interface FileProps {
-  name: String;
+  fullName: String;
   provide:String;
+  dateUpload:string;
+  dateFile:string;
   gender:String;
   age: Number;
   historical: String;
@@ -94,11 +97,18 @@ interface FileProps {
   }
 }
 export default function FormInput(){
+    const router = useRouter();
+
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0);
     const [bmi, setBmi] = useState(0);
     const [fileUpload,setFileUpload] = useState<FileProps>();
     const [onConfirm,setOnConfirm] = useState(false);
+
+    const [ispending,setIspending] = useState<boolean>(false);
+    const [isOK,setIsOK] = useState<boolean>(false);
+    const [isUiShow,setIsUiShow] = useState<boolean>(false);
+
     const { register, handleSubmit, watch,reset,formState:{isSubmitting} } = useForm();
     const calculateBMI = () => {
         if (height > 0 && weight > 0) {
@@ -107,15 +117,40 @@ export default function FormInput(){
             setBmi(bmiValue);
         }
     };
+    const token = localStorage.getItem('token'); 
+
     const formRef = useRef<HTMLFormElement>(null);
 
-    const onSubmit = (data:any)=>{
-      console.log(data)
+  const onSubmit =async (data:any)=>{
+  setIsUiShow(true);
+  setIspending(true);
+  const response = await fetch('http://localhost:2710/users/create-post', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}` 
+    },
+    body: JSON.stringify({
+      Data:data,
+    })
+  });
+  
+  if (response.ok) {
+    setIsOK(true);
+    setIspending(false);
+    router.push("/upload");
+    
+      }
+  else{
+    setIsOK(false);
+    setIspending(false);
+  }
     }
     const triggerSubmit=()=>{
       if(formRef.current){
         formRef.current.requestSubmit();
       }
+      setOnConfirm(false);
     }
  
     function onCancelSubmit(){
@@ -126,15 +161,28 @@ export default function FormInput(){
 useEffect(() => {
   calculateBMI();
 }, [height, weight]);
+const getCustomDate = () => {
+  const date = new Date();
+  
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short', // 'Nov'
+    day: '2-digit', // '20'
+    year: 'numeric' // '2020'
+  }).format(date);
+};
+console.log(getCustomDate());
 
 useEffect(() => {
     if (fileUpload) {
+      
       // Use reset for Update field
            reset({
         
-        name: fileUpload.name,
+        fullName: fileUpload.fullName,
         age:fileUpload.age,
         provide:fileUpload.provide,
+        dateFile:fileUpload.dateFile,
+        dateUpload:fileUpload.dateUpload,
         height:fileUpload.height,
         gender:fileUpload.gender,
         weight:fileUpload.weight,
@@ -176,18 +224,21 @@ useEffect(() => {
  
     return(
       <main className="max-w-5xl mx-auto my-8 bg-white overflow-hidden font-sans">
-      
+{isUiShow &&(
+  <Pendingsubmit ispending={ispending} isOK={isOK} setIsUiShow={setIsUiShow} />
+)}
       <ConfirmSubmit formId="ConfirmSubm  it_FormInput" isSubmitting={isSubmitting} onConfirm={triggerSubmit} onClose={onCancelSubmit} isOpen={onConfirm} title="Are you sure?" message="Please make sure that all information is match with file or paper"/>
       <form ref={formRef} onSubmit={handleSubmit(onSubmit)}  className="p-6 md:p-8 space-y-10">
-        
+     
+        <h1 className="text-lg font-bold text-slate-700 mb-6 uppercase tracking-tight  pl-3" {...register("dateupload",{value:getCustomDate()})}>{getCustomDate()}</h1>
         {/* 1. Patient Information */}
-        <FormSection title="1. Patient Information">
+        <FormSection title={`1. Patient Information`} >
          <div>
             <Dragdrop setFileUpload={setFileUpload} fileUpload={fileUpload}/>
         </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
             <div className="md:col-span-2">
-              <InputField label="Full Name" registration={register("fullName",{value:fileUpload?.name})} placeholder="example:John Doe"  />
+              <InputField label="Full Name" registration={register("fullName",{value:fileUpload?.fullName})} placeholder="example:John Doe"  />
             </div>
             <InputField label="Age" type="number" registration={register("age",{value:fileUpload?.age})} placeholder="Years" />
             <InputField label="Height (cm)" type="number" registration={register("height",{onChange:(e) => setHeight(parseFloat(e.target.value)),value:fileUpload?.height})} />
@@ -196,7 +247,7 @@ useEffect(() => {
 
             <div className="space-y-1">
               <label className="block text-sm font-semibold">BMI</label>
-              <input className="w-full p-2 rounded-md border border-slate-200 bg-slate-50" {...register("bmi")} disabled value={bmi.toFixed(2)} />
+              <input className="w-full p-2 rounded-md border border-slate-200 bg-slate-50" {...register("bmi",{value:bmi.toFixed(2)})} disabled value={bmi.toFixed(2)} />
             </div>
             <div className="md:col-span-3">
               <label className="block text-sm font-semibold mb-1">Medical History</label>
@@ -233,6 +284,13 @@ useEffect(() => {
                 <RowInput label="FBS (mg/dL)" registration={register("fbs",{value:fileUpload?.blood_test.fasting_blood_sugar})} />
               </div>
             </FormSection>
+
+            <FormSection title="7.Doctor">
+              <div className="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-lg">
+                <InputField label="Doctor name" registration={register("provide",{value:fileUpload?.provide})} size="sm" />
+                <InputField label="Date in paper" placeholder="ex : Mar 22 2026" registration={register("dateFile",{value:fileUpload?.dateFile})} size="sm" />
+              </div>
+            </FormSection>
           </div>
 
           {/* 5. Lipid Profile & 6. Liver Function */}
@@ -259,6 +317,7 @@ useEffect(() => {
 
               </div>
             </FormSection>
+            
           </div>
         </div>
 

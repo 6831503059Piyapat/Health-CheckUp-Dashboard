@@ -1,19 +1,34 @@
+'use client'
 import Navbar from "../components/Navbar";
 import { Search,Filter,ArrowDown,ArrowUp } from "lucide-react";
 import FilterSelect from "../components/FilterSelect";
 import Historyitem from "./components/historyitem";
+import { useEffect,useState } from "react";
+import { usePathname } from "next/navigation";
 
-const patients = [
- {provide:'Spider Man', name: 'Robert Chen',pulse: 86, lastVisit: 'Oct 15, 2023', triglyceride: 80,
-                         gender:'Female',fasting_blood_sugar:76 ,creatinine:0.9 ,age:20 ,total_cholesterol: 120,alanine_transaminase:23,
-                         height:180, hdl:72, hemoglobin:13, weight:60,ldl:60,white_blood_cell:9250,bmi:18.5 , blood_pressure:'118/80 mmHg',
-                         platelet:400000,historical:"Nothing commnet" },
-{provide:'Lord Voldermor', name: 'Robert Chen',pulse: 86, lastVisit: 'Oct 15, 2023', triglyceride: 80,
-                         gender:'Female',fasting_blood_sugar:76 ,creatinine:0.9 ,age:20 ,total_cholesterol: 120,alanine_transaminase:23,
-                         height:180, hdl:72, hemoglobin:13, weight:60,ldl:60,white_blood_cell:9250,bmi:18.5 , blood_pressure:'118/80 mmHg',
-                         platelet:400000,historical:"OMG So FATTTT" },
-];
 export default function History(){
+  const pathName = usePathname();
+  const [dataFetch,setDataFetch] = useState<any>([]);
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    const handleFetch =async ()=>{
+      const res = await fetch('http://localhost:2710/users/me',{
+        headers:{'Content-Type':'application/json',
+        'Authorization':`Bearer ${token}`
+        }
+
+      }
+      );
+      const data = await res.json();
+      if(res.ok){
+        setDataFetch(data);
+        console.log(data);
+      }
+      else{
+      }
+    }
+    handleFetch();
+  },[pathName])
     return(
       <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 ">
         <Navbar/>
@@ -40,15 +55,18 @@ export default function History(){
           <table className="w-full text-left text-sm">
             <thead className="w-full border-b border-slate-100 bg-slate-100 ">
               <tr>
-                 <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Date</th>
+                 <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Date Upload</th>
+             <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Date info</th>
+
              <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Provider</th>
+          
              <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Status</th>
              <th></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 ">
 
-             {patients.map((data,i)=>
+             {dataFetch?.Data?.map((data:any,i:number)=>
               
                   <Historyitem key={i} data={data}/>
              
