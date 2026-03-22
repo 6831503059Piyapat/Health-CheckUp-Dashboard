@@ -22,6 +22,7 @@ export default function SettingsPage() {
       setAvatar(imageUrl);
     }
   }
+  
 
   function handleSave() {
     console.log({
