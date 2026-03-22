@@ -1,17 +1,51 @@
 'use client';
 import React from 'react';
-import { Shield, Lock, User, Building2, Headset, FileText, ArrowRight } from 'lucide-react';
+import { Shield, Lock, User, Building2, Headset, FileText, ArrowRight,EyeOff,Eye } from 'lucide-react';
 import LocalNavbar from '@/app/components/LocalNavbar';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+
 export default function Login() {
   const router = useRouter();
- function handleSubmit(){
+  const [isShowpassword,setIsShowpassword] = useState(false);
+  // INPUT FORM
+  const [name,setName] = useState("");
+  const [password,setPassword] = useState("");
+  const [error,setError] = useState("");
+ async function handleSubmit(){
+  
+
+    if(!name || !password){
+      console.log("Login Failed");
+      setError("Email and password are required.");
+      
+    }
+    else{
+      setError("");
+      const res = await fetch('http://localhost:2710/auth/login',{
+    method:"POST",
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      email:name,
+      password:password,
+    }),
+  });
+  const result = await res.json();
+
+  if(res.ok){
+    localStorage.setItem('token',result.access_token);
     router.push('/');
+  }
+  else{
+    setError("");
+  }
+  
+
+    }
+
  }
     return (
     <>
-        <LocalNavbar />
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         
       <div className="max-w-4xl w-full bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
@@ -33,7 +67,7 @@ export default function Login() {
             </div>
             
             <h1 className="text-4xl font-bold mb-6 leading-tight">
-              Dedicated to <br /> Patient Care.
+              Life Markers <br /> 
             </h1>
             <p className="text-blue-100 text-lg leading-relaxed">
               Access clinical records, manage appointments, and coordinate with your team securely from any location.
@@ -60,36 +94,32 @@ export default function Login() {
         {/* Right Side: Login Form */}
         <div className="md:w-7/12 p-8 md:p-16 flex flex-col justify-center">
           <div className="max-w-sm mx-auto w-full">
-            <h2 className="text-3xl font-bold text-slate-800 mb-2">Doctor Login</h2>
-            <p className="text-slate-500 mb-10 text-sm">Enter your credentials to access the hospital system.</p>
-
+            <h2 className="text-3xl font-bold text-slate-800 mb-1">Login</h2>
+             <p className="text-slate-500 mb-3 text-sm">Enter your username and password</p>
+            {error && (
+               <p className='text-white bg-red-500 p-1'>{error}</p>
+            )}
+           
+            
+           
             <div  className="space-y-6">
               {/* Doctor ID */}
+             
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">Doctor ID / Email</label>
+                <label className="block text-sm font-semibold text-slate-700 mb-2 mt-3">Username / Email</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input 
                     type="text" 
-                    placeholder="DR-123456 or name@hospital.com"
-                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    onChange={(e)=>setName(e.target.value)}
+                    value={name}
+                    placeholder="example:name@hospital.com"
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${error? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                 </div>
               </div>
 
-              {/* Hospital Code */}
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">Hospital Code</label>
-                <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <input 
-                    type="text" 
-                    placeholder="e.g. CITY-GEN-01"
-                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  />
-                </div>
-              </div>
-
+           
               {/* Password */}
               <div>
                 <div className="flex justify-between items-center mb-2">
@@ -97,12 +127,17 @@ export default function Login() {
                   <a href="#" className="text-xs font-bold text-blue-600 hover:underline">Forgot Password?</a>
                 </div>
                 <div className="relative">
+                  
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input 
-                    type="password" 
+                    type={`${isShowpassword?"text":"password"}`} 
+                    onChange={(e)=>setPassword(e.target.value)}
+                    value={password||""}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${error? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
+                  {isShowpassword?(<Eye onClick={()=>setIsShowpassword(!isShowpassword)} className='absolute right-5 cursor-pointer top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>):(<EyeOff onClick={()=>setIsShowpassword(!isShowpassword)} className='absolute cursor-pointer right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>)}
+                  
                 </div>
               </div>
 
@@ -121,6 +156,7 @@ export default function Login() {
                 Log In to Dashboard
                 <ArrowRight className="w-5 h-5" />
               </button>
+            
             </div>
 
             {/* Footer Links */}

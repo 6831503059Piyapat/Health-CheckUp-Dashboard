@@ -61,9 +61,29 @@ export default function Historyitem({data}:any){
                                <p><strong>BMI:</strong> {data.bmi}</p>
                                <p><strong>Blood Pressure:</strong> {data.blood_pressure}</p>
                                <p><strong>Platelet:</strong> {data.platelet} cell/uL</p>
+
+                               <p><strong>Temperature:</strong> {data.temperature || 'N/A'} C</p>
+                               <p><strong>Heart Rate:</strong> {data.heart_rate} min</p>
+                               <p><strong>Respiratory Rate:</strong> {data.repiratory_rate} min</p>
+
+                               <p><strong>SPO2:</strong> {data.oxygen_saturation} %RA</p>
+                               <p><strong>Red Blood Cell (RBC):</strong> {data.rbc} cell/uL</p>
+                               <p><strong>Hematocrit:</strong> {data.hematocrit} cell/uL</p>
+
+                               <p><strong>MCV:</strong> {data.mcv} cell/uL</p>
+                               <p><strong>hba1c:</strong> {data.hba1c} %</p>
+                               <p><strong>SGOT:</strong> {data.ast} </p>
+
+                               <p><strong>ALP:</strong> {data.alp} cell/uL</p>
+                               <p><strong>Total Bilirubin:</strong> {data.total_bilirubin} </p>
+                               <p><strong>Albumin:</strong> {data.albumin} </p>
+
+                               <p><strong>GGT:</strong> {data.ggt} </p>
+                               <p><strong>Direct Bilirubin:</strong> {data.direct_bilirubin} </p>
+                               
                             </div>
-                            <h1 className="text-slate-600 text-sm"><strong>Historical</strong></h1>
-                            <textarea className="w-full p-2 rounded-md border border-slate-200 focus:ring-2 focus:ring-[#137fec] outline-none" rows={3} value={data.historical}/>
+                            <h1 className="text-slate-600 text-sm mt-4"><strong>Historical</strong></h1>
+                            <textarea className="w-full p-2 rounded-md border border-slate-200 focus:ring-2 focus:ring-[#137fec] outline-none" readOnly rows={3} value={data.historical}/>
                         </div>
                     </td>
                 </tr>

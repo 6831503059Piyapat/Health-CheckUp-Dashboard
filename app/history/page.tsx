@@ -15,10 +15,10 @@ const patients = [
 ];
 export default function History(){
     return(
-      <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
+      <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 ">
         <Navbar/>
-        <main className="ml-64 flex-1 p-8 ">
-       <div className="bg-white h-[100vh] shadow-xl rounded-md p-5">
+        <main className="ml-64 flex-1 p-8 overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none ">
+       <div className="bg-slate-50 h-[100vh]  rounded-md p-5">
        <div className="bg-white p-2 rounded-xl border border-slate-200 flex gap-4 mb-6 items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -36,7 +36,7 @@ export default function History(){
         </div>  
 
         {/* Table Container */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden ">
           <table className="w-full text-left text-sm">
             <thead className="w-full border-b border-slate-100 bg-slate-100 ">
               <tr>
@@ -46,7 +46,7 @@ export default function History(){
              <th></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-slate-100 ">
 
              {patients.map((data,i)=>
               
