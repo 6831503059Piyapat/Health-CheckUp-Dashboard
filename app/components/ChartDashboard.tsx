@@ -32,7 +32,7 @@ const ChartDashboard = () => {
   useEffect(()=>{
     async function handleFetch(){
     const res = await fetch('http://localhost:2710/users/me',
-      {
+      {   
         headers:{
           'Content-Type':'application/json',
           'Authorization':`Bearer ${token}`
@@ -57,7 +57,8 @@ const ChartDashboard = () => {
   // Calculate years directly. No useState needed = no infinite loop!
   const startYear = currentYear - processedWeights.length +1; // -5 to show 6 years total including current
   const yearLabels = dataFetch.map((item:any) => {
-    const date = new Date(item.dateupload);
+  
+    const date = new Date(item.dateFile);
     return date.getFullYear(); 
   });
   const data = {
@@ -68,7 +69,7 @@ const ChartDashboard = () => {
         data: processedWeights,
         borderColor: 'rgb(80, 146, 251)', // Blue to match your "LifeMarkers" UI
         backgroundColor: 'rgba(59, 130, 246, 0.1)', 
-        tension: 0.3, 
+        tension: 0.1, 
         fill: true,   
         pointRadius: 4, 
         pointHoverRadius: 6,

@@ -43,7 +43,7 @@ return(
     <div className="flex gap-6">
       <Skeleton className="h-24 w-24 rounded-xl bg-gray-200"  />
       <div>
-        <h1 className="text-2xl font-bold text-black mb-2 uppercase">{dataFetch?.name}</h1>
+        <h1 className="text-2xl font-bold text-black mb-2 uppercase">{dataFetch?.name || (<Skeleton className="w-20 h-[30px]"/>)}</h1>
         <div className="grid grid-cols-3 gap-x-4 gap-y-1 text-sm text-gray-500">
           <span>Age : 24 years</span>
           <span>High : 180 cm</span>
@@ -73,7 +73,7 @@ return(
       </div>
 
       <div className="relative flex-grow flex flex-col justify-end border-b border-gray-300 pb-2">
-       <ChartDashboard/>
+       <ChartDashboard />
       </div>
     </main>
 
