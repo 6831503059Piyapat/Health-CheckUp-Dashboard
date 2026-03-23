@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 export default function History(){
   const pathName = usePathname();
   const [dataFetch,setDataFetch] = useState<any>([]);
+  
   useEffect(()=>{
     const token = localStorage.getItem("token");
     const handleFetch =async ()=>{
@@ -22,7 +23,8 @@ export default function History(){
       const data = await res.json();
       if(res.ok){
         setDataFetch(data);
-        console.log(data);
+        console.log(data.Data);
+
       }
       else{
       }
