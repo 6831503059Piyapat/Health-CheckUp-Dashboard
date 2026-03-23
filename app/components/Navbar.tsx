@@ -4,7 +4,7 @@ import NavItem from "./NavItem";
 import { useRouter,usePathname } from "next/navigation";
 import { useState,useEffect } from "react";
 import { useSafeLayoutEffect } from "@heroui/react";
-
+import { Skeleton } from "@heroui/react";
 export default function Navbar() {
   // router for got to another page
     const router = useRouter();
@@ -49,7 +49,7 @@ export default function Navbar() {
            {/* Profile Icon */}
         <div className="px-4 mb-8 cursor-default" >
           <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
-            <img src="https://i.pravatar.cc/150?u=drsmith" className="w-10 h-10 rounded-full border border-white" alt="Doctor" />
+            <Skeleton className="w-10 h-10 rounded-full border border-white"/>
             <div>
               <p className="text-sm font-bold">{userData?.name}</p>
               <p className="text-[10px] text-slate-500 uppercase tracking-wider">Role</p>

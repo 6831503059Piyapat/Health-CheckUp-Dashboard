@@ -220,7 +220,7 @@ export default function Register() {
       body: JSON.stringify({
         subject: "Your OTP Verification Code",
         message: emailHtml,
-        sendTo: "6831503059@lamduan.mfu.ac.th"
+        sendTo: email
       }),
     });
 
