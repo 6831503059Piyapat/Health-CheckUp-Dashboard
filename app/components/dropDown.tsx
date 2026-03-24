@@ -1,15 +1,25 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface Props{
+  type:string,
+  setData:(value:string)=>void,
+  data:any;
 
+}
 
-export default function dropDown({data,type}:any) {
+export default function dropDown({data,type,setData}:Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(type==="Body Mass Index"?"Body Mass Index":"Length of data");
     const [metrics,setMetrics] = useState<any[]>(data);
+
+  useEffect(()=>{
+    setData(selected);
+  },[selected]);
+
   return (
     <div className="relative w-50 font-sans text-[#475569]">
       {/* Trigger Button */}

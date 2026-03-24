@@ -26,7 +26,12 @@ ChartJS.register(
   Filler 
 );
 import { useState,useEffect } from 'react';
-const ChartDashboard = () => {
+
+interface Props{
+  typeData:string,
+  lengthData:string,
+}
+const ChartDashboard = ({typeData,lengthData}:any) => {
   const token = localStorage.getItem("token");
   const [dataFetch,setDataFetch] = useState<any>([]);
   useEffect(()=>{
@@ -51,11 +56,57 @@ const ChartDashboard = () => {
   }
   handleFetch();
   },[]);
-  
+  const handleCategory = (select:string) =>{
+ 
+    switch(select){
+      case "Body Mass Index" :
+        return dataFetch.map((item:any) => Number(item.weight));
+      break;
+      case "Fasting blood sugar" :
+        return dataFetch.map((item:any) => Number(item.fbs));
+      break;
+      case "Cholesterol" :
+        return dataFetch.map((item:any) => Number(item.cholesterol));
+      break;
+      case "HDL" :
+        return dataFetch.map((item:any) => Number(item.hdl));
+      break;
+      case "LDL" :
+        return dataFetch.map((item:any) => Number(item.ldl));
+      break;
+      case "Blood pressure" :
+        return dataFetch.map((item:any) => Number(item.bloodPressure));
+      break;
+      case "Triglyceride" :
+        return dataFetch.map((item:any) => Number(item.triglycerides));
+      break;
+      case "Creatinine" :
+        return dataFetch.map((item:any) => Number(item.creatinine));
+      break;
+      case "ALT" :
+        return dataFetch.map((item:any) => Number(item.sgpt));
+      break;
+      case "Hemoglobin" :
+        return dataFetch.map((item:any) => Number(item.hemoglobin));
+      break;
+      case "White blood cell" :
+        return dataFetch.map((item:any) => Number(item.wbc));
+      break;
+      case "Platelet" :
+        return dataFetch.map((item:any) => Number(item.platelets));
+      break;
+      case "Oxygen level" :
+        return dataFetch.map((item:any) => Number(item.spo2));
+      break;
+      case "Heart rate" :
+        return dataFetch.map((item:any) => Number(item.heartRate));
+      break;
+    }
+
+  }
   const currentYear = new Date().getFullYear(); 
-  const processedWeights = dataFetch.map((item:any) => Number(item.weight));
+  const processedWeights = handleCategory(typeData);
   // Calculate years directly. No useState needed = no infinite loop!
-  const startYear = currentYear - processedWeights.length +1; // -5 to show 6 years total including current
   const yearLabels = dataFetch.map((item:any) => {
   
     const date = new Date(item.dateFile);
@@ -65,7 +116,7 @@ const ChartDashboard = () => {
     labels: yearLabels,
     datasets: [
       {
-        label: 'Weight',
+        label: typeData,
         data: processedWeights,
         borderColor: 'rgb(80, 146, 251)', // Blue to match your "LifeMarkers" UI
         backgroundColor: 'rgba(59, 130, 246, 0.1)', 
@@ -86,7 +137,7 @@ const ChartDashboard = () => {
       legend: { display: false }, // Cleaner look like your screenshot
       title: { 
         display: true, 
-        text: 'Body Mass Index History', 
+        text: typeData, 
         align: 'start' as const,
         font: { size: 16 }
       },

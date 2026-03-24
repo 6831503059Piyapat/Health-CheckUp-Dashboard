@@ -14,6 +14,10 @@ const metrics = [
 const lenghtData=["All of length","Every three yerars","Customized","One of all years","Last years","Current year"]
 export default function Home() {
   const [dataFetch,setDataFetch] = useState<any>();
+  // For graph
+  const [lengthData,setLengthData] = useState<string>();
+  const [typeData,setTypeData] = useState<string>();
+  // Fetch data from backend
   useEffect(()=>{
     const token = localStorage.getItem("token");
     const handleFetch = async()=>{
@@ -64,16 +68,16 @@ return(
       <div className="mb-8 flex justify-between items-center">
         <div>
 
-          <DropDown data={metrics} type={"Body Mass Index"}/>
+          <DropDown data={metrics} type={"Body Mass Index"} setData={setTypeData}/>
         
         </div>
         <div>
-          <DropDown data={lenghtData} type={"Length of data"}/>
+          <DropDown data={lenghtData} type={"Length of data"} setData={setLengthData}/>
         </div>
       </div>
 
       <div className="relative flex-grow flex flex-col justify-end border-b border-gray-300 pb-2">
-       <ChartDashboard />
+       <ChartDashboard typeData={typeData} lengthData={lengthData}/>
       </div>
     </main>
 
