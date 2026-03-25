@@ -4,16 +4,19 @@ import { Search,Filter,ArrowDown,ArrowUp } from "lucide-react";
 import FilterSelect from "../components/FilterSelect";
 import Historyitem from "./components/historyitem";
 import { useEffect,useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname,useRouter } from "next/navigation";
 
 export default function History(){
   const pathName = usePathname();
   const [dataFetch,setDataFetch] = useState<any>([]);
-  
+  const router = useRouter();
   useEffect(()=>{
     const token = localStorage.getItem("token");
+  if(!token){
+      router.push('/auth/login');
+    }
     const handleFetch =async ()=>{
-      const res = await fetch('http://localhost:2710/users/me',{
+      const res = await fetch(`${process.env.PORT}/users/me`,{
         headers:{'Content-Type':'application/json',
         'Authorization':`Bearer ${token}`
         }

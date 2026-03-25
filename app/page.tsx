@@ -32,8 +32,11 @@ const latest = (dataFetchData && dataFetchData.length > 0)
   : null;  // Fetch data from backend
   useEffect(()=>{
     const token = localStorage.getItem("token");
+    if(!token){
+      router.push('/auth/login');
+    }
     const handleFetch = async()=>{
-      const res = await fetch('http://localhost:2710/users/me',{
+      const res = await fetch(`${process.env.PORT}/users/me`,{
         headers:{
           'Content-Type':'application/json',
           'Authorization':`Bearer ${token}`

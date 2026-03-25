@@ -132,14 +132,14 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
             setBmi(bmiValue);
         }
     };
-    const token = localStorage.getItem('token'); 
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit =async (data:any)=>{
   setIsUiShow(true);
   setIspending(true);
-  const responseAi = await fetch("http://localhost:2710/ai/suggest",{
+  const responseAi = await fetch(`${process.env.PORT}/ai/suggest`,{
     method:"POST",
     headers:{
       'Content-Type':'application/json',
@@ -153,7 +153,7 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
   const dataResAi = await responseAi.json();
   if(responseAi.ok){
     
-    const response = await fetch('http://localhost:2710/users/create-post', {
+    const response = await fetch(`${process.env.PORT}/users/create-post`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

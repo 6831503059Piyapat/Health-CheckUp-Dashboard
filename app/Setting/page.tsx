@@ -1,12 +1,19 @@
 'use client';
 import Navbar from '@/app/components/Navbar';
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import { useRouter } from 'next/navigation';
 export default function SettingsPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
   const [contact, setContact] = useState('');
-
+  const router = useRouter();
+ useEffect(()=>{
+  const token = localStorage.getItem("token");
+  if(!token){
+      router.push('/auth/login');
+    }
+ });
   const [password, setPassword] = useState('');
   const [enable2FA, setEnable2FA] = useState(false);
 

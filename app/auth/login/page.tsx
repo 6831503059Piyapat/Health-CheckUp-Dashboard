@@ -2,7 +2,7 @@
 import React from 'react';
 import { Shield, Lock, User, Building2, Headset, FileText, ArrowRight,EyeOff,Eye } from 'lucide-react';
 import LocalNavbar from '@/app/components/LocalNavbar';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Login() {
@@ -14,7 +14,12 @@ export default function Login() {
   const [error,setError] = useState("");
  async function handleSubmit(){
   
-
+useEffect(()=>{
+  const token = localStorage.getItem("token");
+  if(token){
+    router.push("/")
+  }
+});
     if(!name || !password){
       console.log("Login Failed");
       setError("Email and password are required.");
@@ -22,7 +27,7 @@ export default function Login() {
     }
     else{
       setError("");
-      const res = await fetch('http://localhost:2710/auth/login',{
+      const res = await fetch(`${process.env.PORT}/auth/login`,{
     method:"POST",
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({

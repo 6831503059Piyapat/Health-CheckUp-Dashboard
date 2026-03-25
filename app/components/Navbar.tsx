@@ -16,7 +16,7 @@ export default function Navbar() {
       const token = localStorage.getItem('token');
     
     const fetcProfile = async ()=>{
-    const res = await fetch('http://localhost:2710/users/me ',{
+    const res = await fetch(`${process.env.PORT}/users/me`,{
       headers:{
         'Authorization':`Bearer ${token}`,
         'Content-Type':'application/json'

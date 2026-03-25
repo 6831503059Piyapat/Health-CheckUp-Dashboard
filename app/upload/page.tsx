@@ -1,8 +1,16 @@
+'use client'
 import Navbar from "../components/Navbar";
 import FormInput from "./components/FormInput";
-
-export default function Home() {
-
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+export default function Upload() {
+  const router = useRouter();
+useEffect(()=>{
+  const token = localStorage.getItem("token");
+  if(!token){
+      router.push('/auth/login');
+    }
+});
 return(
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
       

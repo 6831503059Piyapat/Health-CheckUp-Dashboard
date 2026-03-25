@@ -55,7 +55,12 @@ export default function Register() {
     return () => clearInterval(interval); 
   }, [isActive, seconds]);
 
-
+useEffect(()=>{
+  const token = localStorage.getItem("token");
+  if(token){
+    router.push("/")
+  }
+});
   // Password : Piadwaf25@
   const checkPassword = ()=>{
     
@@ -69,7 +74,7 @@ export default function Register() {
       setErrorOTP("");
       setIsUipending(true);
       setIspending(true);
-          const res = await fetch('http://localhost:2710/auth/register',{
+          const res = await fetch(`${process.env.PORT}/auth/register`,{
     method:"POST",
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
