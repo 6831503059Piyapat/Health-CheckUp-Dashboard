@@ -16,7 +16,7 @@ export default function History(){
       router.push('/auth/login');
     }
     const handleFetch =async ()=>{
-      const res = await fetch(`${process.env.PORT}/users/me`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
         headers:{'Content-Type':'application/json',
         'Authorization':`Bearer ${token}`
         }

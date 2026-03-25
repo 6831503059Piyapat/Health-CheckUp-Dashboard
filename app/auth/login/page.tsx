@@ -28,7 +28,7 @@ export default function Login() {
     }
     else{
       setError("");
-      const res = await fetch(`${process.env.PORT}/auth/login`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/login`,{
     method:"POST",
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({

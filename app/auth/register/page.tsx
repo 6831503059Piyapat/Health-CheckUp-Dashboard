@@ -74,7 +74,7 @@ useEffect(()=>{
       setErrorOTP("");
       setIsUipending(true);
       setIspending(true);
-          const res = await fetch(`${process.env.PORT}/auth/register`,{
+          const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/register`,{
     method:"POST",
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({

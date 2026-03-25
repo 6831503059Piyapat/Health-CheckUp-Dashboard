@@ -37,7 +37,7 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
   useEffect(()=>{
     const token = localStorage.getItem("token");
     async function handleFetch(){
-    const res = await fetch(`${process.env.PORT}/users/me`,
+    const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,
       {   
         headers:{
           'Content-Type':'application/json',

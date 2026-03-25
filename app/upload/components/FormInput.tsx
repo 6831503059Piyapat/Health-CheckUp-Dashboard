@@ -139,7 +139,7 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
   const onSubmit =async (data:any)=>{
   setIsUiShow(true);
   setIspending(true);
-  const responseAi = await fetch(`${process.env.PORT}/ai/suggest`,{
+  const responseAi = await fetch(`${process.env.NEXT_PUBLIC_PORT}/ai/suggest`,{
     method:"POST",
     headers:{
       'Content-Type':'application/json',
@@ -153,7 +153,7 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
   const dataResAi = await responseAi.json();
   if(responseAi.ok){
     
-    const response = await fetch(`${process.env.PORT}/users/create-post`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/create-post`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
