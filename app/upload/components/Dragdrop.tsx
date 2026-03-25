@@ -227,7 +227,7 @@ const formdata = new FormData();
     formdata.append("file", selectedFiles[0]);
     formdata.append('prompt', prompt);
     setOnAnalyze(true);
-    const res = await fetch("http://localhost:2710/ai", {
+    const res = await fetch("http://localhost:2710/ai/upload", {
       method: "POST",
       body: formdata,
     });

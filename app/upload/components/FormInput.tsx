@@ -97,6 +97,19 @@ interface FileProps {
   }
 }
 export default function FormInput(){
+  const prompt = `Role: You are a professional Health Data Analyst.
+
+Task: Analyze the provided JSON health data (specifically HDL and LDL levels).
+
+Rules:
+
+Preserve Structure: You must return the exact same JSON object received from the user. Do not remove or rename any existing fields.
+
+Append Data: Add exactly one new field named "suggest".
+
+Content: Inside the "suggest" field, provide a concise health analysis and actionable advice in Thai.
+
+Format: Output only valid JSON. Do not include markdown formatting like json unless requested.`;
     const router = useRouter();
 
     const [height, setHeight] = useState(0);
@@ -109,7 +122,9 @@ export default function FormInput(){
     const [isOK,setIsOK] = useState<boolean>(false);
     const [isUiShow,setIsUiShow] = useState<boolean>(false);
 
-    const { register, handleSubmit, watch,reset,formState:{isSubmitting} } = useForm();
+    const [resData,setResData] = useState<any>();
+    const { register, handleSubmit,reset,formState:{isSubmitting} } = useForm();
+    
     const calculateBMI = () => {
         if (height > 0 && weight > 0) {
             const heightInMeters = height / 100;
@@ -124,27 +139,45 @@ export default function FormInput(){
   const onSubmit =async (data:any)=>{
   setIsUiShow(true);
   setIspending(true);
-  const response = await fetch('http://localhost:2710/users/create-post', {
+  const responseAi = await fetch("http://localhost:2710/ai/suggest",{
+    method:"POST",
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':`Bearer ${token}`
+    },
+    body :JSON.stringify({
+      promptData:prompt,
+      ObjData:data
+    })
+  });
+  const dataResAi = await responseAi.json();
+  if(responseAi.ok){
+    
+    const response = await fetch('http://localhost:2710/users/create-post', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}` 
     },
     body: JSON.stringify({
-      Data:data,
+      Data:dataResAi,
     })
   });
   
   if (response.ok) {
     setIsOK(true);
     setIspending(false);
-    router.push("/upload");
+    // Response From ai
+    
     
       }
   else{
     setIsOK(false);
     setIspending(false);
   }
+  }
+  // 
+  
     }
     const triggerSubmit=()=>{
       if(formRef.current){
@@ -170,7 +203,6 @@ const getCustomDate = () => {
     year: 'numeric' // '2020'
   }).format(date);
 };
-console.log(getCustomDate());
 
 useEffect(() => {
     if (fileUpload) {
@@ -229,8 +261,9 @@ useEffect(() => {
 )}
       <ConfirmSubmit formId="ConfirmSubm  it_FormInput" isSubmitting={isSubmitting} onConfirm={triggerSubmit} onClose={onCancelSubmit} isOpen={onConfirm} title="Are you sure?" message="Please make sure that all information is match with file or paper"/>
       <form ref={formRef} onSubmit={handleSubmit(onSubmit)}  className="p-6 md:p-8 space-y-10">
-     
+     {/* Upload date day that upload data */}
         <h1 className="text-lg font-bold text-slate-700 mb-6 uppercase tracking-tight  pl-3" {...register("dateupload",{value:getCustomDate()})}>{getCustomDate()}</h1>
+        <h1 {...register("ai_suggest")}></h1>
         {/* 1. Patient Information */}
         <FormSection title={`1. Patient Information`} >
          <div>

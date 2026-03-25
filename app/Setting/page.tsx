@@ -1,8 +1,6 @@
 'use client';
 import Navbar from '@/app/components/Navbar';
-import LocalNavbar from '@/app/components/LocalNavbar';
 import { useState } from "react";
-
 export default function SettingsPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -38,10 +36,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-
-      <div className="max-w-5xl mx-auto space-y-6">
-
+    <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
+<Navbar/>
+      <div className="max-w-5xl mx-auto space-y-6 mb-6 mt-6">
+    
         {/* header */}
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Settings</h1>

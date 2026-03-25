@@ -32,9 +32,10 @@ interface Props{
   lengthData:string,
 }
 const ChartDashboard = ({typeData,lengthData}:any) => {
-  const token = localStorage.getItem("token");
+  
   const [dataFetch,setDataFetch] = useState<any>([]);
   useEffect(()=>{
+    const token = localStorage.getItem("token");
     async function handleFetch(){
     const res = await fetch('http://localhost:2710/users/me',
       {   
@@ -106,9 +107,8 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
   }
   const currentYear = new Date().getFullYear(); 
   const processedWeights = handleCategory(typeData);
-  // Calculate years directly. No useState needed = no infinite loop!
+
   const yearLabels = dataFetch.map((item:any) => {
-  
     const date = new Date(item.dateFile);
     return date.getFullYear(); 
   });
