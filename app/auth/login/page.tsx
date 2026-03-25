@@ -12,14 +12,15 @@ export default function Login() {
   const [name,setName] = useState("");
   const [password,setPassword] = useState("");
   const [error,setError] = useState("");
- async function handleSubmit(){
-  
-useEffect(()=>{
+  useEffect(()=>{
   const token = localStorage.getItem("token");
   if(token){
     router.push("/")
   }
 });
+ async function handleSubmit(){
+  
+
     if(!name || !password){
       console.log("Login Failed");
       setError("Email and password are required.");
