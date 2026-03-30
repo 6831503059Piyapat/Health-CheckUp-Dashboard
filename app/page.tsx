@@ -10,6 +10,7 @@ import Result from "./components/Result";
 import DropDown from "./components/dropDown";
 import HealthcareRec from "./components/HealthcareRec";
 import { h1 } from "framer-motion/client";
+import {jwtDecode,JwtPayload} from "jwt-decode";
 const metrics = [
   "Fasting blood sugar", "Cholesterol", "HDL", "LDL", 
   "Blood pressure", "Triglyceride", "Creatinine", "ALT", 
@@ -32,9 +33,24 @@ const latest = (dataFetchData && dataFetchData.length > 0)
   : null;  // Fetch data from backend
   useEffect(()=>{
     const token = localStorage.getItem("token");
-    if(!token){
-      router.push('/auth/login');
-    }
+    
+    if (token) {
+        try {
+          const decoded = jwtDecode<JwtPayload>(token);
+          const currentTime = Date.now() / 1000; 
+    
+          if (decoded.exp! < currentTime) {
+            localStorage.removeItem("token");
+            router.push('/auth/login');
+          }
+        } catch (error) {
+          localStorage.removeItem("token");
+          router.push('/auth/login');
+        }
+      }
+      else{
+        router.push('/auth/login');
+      }
     const handleFetch = async()=>{
       const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
         headers:{

@@ -2,13 +2,27 @@
 import Navbar from "./components/Navbar"
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import {jwtDecode,JwtPayload} from "jwt-decode";
 export default function NotFound(){
     const router = useRouter();
     useEffect(()=>{
 
       const token = localStorage.getItem("token");
-      if(token){
-        router.push("/")
+      if (token) {
+              try {
+                const decoded = jwtDecode<JwtPayload>(token);
+                const currentTime = Date.now() / 1000; 
+          
+                if (decoded.exp! < currentTime) {
+                  localStorage.removeItem("token");
+                  router.push('/auth/login');
+                }
+              } catch (error) {
+                localStorage.removeItem("token");
+                router.push('/auth/login');
+              }
+            }else{
+        router.push('/auth/login');
       }
     });
     return(

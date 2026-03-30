@@ -4,7 +4,7 @@ import { Shield, Lock, User, Building2, Headset, FileText, ArrowRight,EyeOff,Eye
 import LocalNavbar from '@/app/components/LocalNavbar';
 import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
+import {jwtDecode,JwtPayload} from 'jwt-decode';
 export default function Login() {
   const router = useRouter();
   const [isShowpassword,setIsShowpassword] = useState(false);
@@ -14,10 +14,22 @@ export default function Login() {
   const [error,setError] = useState("");
   useEffect(()=>{
   const token = localStorage.getItem("token");
-  if(token){
-    router.push("/")
+  if (token) {
+    try {
+      const decoded = jwtDecode<JwtPayload>(token);
+      const currentTime = Date.now() / 1000; 
+
+      if (decoded.exp! < currentTime) {
+        localStorage.removeItem("token");
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
+      localStorage.removeItem("token");
+    }
   }
-});
+
+},[]);
  async function handleSubmit(){
   
 
@@ -162,10 +174,12 @@ export default function Login() {
                 Log In to Dashboard
                 <ArrowRight className="w-5 h-5" />
               </button>
-            
+                          <h1 className='text-center '>Don't have any an account? <button className='underline text-blue-500' onClick={()=>router.push('/auth/register')}>register</button></h1>
+
             </div>
 
             {/* Footer Links */}
+
             <div className="mt-12">
               <div className="flex justify-center gap-6 mb-4">
                 <button className="flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors text-xs font-medium uppercase tracking-wide">

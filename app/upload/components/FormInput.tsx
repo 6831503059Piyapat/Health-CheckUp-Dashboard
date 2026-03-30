@@ -99,7 +99,7 @@ interface FileProps {
 export default function FormInput(){
   const prompt = `Role: You are a professional Health Data Analyst.
 
-Task: Analyze the provided JSON health data (specifically HDL and LDL levels).
+Task: Analyze the provided JSON health data .
 
 Rules:
 
@@ -139,6 +139,7 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
   const onSubmit =async (data:any)=>{
   setIsUiShow(true);
   setIspending(true);
+  
   const responseAi = await fetch(`${process.env.NEXT_PUBLIC_PORT}/ai/suggest`,{
     method:"POST",
     headers:{
@@ -151,6 +152,11 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
     })
   });
   const dataResAi = await responseAi.json();
+  if (responseAi.status === 401) {
+     localStorage.removeItem('token');
+      router.push('/auth/login');
+     return;
+  }
   if(responseAi.ok){
     
     const response = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/create-post`, {
@@ -163,7 +169,11 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
       Data:dataResAi,
     })
   });
-  
+  if (response.status === 401) {
+     localStorage.removeItem('token');
+      router.push('/auth/login');
+     return;
+  }
   if (response.ok) {
     setIsOK(true);
     setIspending(false);

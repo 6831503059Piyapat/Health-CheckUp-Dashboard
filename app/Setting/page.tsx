@@ -2,6 +2,7 @@
 import Navbar from '@/app/components/Navbar';
 import { useState,useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import {jwtDecode,JwtPayload} from "jwt-decode";
 export default function SettingsPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -10,9 +11,22 @@ export default function SettingsPage() {
   const router = useRouter();
  useEffect(()=>{
   const token = localStorage.getItem("token");
-  if(!token){
-      router.push('/auth/login');
-    }
+  if (token) {
+            try {
+              const decoded = jwtDecode<JwtPayload>(token);
+              const currentTime = Date.now() / 1000; 
+        
+              if (decoded.exp! < currentTime) {
+                localStorage.removeItem("token");
+                router.push('/auth/login');
+              }
+            } catch (error) {
+              localStorage.removeItem("token");
+              router.push('/auth/login');
+            }
+          }else{
+        router.push('/auth/login');
+      }
  });
   const [password, setPassword] = useState('');
   const [enable2FA, setEnable2FA] = useState(false);

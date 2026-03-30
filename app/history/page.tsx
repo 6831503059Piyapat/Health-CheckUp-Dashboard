@@ -5,16 +5,29 @@ import FilterSelect from "../components/FilterSelect";
 import Historyitem from "./components/historyitem";
 import { useEffect,useState } from "react";
 import { usePathname,useRouter } from "next/navigation";
-
+import {jwtDecode,JwtPayload} from "jwt-decode";
 export default function History(){
   const pathName = usePathname();
   const [dataFetch,setDataFetch] = useState<any>([]);
   const router = useRouter();
   useEffect(()=>{
     const token = localStorage.getItem("token");
-  if(!token){
-      router.push('/auth/login');
-    }
+  if (token) {
+            try {
+              const decoded = jwtDecode<JwtPayload>(token);
+              const currentTime = Date.now() / 1000; 
+        
+              if (decoded.exp! < currentTime) {
+                localStorage.removeItem("token");
+                router.push('/auth/login');
+              }
+            } catch (error) {
+              localStorage.removeItem("token");
+              router.push('/auth/login');
+            }
+          }else{
+        router.push('/auth/login');
+      }
     const handleFetch =async ()=>{
       const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
         headers:{'Content-Type':'application/json',

@@ -2,6 +2,7 @@
 
 import React, { useState,useEffect } from 'react';
 import { X, Check } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { data, div } from 'framer-motion/client';
 interface Props{
     ui:(value:boolean)=>void;
@@ -10,6 +11,7 @@ interface Props{
 export default function Result({ui}:Props) {
   const [dataFetch,setDataFetch] = useState<any[]>([]);
   const token = localStorage.getItem("token");
+  const router = useRouter();
   useEffect(()=>{
     const handlefetch = async ()=>{
         const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
@@ -22,6 +24,10 @@ export default function Result({ui}:Props) {
         const data = await res.json();
         if(res.ok){
             setDataFetch(data.Data);
+        }
+        if(res.status === 401){
+            localStorage.removeItem("token");
+            router.push('/auth/login');
         }
     }
     handlefetch();

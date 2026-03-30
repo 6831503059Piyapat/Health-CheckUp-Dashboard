@@ -6,6 +6,7 @@ import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PendingCreate from './components/pendingCreate';
 import Checkpassword from './components/Checkpassword';
+import {jwtDecode,JwtPayload} from 'jwt-decode';
 // interface return after register success
 interface AuthAfterRegister {
   email:string,
@@ -57,9 +58,23 @@ export default function Register() {
 
 useEffect(()=>{
   const token = localStorage.getItem("token");
-  if(token){
-    router.push("/")
-  }
+  if (token) {
+            try {
+              const decoded = jwtDecode<JwtPayload>(token);
+              const currentTime = Date.now() / 1000; 
+        
+              if (decoded.exp! < currentTime) {
+                localStorage.removeItem("token");
+                
+              }
+              else{
+                router.push('/');
+              }
+            } catch (error) {
+              localStorage.removeItem("token");
+              router.push('/auth/login');
+            }
+          }
 });
   // Password : Piadwaf25@
   const checkPassword = ()=>{
