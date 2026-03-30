@@ -1,5 +1,5 @@
 'use client';
-import { Plus, Users, LayoutDashboard, Settings,History,ArrowDownToLine } from "lucide-react";
+import { Plus, Users, LayoutDashboard, Settings,History,ArrowDownToLine, LogOut } from "lucide-react";
 import NavItem from "./NavItem";
 import { useRouter,usePathname } from "next/navigation";
 import { useState,useEffect } from "react";
@@ -12,6 +12,10 @@ export default function Navbar() {
   // check pathname if current pathname match with current sidebar  
     const pathname = usePathname();
     const [userData,setUserData] = useState<any>();
+    const handleLogout = ()=>{
+      localStorage.removeItem("token");
+      router.push('/auth/login');
+    }
     useEffect(()=>{
       const token = localStorage.getItem('token');
     
@@ -67,8 +71,12 @@ export default function Navbar() {
 
       {/* Setting button */}
         <div className="p-4 border-t border-slate-100">
+<button onClick={()=>handleLogout()} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all focus:ring-2 focus:ring-red-500 text-red-500 hover:bg-red-50 hover:text-red-600 
+    }`}>
+      {<LogOut size={20} className="text-red-500"/>}
+      {"Logout"}
+    </button>
           <div onClick={()=>router.push('/Setting')}><NavItem  icon={<Settings size={20}/>} label="Settings" /></div>
-          
         </div>
       </aside>
     )
