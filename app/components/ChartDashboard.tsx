@@ -144,7 +144,7 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
     },
     scales: {
       y: {
-        beginAtZero: false, // BMI usually doesn't start at 0
+        beginAtZero: true, // BMI usually doesn't start at 0
         grid: { display: true },
       },
       x: {
@@ -154,7 +154,7 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
   };
 
   return (
-    <div className="h-full w-full bg-white p-4 rounded-xl">
+    <div className="h-[50vh] w-full bg-white p-2 rounded-xl">
       <Line options={options} data={data} />
     </div>
   );
