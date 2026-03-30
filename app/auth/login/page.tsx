@@ -174,7 +174,7 @@ export default function Login() {
                 Log In to Dashboard
                 <ArrowRight className="w-5 h-5" />
               </button>
-                          <h1 className='text-center '>Don't have any an account? <button className='underline text-blue-500' onClick={()=>router.push('/auth/register')}>register</button></h1>
+                          <h1 className='text-center '>Don't have any an account? <button className='underline text-blue-500 cursor-pointer' onClick={()=>router.push('/auth/register')}>register</button></h1>
 
             </div>
 
