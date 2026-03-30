@@ -6,9 +6,13 @@ import Historyitem from "./components/historyitem";
 import { useEffect,useState } from "react";
 import { usePathname,useRouter } from "next/navigation";
 import {jwtDecode,JwtPayload} from "jwt-decode";
+import { Spinner } from "@heroui/react";
+import { div } from "framer-motion/client";
+import { set } from "react-hook-form";
 export default function History(){
   const pathName = usePathname();
   const [dataFetch,setDataFetch] = useState<any>([]);
+  const [isLoading,setIsLoading] = useState(true);
   const router = useRouter();
   useEffect(()=>{
     const token = localStorage.getItem("token");
@@ -28,6 +32,7 @@ export default function History(){
           }else{
         router.push('/auth/login');
       }
+    
     const handleFetch =async ()=>{
       const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
         headers:{'Content-Type':'application/json',
@@ -39,7 +44,8 @@ export default function History(){
       const data = await res.json();
       if(res.ok){
         setDataFetch(data);
-        console.log(data.Data);
+        setIsLoading(false);
+        
 
       }
       else{
@@ -90,12 +96,13 @@ export default function History(){
              
             
             )}
+            
                 
             
 
             </tbody>
           </table>
-
+      
           {/* Pagination */}
           {/* <div className="px-6 py-4 bg-slate-50/30 flex justify-between items-center border-t border-slate-100">
             <p className="text-xs text-slate-400 font-medium">Showing 0 to 0 of 0 File</p>
@@ -109,6 +116,18 @@ export default function History(){
           </div>
         </div> */}
        </div>
+       {isLoading && (
+              
+        <div className="flex h-[40vh] items-center justify-center text-gray-500 italic">
+          <Spinner size="xl" className="text-slate-400"/>
+        </div>
+              
+            )}
+        {dataFetch?.Data && !isLoading && dataFetch.Data.length === 0 && (
+              <div className="flex h-[40vh] items-center justify-center text-gray-500 italic">
+                <p>No history found</p>
+              </div>
+            )}
        </div>
     </main>
       </div>
