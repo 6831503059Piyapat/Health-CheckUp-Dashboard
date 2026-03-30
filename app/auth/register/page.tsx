@@ -412,7 +412,7 @@ useEffect(()=>{
                 <ArrowRight className="w-5 h-5" />
                 
               </button>
-                                          <h1 className='text-center '>You already have an account? <button className='underline text-blue-500 cursor-pointer' onClick={()=>router.push('/auth/login')}>Login</button></h1>
+                  <h1 className='text-center '>You already have an account? <button className='underline text-blue-500 cursor-pointer' onClick={()=>router.push('/auth/login')}>Login</button></h1>
 
               </>
               )}

@@ -5,6 +5,7 @@ import LocalNavbar from '@/app/components/LocalNavbar';
 import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {jwtDecode,JwtPayload} from 'jwt-decode';
+import { set } from 'react-hook-form';
 export default function Login() {
   const router = useRouter();
   const [isShowpassword,setIsShowpassword] = useState(false);
@@ -53,6 +54,9 @@ export default function Login() {
   if(res.ok){
     localStorage.setItem('token',result.access_token);
     router.push('/');
+  }
+  if(res.status === 401){
+    setError("Username or password is incorrect.");
   }
   else{
     setError("");
