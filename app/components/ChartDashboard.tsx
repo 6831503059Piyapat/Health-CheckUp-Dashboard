@@ -118,7 +118,7 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
       {
         label: typeData,
         data: processedWeights,
-        borderColor: 'rgb(80, 146, 251)', // Blue to match your "LifeMarkers" UI
+        borderColor: 'rgb(35, 167, 176)', // Blue to match your "LifeMarkers" UI
         backgroundColor: 'rgba(59, 130, 246, 0.1)', 
         tension: 0.1, 
         fill: true,   

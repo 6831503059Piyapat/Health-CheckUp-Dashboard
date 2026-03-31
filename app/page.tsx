@@ -86,11 +86,11 @@ return(
       <div>
         <h1 className="text-2xl font-bold text-black mb-2 uppercase">{dataFetch?.name || (<Skeleton className="w-20 h-[30px]"/>)}</h1>
         <div className="grid grid-cols-3 gap-x-4 gap-y-1 text-sm text-gray-500">
-          <span>Age : 24 years</span>
-          <span>High : 180 cm</span>
-          <span>Weight : 24</span>
-          <span className="col-span-3">Gender : Female</span>
-          <span className="col-span-3">Last Checkup : Mar 21, 2025</span>
+          <span>Age : {latest?.age } years</span>
+          <span>High : {latest?.height} cm</span>
+          <span>Weight : {latest?.weight } kg</span>
+          <span className="col-span-3">Gender : {latest?.gender }</span>
+          <span className="col-span-3">Last Checkup : {latest?.dateFile || <Skeleton className="w-20 h-[20px]"/>}</span>
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@ return(
               
             </div>
             <div>
-              <p className="font-bold">Dr.{latest?.provide}</p>
+              <p className="font-bold">{latest?.provide}</p>
               <p className="text-xs text-gray-500">{latest?.dateFile}</p>
             </div>
             </>

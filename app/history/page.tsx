@@ -154,7 +154,7 @@ export default function History(){
         </div>
               
             )}
-        {dataFetch?.Data && !isLoading && dataFetch.Data.length === 0 && (
+        {!isLoading && displayedData.length === 0 && (
               <div className="flex h-[40vh] items-center justify-center text-gray-500 italic">
                 <p>No history found</p>
               </div>
