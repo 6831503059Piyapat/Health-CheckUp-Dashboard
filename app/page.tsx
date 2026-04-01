@@ -134,31 +134,30 @@ return(
           <h2 className="mb-4 font-semibold">Latest test results</h2>
      
       <div className="mb-4 flex items-center gap-4 rounded-xl bg-gray-200 p-4">
-        {typeData && typeData.length > 0 ?(
-          <>
-            <div className="text-center leading-tight border-r border-gray-400 pr-4">
-              <p className="text-[32px] uppercase font-bold ">📅</p>
-              
-            </div>
-            <div>
-              <p className="font-bold">{latest?.provide}</p>
-              <p className="text-xs text-gray-500">{latest?.dateFile}</p>
-            </div>
-            </>
+            {dataFetchData && dataFetchData.length > 0 ?(
+              <>
+                <div className="text-center leading-tight border-r border-gray-400 pr-4">
+                  <p className="text-[32px] uppercase font-bold ">📅</p>
+                </div>
+                <div>
+                  <p className="font-bold">{latest?.provide}</p>
+                  <p className="text-xs text-gray-500">{latest?.dateFile}</p>
+                </div>
+              </>
             ):(
-      <div className="flex h-full items-center justify-center text-gray-500 italic">
-        <p>You do not have any upload result</p>
-      </div>
-     )}
+              <div className="flex h-full items-center justify-center text-gray-500 italic">
+                <p>You do not have any upload result</p>
+              </div>
+            )}
           </div>
      
           
           
           {/* <button className="w-full rounded-xl bg-gray-200 py-3 text-sm font-medium">2 more new Appointment</button> */}
         </div>
-         {typeData && typeData.length > 0 ?(
+         {dataFetchData && dataFetchData.length > 0 ? (
         <button type="button" onClick={()=>setResultUi(true)} className="w-full border-t border-gray-100 py-4 text-sm font-medium hover:bg-gray-50 text-center">View </button>
-      ):(
+      ) : (
       <div className="flex h-full items-center justify-center text-gray-500 italic">
         
       </div>

@@ -12,6 +12,7 @@ export default function Navbar() {
   // check pathname if current pathname match with current sidebar  
     const pathname = usePathname();
     const [userData,setUserData] = useState<any>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const handleLogout = ()=>{
       localStorage.removeItem("token");
       router.push('/auth/login');
@@ -20,20 +21,23 @@ export default function Navbar() {
       const token = localStorage.getItem('token');
     
     const fetcProfile = async ()=>{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
-      headers:{
-        'Authorization':`Bearer ${token}`,
-        'Content-Type':'application/json'
+      try{
+        setIsLoading(true);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
+          headers:{
+            'Authorization':`Bearer ${token}`,
+            'Content-Type':'application/json'
+          }
+        });
+        const data = await res.json();
+        if(res.ok){     
+          setUserData(data);
+        }
+      }finally{
+        setIsLoading(false);
       }
-    });
-    const data = await res.json();
-    if(res.ok){     
-      setUserData(data);
-    }
-  
-
-  };
-  fetcProfile();
+    };
+    fetcProfile();
     },[pathname])
 
   
@@ -55,7 +59,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
             <Skeleton className="w-10 h-10 rounded-full border border-white"/>
             <div>
-              <p className="text-sm font-bold">{userData?.name}</p>
+                <p className="text-sm font-bold">{isLoading ? 'Loading…' : userData?.name}</p>
               <p className="text-[10px] text-slate-500 uppercase tracking-wider">Role</p>
             </div>
           </div>

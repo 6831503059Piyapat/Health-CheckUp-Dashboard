@@ -13,7 +13,7 @@ import {
   Filler // Added Filler to make 'fill: true' work
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-
+import { Toast,toast } from "@heroui/react";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,7 +25,7 @@ ChartJS.register(
   Legend,
   Filler 
 );
-import { useState,useEffect } from 'react';
+import { useState,useEffect, useRef } from 'react';
 
 interface Props{
   typeData:string,
@@ -34,9 +34,12 @@ interface Props{
 const ChartDashboard = ({typeData,lengthData}:any) => {
   
   const [dataFetch,setDataFetch] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   useEffect(()=>{
     const token = localStorage.getItem("token");
     async function handleFetch(){
+    try{
+    setIsLoading(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,
       {   
         headers:{
@@ -53,6 +56,9 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
     })
    setDataFetch(sortedData);
   }
+    }finally{
+      setIsLoading(false);
+    }
   
   }
   handleFetch();
@@ -107,11 +113,50 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
   }
   const currentYear = new Date().getFullYear(); 
   const processedWeights = handleCategory(typeData);
-
   const yearLabels = dataFetch.map((item:any) => {
     const date = new Date(item.dateFile);
     return date.getFullYear(); 
   });
+  const hasNumericData = Array.isArray(processedWeights) && processedWeights.some(v => typeof v === 'number' && !isNaN(v));
+
+  // standard thresholds (max values). adjust as needed
+  const thresholds: Record<string, number | undefined> = {
+    'Body Mass Index': 25,
+    'Fasting blood sugar': 125,
+    'Cholesterol': 200,
+    'LDL': 130,
+    'Triglyceride': 150,
+    'Creatinine': 1.3,
+    'ALT': 41,
+    'White blood cell': 11000,
+    'Platelet': 450000,
+    'Heart rate': 100,
+    'Blood pressure': 140
+  };
+
+  const threshold = thresholds[typeData];
+  const exceedIndices: number[] = [];
+  const pointBackgroundColor = Array.isArray(processedWeights) ? processedWeights.map((v:any, i:number) => {
+    const num = Number(v);
+    if (isNaN(num) || threshold === undefined) return '#fff';
+    const exceed = num > threshold;
+    if (exceed) exceedIndices.push(i);
+    // user requested white fill when value higher than standard
+    return '#fff';
+  }) : [];
+  const pointBorderColor = pointBackgroundColor.map((_, idx) => exceedIndices.includes(idx) ? 'rgb(220 38 38)' : 'rgb(35 167 176)');
+  const lastToastRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!threshold) return;
+    if (exceedIndices.length === 0) return;
+    const msg = `${typeData} high: ${exceedIndices.length} value(s) above standard (${threshold}).`;
+    if (lastToastRef.current === msg) return;
+    lastToastRef.current = msg;
+    try { Toast.toast.danger(msg, { timeout: 5000 }); } catch(e) { console.warn('toast error', e); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeData, JSON.stringify(processedWeights)]);
+
   const data = {
     labels: yearLabels,
     datasets: [
@@ -122,9 +167,10 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
         backgroundColor: 'rgba(59, 130, 246, 0.1)', 
         tension: 0.1, 
         fill: true,   
-        pointRadius: 4, 
-        pointHoverRadius: 6,
-        pointBackgroundColor: '#fff',
+        pointRadius: 6, 
+        pointHoverRadius: 8,
+        pointBackgroundColor: pointBackgroundColor,
+        pointBorderColor: pointBorderColor,
         pointBorderWidth: 2,
       },
     ],
@@ -153,9 +199,37 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
     },
   };
 
+  if (!dataFetch || dataFetch.length === 0) {
+    return (
+      <div className="h-[50vh] w-full bg-white p-6 rounded-xl flex items-center justify-center text-sm text-gray-500">
+        No records available. Upload a result to see the chart.
+      </div>
+    );
+  }
+
+  if (!typeData) {
+    return (
+      <div className="h-[50vh] w-full bg-white p-6 rounded-xl flex items-center justify-center text-sm text-gray-500">
+        Select a metric to view its trend.
+      </div>
+    );
+  }
+
+  if (!hasNumericData) {
+    return (
+      <div className="h-[50vh] w-full bg-white p-6 rounded-xl flex items-center justify-center text-sm text-gray-500">
+        No numeric data available for "{typeData}".
+      </div>
+    );
+  }
+
   return (
     <div className="h-[50vh] w-full bg-white p-2 rounded-xl">
-      <Line options={options} data={data} />
+      {isLoading ? (
+        <div className="h-full flex items-center justify-center">Loading chart…</div>
+      ) : (
+        <Line options={options} data={data} />
+      )}
     </div>
   );
 };

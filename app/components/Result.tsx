@@ -10,25 +10,31 @@ interface Props{
 
 export default function Result({ui}:Props) {
   const [dataFetch,setDataFetch] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const token = localStorage.getItem("token");
   const router = useRouter();
   useEffect(()=>{
     const handlefetch = async ()=>{
-        const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
-            headers:{
-                'Content-Type':'application/json',
-                'Authorization':`Bearer ${token}`
-            }
+    try{
+    setIsLoading(true);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${token}`
+      }
 
-        })
-        const data = await res.json();
-        if(res.ok){
-            setDataFetch(data.Data);
-        }
-        if(res.status === 401){
-            localStorage.removeItem("token");
-            router.push('/auth/login');
-        }
+    })
+    const data = await res.json();
+    if(res.ok){
+      setDataFetch(data.Data);
+    }
+    if(res.status === 401){
+      localStorage.removeItem("token");
+      router.push('/auth/login');
+    }
+    }finally{
+      setIsLoading(false);
+    }
     }
     handlefetch();
   },[])
@@ -50,7 +56,10 @@ export default function Result({ui}:Props) {
 
       {/* List Items */}
       <div className="space-y-3 h-[60vh] overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none">
-        {dataFetch.map((value,i)=>(
+        {isLoading ? (
+          <div className="flex items-center justify-center h-40">Loading…</div>
+        ) : (
+        dataFetch.map((value,i)=>(
             <div 
               key={i}
               className="group  flex items-center justify-between p-4 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-200 transition-all"
@@ -60,7 +69,8 @@ export default function Result({ui}:Props) {
               
              
             </div>
-        ))}
+        )))}
+     
      
       </div>
 </div>
