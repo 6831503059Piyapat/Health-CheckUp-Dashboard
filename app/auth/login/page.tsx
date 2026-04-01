@@ -130,7 +130,7 @@ export default function Login() {
             <h2 className="text-3xl font-bold text-slate-800 mb-1">Login</h2>
              <p className="text-slate-500 mb-3 text-sm">Enter your username and password</p>
             {error && (
-               <p className='text-white bg-red-500 p-1'>{error}</p>
+               <p className='text-sm text-red-600 p-2 bg-red-50 rounded'>{error}</p>
             )}
            
             

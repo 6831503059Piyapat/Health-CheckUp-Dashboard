@@ -36,10 +36,7 @@ return(
         
         {/* Header */}
         <header className="flex justify-between items-end mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-800">Upload Result File</h1>
-          </div>
-       
+        
         </header>
        
        {/* Upload Section */}

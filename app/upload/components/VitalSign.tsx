@@ -7,15 +7,15 @@ export default function VitalSign({ register,fileUpload }: any) {
 <div>
 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Temp (C)</label>
 <input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all"
- {...register("temperature",{value:fileUpload?.vital_signs.temperature})} />
+ type="number" min={25} max={45} step="0.1" {...register("temperature",{value:fileUpload?.vital_signs.temperature})} />
 </div>
 <div>
 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Heart Rate (BPM)</label>
-<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="text" {...register("heartRate",{value:fileUpload?.vital_signs.heart_rate})} />
+<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="number" min={0} max={300} {...register("heartRate",{value:fileUpload?.vital_signs.heart_rate})} />
 </div>
 <div>
 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Resp. Rate (min)</label>
-<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="text" {...register("respiratoryRate",{value:fileUpload?.vital_signs.respiratory_rate})} />
+<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="number" min={0} max={100} {...register("respiratoryRate",{value:fileUpload?.vital_signs.respiratory_rate})} />
 </div>
 <div>
 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">BP (mmHg)</label>
@@ -23,11 +23,11 @@ export default function VitalSign({ register,fileUpload }: any) {
 </div>
 <div>
 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">SpO2 (%RA)</label>
-<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="text" {...register("spo2",{value:fileUpload?.vital_signs.oxygen_saturation})} />
+<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="number" min={0} max={100} {...register("spo2",{value:fileUpload?.vital_signs.oxygen_saturation})} />
 </div>
 <div>
 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Pulse. Rate (min)</label>
-<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="text" {...register("pulse",{value:fileUpload?.vital_signs.pulse})} />
+<input className="w-full p-2 rounded-md border border-slate-200 focus:border-[#137fec] focus:ring-1 focus:ring-[#137fec] outline-none transition-all" type="number" min={0} max={300} {...register("pulse",{value:fileUpload?.vital_signs.pulse})} />
 </div>
 </div>
 </section>

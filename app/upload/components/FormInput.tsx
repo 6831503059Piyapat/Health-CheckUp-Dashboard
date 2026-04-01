@@ -123,7 +123,29 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
     const [isUiShow,setIsUiShow] = useState<boolean>(false);
 
     const [resData,setResData] = useState<any>();
-    const { register, handleSubmit,reset,formState:{isSubmitting} } = useForm();
+    const { register, handleSubmit,reset,formState:{isSubmitting}, setError } = useForm();
+    const [formError, setFormError] = useState<string | null>(null);
+
+    const validateSections = (data:any) => {
+      const hasTopic1 = data.fullName && String(data.fullName).trim().length > 0;
+      const hasDoctor = data.provide && String(data.provide).trim().length > 0;
+
+      const vitalKeys = ['temperature','heartRate','respiratoryRate','bloodPressure','spo2','pulse'];
+      const cbcKeys = ['hemoglobin','wbc','rbc','platelets','hematocrit','mcv'];
+      const sugarKeys = ['hba1c','fbs'];
+      const lipidKeys = ['cholesterol','hdl','ldl','triglycerides'];
+      const liverKeys = ['sgot','sgpt','alp','total_bilirubin','albumin','ggt','direct_bilirubin'];
+
+      const anyFilled = [...vitalKeys,...cbcKeys,...sugarKeys,...lipidKeys,...liverKeys].some((k) => {
+        const v = data[k];
+        return v !== undefined && v !== null && String(v).trim() !== '';
+      });
+
+      if (!hasTopic1) return { valid: false, message: 'Please fill required fields in Topic 1 (Patient Information).' };
+      if (!hasDoctor) return { valid: false, message: 'Please fill required fields in Topic 7 (Doctor).' };
+      if (!anyFilled) return { valid: false, message: 'Please enter at least one value in Topics 2–6.' };
+      return { valid: true };
+    };
     
     const calculateBMI = () => {
         if (height > 0 && weight > 0) {
@@ -137,8 +159,16 @@ Format: Output only valid JSON. Do not include markdown formatting like json unl
     const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit =async (data:any)=>{
+  setFormError(null);
   setIsUiShow(true);
   setIspending(true);
+
+  const validation = validateSections(data);
+  if(!validation.valid){
+    setFormError(validation.message || 'Validation failed');
+    setIspending(false);
+    return;
+  }
   
   const responseAi = await fetch(`${process.env.NEXT_PUBLIC_PORT}/ai/suggest`,{
     method:"POST",
@@ -274,6 +304,9 @@ useEffect(() => {
      {/* Upload date day that upload data */}
         <h1 className="text-lg font-bold text-slate-700 mb-6 uppercase tracking-tight  pl-3" {...register("dateupload",{value:getCustomDate()})}>{getCustomDate()}</h1>
         <h1 {...register("ai_suggest")}></h1>
+        {formError && (
+          <div className="text-sm text-red-600 p-2 bg-red-50 rounded">{formError}</div>
+        )}
         {/* 1. Patient Information */}
         <FormSection title={`1. Patient Information`} >
          <div>
@@ -283,9 +316,9 @@ useEffect(() => {
             <div className="md:col-span-2">
               <InputField label="Full Name" registration={register("fullName",{value:fileUpload?.fullName})} placeholder="example:John Doe"  />
             </div>
-            <InputField label="Age" type="number" registration={register("age",{value:fileUpload?.age})} placeholder="Years" />
-            <InputField label="Height (cm)" type="number" registration={register("height",{onChange:(e) => setHeight(parseFloat(e.target.value)),value:fileUpload?.height})} />
-            <InputField label="Weight (kg)" type="number" registration={register("weight",{onChange:(e) => setWeight(parseFloat(e.target.value)),value:fileUpload?.weight})} />
+            <InputField label="Age" type="number" min={0} max={130} registration={register("age",{value:fileUpload?.age})} placeholder="Years" />
+            <InputField label="Height (cm)" type="number" min={30} max={300} step={0.1} registration={register("height",{onChange:(e) => setHeight(parseFloat(e.target.value)),value:fileUpload?.height})} placeholder="example:175" />
+            <InputField label="Weight (kg)" type="number" min={0} max={500} step={0.1} registration={register("weight",{onChange:(e) => setWeight(parseFloat(e.target.value)),value:fileUpload?.weight})} placeholder="example:70" />
             <InputField label="Gender" type="text" registration={register("gender",{value:fileUpload?.gender})} placeholder="example:Female" />
 
             <div className="space-y-1">
@@ -311,20 +344,20 @@ useEffect(() => {
           <div className="space-y-10">
             <FormSection title="3. Blood Test - CBC">
               <div className="space-y-3 bg-slate-50 p-4 rounded-lg">
-                <RowInput label="Hemoglobin (g/dL)" registration={register("hemoglobin",{value:fileUpload?.blood_test.cbc.hemoglobin})} />
-                <RowInput label="WBC Count (cells/µL)" registration={register("wbc",{value:fileUpload?.blood_test.cbc.wbc})} />
-                <RowInput label="RBC Count (cells/µL)" registration={register("rbc",{value:fileUpload?.blood_test.cbc.rbc})} />
-                <RowInput label="Platelet Count" registration={register("platelets",{value:fileUpload?.blood_test.cbc.platelets})} />
-                <RowInput label="hematocrit (cells/µL)" registration={register("hematocrit",{value:fileUpload?.blood_test.cbc.hematocrit})} />
-                <RowInput label="mcv (cells/µL)" registration={register("mcv",{value:fileUpload?.blood_test.cbc.mcv})} />
+                <RowInput label="Hemoglobin (g/dL)" type="number" min={3} max={25} step={0.1} placeholder="e.g., 12.5" registration={register("hemoglobin",{value:fileUpload?.blood_test.cbc.hemoglobin})} />
+                <RowInput label="WBC Count (cells/µL)" type="number" min={0} max={50000} step={1} placeholder="e.g., 7500" registration={register("wbc",{value:fileUpload?.blood_test.cbc.wbc})} />
+                <RowInput label="RBC Count (cells/µL)" type="number" min={0} max={10} step={0.01} placeholder="e.g., 4.5" registration={register("rbc",{value:fileUpload?.blood_test.cbc.rbc})} />
+                <RowInput label="Platelet Count" type="number" min={0} max={2000000} step={1} placeholder="e.g., 250000" registration={register("platelets",{value:fileUpload?.blood_test.cbc.platelets})} />
+                <RowInput label="hematocrit (cells/µL)" type="number" min={0} max={100} step={0.1} placeholder="e.g., 38.5" registration={register("hematocrit",{value:fileUpload?.blood_test.cbc.hematocrit})} />
+                <RowInput label="mcv (cells/µL)" type="number" min={0} max={200} step={0.1} placeholder="e.g., 90.5" registration={register("mcv",{value:fileUpload?.blood_test.cbc.mcv})} />
 
               </div>
             </FormSection>
             
             <FormSection title="4. Fasting Blood Sugar">
               <div className="space-y-3 bg-slate-50 p-4 rounded-lg">
-                <RowInput label="HbA1c (%)" registration={register("hba1c",{value:fileUpload?.blood_test.hba1c})} />
-                <RowInput label="FBS (mg/dL)" registration={register("fbs",{value:fileUpload?.blood_test.fasting_blood_sugar})} />
+                <RowInput label="HbA1c (%)" type="number" min={2} max={20} step={0.1} placeholder="e.g., 5.7" registration={register("hba1c",{value:fileUpload?.blood_test.hba1c})} />
+                <RowInput label="FBS (mg/dL)" type="number" min={0} max={1000} step={1} placeholder="e.g., 92" registration={register("fbs",{value:fileUpload?.blood_test.fasting_blood_sugar})} />
               </div>
             </FormSection>
 
@@ -340,23 +373,23 @@ useEffect(() => {
           <div className="space-y-10">
             <FormSection title="5. Lipid Profile">
               <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg">
-                <InputField label="Cholesterol" registration={register("cholesterol",{value:fileUpload?.blood_test.lipid_profile.total_cholesterol})} size="sm" />
-                <InputField label="HDL" registration={register("hdl",{value:fileUpload?.blood_test.lipid_profile.hdl})} size="sm" />
-                <InputField label="LDL" registration={register("ldl",{value:fileUpload?.blood_test.lipid_profile.ldl})} size="sm" />
-                <InputField label="Triglycerides" registration={register("triglycerides",{value:fileUpload?.blood_test.lipid_profile.triglycerides})} size="sm" />
+                <InputField label="Cholesterol" type="number" min={0} max={2000} step={1} placeholder="e.g., 200" registration={register("cholesterol",{value:fileUpload?.blood_test.lipid_profile.total_cholesterol})} size="sm" />
+                <InputField label="HDL" type="number" min={0} max={1000} step={1} placeholder="e.g., 50" registration={register("hdl",{value:fileUpload?.blood_test.lipid_profile.hdl})} size="sm" />
+                <InputField label="LDL" type="number" min={0} max={1000} step={1} placeholder="e.g., 120" registration={register("ldl",{value:fileUpload?.blood_test.lipid_profile.ldl})} size="sm" />
+                <InputField label="Triglycerides" type="number" min={0} max={5000} step={1} placeholder="e.g., 150" registration={register("triglycerides",{value:fileUpload?.blood_test.lipid_profile.triglycerides})} size="sm" />
 
               </div>
             </FormSection>
 
             <FormSection title="6. Liver Function">
               <div className="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-lg">
-                <InputField label="SGOT" registration={register("sgot",{value:fileUpload?.blood_test.liver_function_test.ast})} size="sm" />
-                <InputField label="SGPT" registration={register("sgpt",{value:fileUpload?.blood_test.liver_function_test.alt})} size="sm" />
-                <InputField label="ALP" registration={register("alp",{value:fileUpload?.blood_test.liver_function_test.alp})} size="sm" />
-                <InputField label="Total bilirubin" registration={register("total_bilirubin",{value:fileUpload?.blood_test.liver_function_test.total_bilirubin})} size="sm" />
-                <InputField label="Albumin" registration={register("albumin",{value:fileUpload?.blood_test.liver_function_test.albumin})} size="sm" />
-                <InputField label="GGT" registration={register("ggt",{value:fileUpload?.blood_test.liver_function_test.ggt})} size="sm" />
-                <InputField label="Direct Bilirubin" registration={register("direct_bilirubin",{value:fileUpload?.blood_test.liver_function_test.direct_bilirubin})} size="sm" />
+                <InputField label="SGOT" type="number" min={0} max={2000} step={1} placeholder="e.g., 35" registration={register("sgot",{value:fileUpload?.blood_test.liver_function_test.ast})} size="sm" />
+                <InputField label="SGPT" type="number" min={0} max={2000} step={1} placeholder="e.g., 40" registration={register("sgpt",{value:fileUpload?.blood_test.liver_function_test.alt})} size="sm" />
+                <InputField label="ALP" type="number" min={0} max={2000} step={1} placeholder="e.g., 120" registration={register("alp",{value:fileUpload?.blood_test.liver_function_test.alp})} size="sm" />
+                <InputField label="Total bilirubin" type="number" min={0} max={50} step={0.1} placeholder="e.g., 1.2" registration={register("total_bilirubin",{value:fileUpload?.blood_test.liver_function_test.total_bilirubin})} size="sm" />
+                <InputField label="Albumin" type="number" min={0} max={10} step={0.1} placeholder="e.g., 4.0" registration={register("albumin",{value:fileUpload?.blood_test.liver_function_test.albumin})} size="sm" />
+                <InputField label="GGT" type="number" min={0} max={2000} step={1} placeholder="e.g., 25" registration={register("ggt",{value:fileUpload?.blood_test.liver_function_test.ggt})} size="sm" />
+                <InputField label="Direct Bilirubin" type="number" min={0} max={50} step={0.1} placeholder="e.g., 0.5" registration={register("direct_bilirubin",{value:fileUpload?.blood_test.liver_function_test.direct_bilirubin})} size="sm" />
 
               </div>
             </FormSection>
