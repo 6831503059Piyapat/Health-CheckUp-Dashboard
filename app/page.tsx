@@ -12,6 +12,7 @@ import HealthcareRec from "./components/HealthcareRec";
 import { h1 } from "framer-motion/client";
 import {jwtDecode,JwtPayload} from "jwt-decode";
 const metrics = [
+  "Body Mass Index",
   "Fasting blood sugar", "Cholesterol", "HDL", "LDL", 
   "Blood pressure", "Triglyceride", "Creatinine", "ALT", 
   "Hemoglobin", "White blood cell", "Platelet", "Oxygen level", "Heart rate"

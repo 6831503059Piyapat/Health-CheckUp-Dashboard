@@ -6,6 +6,7 @@ import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {jwtDecode,JwtPayload} from 'jwt-decode';
 import { set } from 'react-hook-form';
+import PendingState from './components/pendingState';
 export default function Login() {
   const router = useRouter();
   const [isShowpassword,setIsShowpassword] = useState(false);
@@ -13,6 +14,10 @@ export default function Login() {
   const [name,setName] = useState("");
   const [password,setPassword] = useState("");
   const [error,setError] = useState("");
+  // Pending State
+  const [ispending,setIspending] = useState(false);
+  const [isOK,setIsOK] = useState(false);
+  const [isUiShow,setIsUiShow] = useState(false);
   useEffect(()=>{
   const token = localStorage.getItem("token");
   if (token) {
@@ -41,7 +46,9 @@ export default function Login() {
     }
     else{
       setError("");
-      const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/login`,{
+      setIsUiShow(true);
+      setIspending(true);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/login`,{
     method:"POST",
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
@@ -52,10 +59,14 @@ export default function Login() {
   const result = await res.json();
 
   if(res.ok){
+    setIsOK(true);
+    setIspending(false);
     localStorage.setItem('token',result.access_token);
     router.push('/');
   }
   if(res.status === 401){
+    setIsOK(false);
+    setIspending(false);
     setError("Username or password is incorrect.");
   }
   else{
@@ -69,7 +80,7 @@ export default function Login() {
     return (
     <>
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        
+        <PendingState ispending={ispending} isOK={isOK} setIsUiShow={setIsUiShow} isUiShow={isUiShow}/>
       <div className="max-w-4xl w-full bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
         
         {/* Left Side: Branding & Info */}

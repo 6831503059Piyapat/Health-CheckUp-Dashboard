@@ -20,6 +20,7 @@ export default function History(){
   const displayedData = useMemo(()=>{
     const list = Array.isArray(dataFetch?.Data) ? [...dataFetch.Data] : [];
     const q = searchQuery.trim().toLowerCase();
+    
     let filtered = list.filter((it:any)=>{
       if(!q) return true;
       const provider = (it.provide||'').toString().toLowerCase();
