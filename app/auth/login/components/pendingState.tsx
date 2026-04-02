@@ -15,7 +15,7 @@ export default function PendingState({ispending,isOK,setIsUiShow,isUiShow}:Pendi
     if(isUiShow){
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-lg space-y-6 bg-white p-6 shadow-xl dark:bg-gray-800 justify-center text-center text-[20px] font-bold">
+      <div className="w-full max-w-md rounded-lg space-y-6 bg-white p-6 shadow-xl dark:bg-gray-800 justify-center text-center text-[20px] font-bold text-slate-900 dark:text-white">
         <p>Logging in...</p>
         
         <div className="flex justify-center">

@@ -1,17 +1,14 @@
 import { Spinner,Button } from "@heroui/react"
 import { CircleCheckBig } from "lucide-react"
 import { X } from "lucide-react"
-interface Regis{
-    email:string,
-}
 interface PendingProps{
     ispending:boolean,
     isOK:boolean,
-    returnRegis:Regis,
+    email:string,
     setIsUipending:(value:boolean)=>void,
 }
 
-export default function PendingCreate({ispending,isOK,setIsUipending,returnRegis}:PendingProps){
+export default function PendingCreate({ispending,isOK,setIsUipending,email}:PendingProps){
     return(
          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-lg space-y-6 bg-white p-6 shadow-xl dark:bg-gray-800 justify-center text-center text-[20px] font-bold">
@@ -32,7 +29,7 @@ export default function PendingCreate({ispending,isOK,setIsUipending,returnRegis
         <p className="text-[14px]">Please wait . . .</p>
        )}
        {isOK&& !ispending &&(
-        <p className="text-[14px]">Account {returnRegis.email} has been Created</p>
+        <p className="text-[14px]">Account {email} has been Created</p>
        )}
        {!isOK && !ispending&&(
         <p className="text-[14px]">Failed to create an account. Please Try again</p>

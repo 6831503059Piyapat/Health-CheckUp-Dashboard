@@ -13,7 +13,7 @@ import {
   Filler // Added Filler to make 'fill: true' work
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Toast,toast } from "@heroui/react";
+import { Toast } from "@heroui/react";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,11 +27,7 @@ ChartJS.register(
 );
 import { useState,useEffect, useRef } from 'react';
 
-interface Props{
-  typeData:string,
-  lengthData:string,
-}
-const ChartDashboard = ({typeData,lengthData}:any) => {
+const ChartDashboard = ({typeData}:any) => {
   
   const [dataFetch,setDataFetch] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -48,14 +44,15 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
         }
       }
     );
+    if(res.status === 401){ localStorage.removeItem('token'); return; }
     const data = await res.json();
-    if(res.ok){
-      const sortedData = [...data.Data].sort((a, b) => {
-     return new Date(a.dateFile).getTime() - new Date(b.dateFile).getTime();
-        
-    })
-   setDataFetch(sortedData);
-  }
+    const records = Array.isArray(data.Data) ? data.Data : Array.isArray(data.data) ? data.data : [];
+    if(res.ok && records.length > 0){
+      const sortedData = [...records].sort((a, b) => {
+        return new Date(a.dateFile).getTime() - new Date(b.dateFile).getTime();
+      });
+      setDataFetch(sortedData);
+    }
     }finally{
       setIsLoading(false);
     }
@@ -66,52 +63,23 @@ const ChartDashboard = ({typeData,lengthData}:any) => {
   const handleCategory = (select:string) =>{
  
     switch(select){
-      case "Body Mass Index" :
-        return dataFetch.map((item:any) => Number(item.weight));
-      break;
-      case "Fasting blood sugar" :
-        return dataFetch.map((item:any) => Number(item.fbs));
-      break;
-      case "Cholesterol" :
-        return dataFetch.map((item:any) => Number(item.cholesterol));
-      break;
-      case "HDL" :
-        return dataFetch.map((item:any) => Number(item.hdl));
-      break;
-      case "LDL" :
-        return dataFetch.map((item:any) => Number(item.ldl));
-      break;
-      case "Blood pressure" :
-        return dataFetch.map((item:any) => Number(item.bloodPressure));
-      break;
-      case "Triglyceride" :
-        return dataFetch.map((item:any) => Number(item.triglycerides));
-      break;
-      case "Creatinine" :
-        return dataFetch.map((item:any) => Number(item.creatinine));
-      break;
-      case "ALT" :
-        return dataFetch.map((item:any) => Number(item.sgpt));
-      break;
-      case "Hemoglobin" :
-        return dataFetch.map((item:any) => Number(item.hemoglobin));
-      break;
-      case "White blood cell" :
-        return dataFetch.map((item:any) => Number(item.wbc));
-      break;
-      case "Platelet" :
-        return dataFetch.map((item:any) => Number(item.platelets));
-      break;
-      case "Oxygen level" :
-        return dataFetch.map((item:any) => Number(item.spo2));
-      break;
-      case "Heart rate" :
-        return dataFetch.map((item:any) => Number(item.heartRate));
-      break;
+      case "Body Mass Index":   return dataFetch.map((item:any) => Number(item.weight));
+      case "Fasting blood sugar": return dataFetch.map((item:any) => Number(item.fbs));
+      case "Cholesterol":       return dataFetch.map((item:any) => Number(item.cholesterol));
+      case "HDL":               return dataFetch.map((item:any) => Number(item.hdl));
+      case "LDL":               return dataFetch.map((item:any) => Number(item.ldl));
+      case "Blood pressure":    return dataFetch.map((item:any) => Number(item.bloodPressure));
+      case "Triglyceride":      return dataFetch.map((item:any) => Number(item.triglycerides));
+      case "Creatinine":        return dataFetch.map((item:any) => Number(item.creatinine));
+      case "ALT":               return dataFetch.map((item:any) => Number(item.sgpt));
+      case "Hemoglobin":        return dataFetch.map((item:any) => Number(item.hemoglobin));
+      case "White blood cell":  return dataFetch.map((item:any) => Number(item.wbc));
+      case "Platelet":          return dataFetch.map((item:any) => Number(item.platelets));
+      case "Oxygen level":      return dataFetch.map((item:any) => Number(item.spo2));
+      case "Heart rate":        return dataFetch.map((item:any) => Number(item.heartRate));
     }
 
   }
-  const currentYear = new Date().getFullYear(); 
   const processedWeights = handleCategory(typeData);
   const yearLabels = dataFetch.map((item:any) => {
     const date = new Date(item.dateFile);

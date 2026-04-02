@@ -1,11 +1,9 @@
 'use client';
 import React from 'react';
-import { Shield, Lock, User, Building2, Headset, FileText, ArrowRight,EyeOff,Eye } from 'lucide-react';
-import LocalNavbar from '@/app/components/LocalNavbar';
+import { Shield, Lock, User, Headset, FileText, ArrowRight,EyeOff,Eye } from 'lucide-react';
 import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {jwtDecode,JwtPayload} from 'jwt-decode';
-import { set } from 'react-hook-form';
 import PendingState from './components/pendingState';
 export default function Login() {
   const router = useRouter();
@@ -64,13 +62,15 @@ export default function Login() {
     localStorage.setItem('token',result.access_token);
     router.push('/');
   }
-  if(res.status === 401){
+  else if(res.status === 401){
     setIsOK(false);
     setIspending(false);
     setError("Username or password is incorrect.");
   }
   else{
-    setError("");
+    setIsOK(false);
+    setIspending(false);
+    setError("Something went wrong. Try again later.");
   }
   
 
@@ -147,12 +147,12 @@ export default function Login() {
                     onChange={(e)=>setName(e.target.value)}
                     value={name}
                     placeholder="example:name@hospital.com"
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${error? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${error? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                 </div>
               </div>
 
-           
+
               {/* Password */}
               <div>
                 <div className="flex justify-between items-center mb-2">
@@ -160,14 +160,14 @@ export default function Login() {
                   <a href="#" className="text-xs font-bold text-blue-600 hover:underline">Forgot Password?</a>
                 </div>
                 <div className="relative">
-                  
+
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <input 
-                    type={`${isShowpassword?"text":"password"}`} 
+                  <input
+                    type={`${isShowpassword?"text":"password"}`}
                     onChange={(e)=>setPassword(e.target.value)}
                     value={password||""}
                     placeholder="••••••••"
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${error? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${error? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                   {isShowpassword?(<Eye onClick={()=>setIsShowpassword(!isShowpassword)} className='absolute right-5 cursor-pointer top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>):(<EyeOff onClick={()=>setIsShowpassword(!isShowpassword)} className='absolute cursor-pointer right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>)}
                   
@@ -189,7 +189,7 @@ export default function Login() {
                 Log In to Dashboard
                 <ArrowRight className="w-5 h-5" />
               </button>
-                          <h1 className='text-center '>Don't have any an account? <button className='underline text-blue-500 cursor-pointer' onClick={()=>router.push('/auth/register')}>register</button></h1>
+                          <h1 className='text-center '>Don't have an account? <button className='underline text-blue-500 cursor-pointer' onClick={()=>router.push('/auth/register')}>register</button></h1>
 
             </div>
 

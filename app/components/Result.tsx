@@ -3,7 +3,6 @@
 import React, { useState,useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { data, div } from 'framer-motion/client';
 interface Props{
     ui:(value:boolean)=>void;
 }
@@ -26,7 +25,7 @@ export default function Result({ui}:Props) {
     })
     const data = await res.json();
     if(res.ok){
-      setDataFetch(data.Data);
+      setDataFetch(Array.isArray(data.Data) ? data.Data : Array.isArray(data.data) ? data.data : []);
     }
     if(res.status === 401){
       localStorage.removeItem("token");

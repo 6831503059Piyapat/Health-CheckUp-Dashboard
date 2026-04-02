@@ -1,7 +1,6 @@
 'use client'
 import { useEffect,useState } from "react";
 import { CircleCheck,CircleX } from "lucide-react"
-import { PassThrough } from "stream";
 interface Props{
     condition:string;
     setPasswordCons:(value:boolean)=>void,
@@ -36,17 +35,20 @@ const atleast =(text:any) =>{
   return text.length >=6;
 }
 useEffect(()=>{
- setIsUpper(findFirstUpper(condition));
- setIsLower(findFirstLower(condition));
- setIsNumber(findFirstNumber(condition));
- setIsSpecailChars(findFirstSpecial(condition));
- setIsAtleast(atleast(condition));
- console.log(isAtleast)
- if(isUpper && isLower && isNumber && isSpecialChars && isAtleast) {
+ const upper = findFirstUpper(condition);
+ const lower = findFirstLower(condition);
+ const number = findFirstNumber(condition);
+ const special = findFirstSpecial(condition);
+ const enough = atleast(condition);
+ setIsUpper(upper);
+ setIsLower(lower);
+ setIsNumber(number);
+ setIsSpecailChars(special);
+ setIsAtleast(enough);
+ if(upper && lower && number && special && enough) {
     setPasswordCons(true);
  }
  else{
-    
     setPasswordCons(false);
  }
 },[condition])

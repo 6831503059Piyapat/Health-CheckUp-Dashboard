@@ -7,7 +7,6 @@ import { useEffect,useState,useMemo } from "react";
 import { usePathname,useRouter } from "next/navigation";
 import {jwtDecode,JwtPayload} from "jwt-decode";
 import { Spinner } from "@heroui/react";
-import { div } from "framer-motion/client";
 import { set } from "react-hook-form";
 export default function History(){
   const pathName = usePathname();
@@ -18,7 +17,7 @@ export default function History(){
   const [sortOrder,setSortOrder] = useState<'asc'|'desc'>('desc');
   const router = useRouter();
   const displayedData = useMemo(()=>{
-    const list = Array.isArray(dataFetch?.Data) ? [...dataFetch.Data] : [];
+    const list = Array.isArray(dataFetch?.Data) ? [...dataFetch.Data] : Array.isArray(dataFetch?.data) ? [...dataFetch.data] : [];
     const q = searchQuery.trim().toLowerCase();
     
     let filtered = list.filter((it:any)=>{

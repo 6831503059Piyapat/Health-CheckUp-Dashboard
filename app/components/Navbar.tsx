@@ -1,9 +1,8 @@
 'use client';
-import { Plus, Users, LayoutDashboard, Settings,History,ArrowDownToLine, LogOut } from "lucide-react";
+import { Plus, LayoutDashboard, Settings,History,ArrowDownToLine, LogOut } from "lucide-react";
 import NavItem from "./NavItem";
 import { useRouter,usePathname } from "next/navigation";
 import { useState,useEffect } from "react";
-import { useSafeLayoutEffect } from "@heroui/react";
 import { Skeleton } from "@heroui/react";
 export default function Navbar() {
   // router for got to another page
@@ -29,8 +28,9 @@ export default function Navbar() {
             'Content-Type':'application/json'
           }
         });
+        if(res.status === 401){ localStorage.removeItem('token'); router.push('/auth/login'); return; }
         const data = await res.json();
-        if(res.ok){     
+        if(res.ok){
           setUserData(data);
         }
       }finally{

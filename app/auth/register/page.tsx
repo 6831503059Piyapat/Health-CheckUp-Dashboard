@@ -1,16 +1,11 @@
 'use client';
 import React from 'react';
-import { Shield, Lock, User, Building2, Headset, FileText, ArrowRight,EyeOff,Eye,Mail,KeyRound,CircleX,CircleCheck } from 'lucide-react';
-import LocalNavbar from '@/app/components/LocalNavbar';
+import { Shield, Lock, User, Headset, FileText, ArrowRight,EyeOff,Eye,Mail,KeyRound } from 'lucide-react';
 import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PendingCreate from './components/pendingCreate';
 import Checkpassword from './components/Checkpassword';
 import {jwtDecode,JwtPayload} from 'jwt-decode';
-// interface return after register success
-interface AuthAfterRegister {
-  email:string,
-}
 export default function Register() {
   const router = useRouter();
   const [isShowpassword,setIsShowpassword] = useState(false);
@@ -27,11 +22,9 @@ export default function Register() {
   const [errorConfirmPassword,setErrorConfirmPassword]=useState<string>();
   const [errorOTP,setErrorOTP] = useState<string>();
   // OTP STATE
-  const [OTPstate,setOTPstate]=useState("");
+  const [isOTPSent,setIsOTPSent]=useState(false);
   const [OTPConfirm,setOTPConfirm]= useState("");
   const [isOTPmatch,setIsOTPmatch] = useState<boolean>(true);
-  // Data After Register
-  const [returnRegis,setReturnRegis] = useState<AuthAfterRegister>({email:""}); 
   // Countdown OTP resend STATE
   const [seconds, setSeconds] = useState(0); //START with 0
   const [isActive, setIsActive] = useState(false);
@@ -75,184 +68,85 @@ useEffect(()=>{
               router.push('/auth/login');
             }
           }
-});
-  // Password : Piadwaf25@
-  const checkPassword = ()=>{
-    
-  }
-  // Function Check Email Format
-
-// Functoin Compare OTP 
-  const handleCeckOTP = async ()=>{
-    if (OTPstate===OTPConfirm){
-      setIsOTPmatch(true);
-      setErrorOTP("");
-      setIsUipending(true);
-      setIspending(true);
-          const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/register`,{
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      email:email,
-      name:name,
-      password:password,
-    }),
-  });
-  const result = await res.json();
-  setReturnRegis(result);
-   
-  if(res.ok){
-   setIsOK(true);
-   setIspending(false);
-    router.push("/auth/login");
-      
-  }
-  else{
-       setIsOK(false);
-      setIspending(false);
-    setErrorName("");
-    setErrorEmail("");
-      setErrorPassword("");
-      setErrorConfirmPassword("");
-  }
-  
-    }
-    else{
+},[]);
+  const handleCheckOTP = async () => {
+    if (!OTPConfirm) {
       setIsOTPmatch(false);
-      setErrorOTP("Invalid OTP. Please try again.");
+      setErrorOTP("Please enter the code.");
+      return;
     }
-
-
-  }
-  // Function Handle after user Click register button
- function handleSubmit(){
-   if(name && password && passwordCon && passwordConfirm &&
-    !name.includes(" ") && 
-    !password.includes(" ") &&
-    !email.includes(" ") &&
-     password === passwordConfirm){
-      setErrorName("");
-      setErrorEmail("");
-      setErrorPassword("");
-      setErrorConfirmPassword("");
-      sendEmail();
-      console.log("Work");
-  
-    }
-  // Check Email Format 
-  //  Work when User not input anything (Error prevent)
-  if(!name){
-    setErrorName("Name is required.");
-  }
-  if(!password){
-    setErrorPassword("Password is required");
-  }
-  if(!passwordConfirm){
-    setErrorConfirmPassword("Confirm Password is required.");
-  }
-  if(!email){
-    setErrorEmail("Email is required.");
-  }
-  // Work when found text
-  if(name){
-    setErrorName("");
-  }
-  if(password){
-    setErrorPassword("");
-  }
-  if(passwordConfirm){
-    setErrorConfirmPassword("");
-  
-  }
-  if(email){
-    setErrorEmail("");
-  }
-  // Work when found spaces
-  if(name.includes(" ")){
-      setErrorName("Name cannot contain spaces.");
-  }
-  if(email.includes(" ")){
-      setErrorEmail("Email cannot contain spaces.");
-  }
-  if(password.includes(" ")){
-      setErrorPassword("Password cannot contain spaces.");
-  }
-  if(password != passwordConfirm){
-      setErrorPassword("Passwords do not match. Please try again.");
-      setErrorConfirmPassword("Passwords do not match. Please try again.");
-    }
-     if(!passwordCon){
-      setErrorPassword("Condition password failed.");
-    }
-  // Work when not found text
-    if(!name || !password || !passwordConfirm || !email){
-    
-    }
-   
-    // Work when password and Confirm password not match
-    
-    // Work when found spaces
-    if(name.includes(" ") || password.includes(" ") || email.includes(" ")){
-    
-
-    }
-
-   
-    // console.log(name);
-    // console.log(password);
-    // console.log(email);
-    // console.log(passwordCon);
-    // console.log(!name.includes(" "));
-    // console.log(!password.includes(" "));
-    // console.log(!email.includes(" "));
-    // console.log(password === passwordConfirm);
-    
-
- }
- const generateRandomString = (length: number) => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-};
-
- const sendEmail = async () => {
-    setSeconds(60);
-    console.log("WORK");
-    setIsActive(true);
-    const OTP = generateRandomString(6);
-    setOTPstate(OTP);
-      const emailHtml = `
-        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-            <p>Hello,</p>
-            <p>Your One-Time Password (OTP) is:</p>
-            <h1 style="color: #4A90E2; font-size: 32px; letter-spacing: 5px;">${OTP}</h1>
-            <p>This code will expire in 2 minutes.</p>
-            <p style="font-size: 12px; color: #888;">If you did not request this code, please ignore this email.</p>
-            <p>Thank you,<br/>The Support Team</p>
-        </div>
-    `;
-    console.log(OTP);
-    const response = await fetch('/api/send-email', {
-      method: 'POST',
-      body: JSON.stringify({
-        subject: "Your OTP Verification Code",
-        message: emailHtml,
-        sendTo: email
-      }),
+    setIsOTPmatch(true);
+    setErrorOTP("");
+    setIsUipending(true);
+    setIspending(true);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/verify`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code: OTPConfirm }),
     });
-
-    const data = await response.json();
-    
+    if (res.ok) {
+      setIsOK(true);
+      setIspending(false);
+      router.push("/auth/login");
+    } else {
+      setIsOK(false);
+      setIspending(false);
+      setIsOTPmatch(false);
+      setErrorOTP("Invalid or expired code. Please try again.");
+    }
   };
+
+  const handleResend = async () => {
+    setSeconds(60);
+    setIsActive(true);
+    await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/resend-code`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+  };
+
+  async function handleSubmit() {
+    let valid = true;
+    if (!name) { setErrorName("Name is required."); valid = false; }
+    else if (name.includes(" ")) { setErrorName("Name cannot contain spaces."); valid = false; }
+    else setErrorName("");
+
+    if (!email) { setErrorEmail("Email is required."); valid = false; }
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setErrorEmail("Please enter a valid email address."); valid = false; }
+    else setErrorEmail("");
+
+    if (!password) { setErrorPassword("Password is required"); valid = false; }
+    else if (password.includes(" ")) { setErrorPassword("Password cannot contain spaces."); valid = false; }
+    else if (!passwordCon) { setErrorPassword("Condition password failed."); valid = false; }
+    else setErrorPassword("");
+
+    if (!passwordConfirm) { setErrorConfirmPassword("Confirm Password is required."); valid = false; }
+    else if (password !== passwordConfirm) { setErrorConfirmPassword("Passwords do not match."); setErrorPassword("Passwords do not match."); valid = false; }
+    else setErrorConfirmPassword("");
+
+    if (!valid) return;
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/register`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name }),
+    });
+    if (res.ok) {
+      setSeconds(60);
+      setIsActive(true);
+      setIsOTPSent(true);
+    } else {
+      const result = await res.json();
+      setErrorEmail(result?.message || "Registration failed. Try again.");
+    }
+  }
     return (
     <>
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       {/* UI Pending while create Account */}
       {isUipending&&(
-      <PendingCreate ispending={ispending} isOK={isOK} setIsUipending={setIsUipending} returnRegis={returnRegis}/>
+      <PendingCreate ispending={ispending} isOK={isOK} setIsUipending={setIsUipending} email={email}/>
       )}
       
       <div className="max-w-4xl w-full bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
@@ -301,16 +195,16 @@ useEffect(()=>{
         {/* Right Side: Login Form */}
         <div className="md:w-7/12 p-8 md:p-16 flex flex-col justify-center">
           <div className="max-w-sm mx-auto w-full">
-            {!OTPstate && (
+            {!isOTPSent && (
               <>
               <h2 className="text-3xl font-bold text-slate-800 mb-1">Register</h2>
              <p className="text-slate-500 mb-3 text-sm">Enter your username and password</p>
               </>
             )}
-            {OTPstate && (
+            {isOTPSent && (
               <>
-              <h2 className="text-3xl font-bold text-slate-800 mb-1">OTP</h2>
-             <p className="text-slate-500 mb-3 text-sm">We sent a code to {email || 'N/A'}</p>
+              <h2 className="text-3xl font-bold text-slate-800 mb-1">Verify Email</h2>
+             <p className="text-slate-500 mb-3 text-sm">We sent a 6-digit code to {email}</p>
               </>
             )}
             
@@ -320,7 +214,7 @@ useEffect(()=>{
            
             <div  className="space-y-7">
               {/* IS OTP */}
-              {!OTPstate && (
+              {!isOTPSent && (
                 <>
                {/* Username */}
               <div>
@@ -332,7 +226,7 @@ useEffect(()=>{
                     onChange={(e)=>setName(e.target.value)}
                     value={name}
                     placeholder="example:John"
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${errorName? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorName? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                   <p className='absolute text-red-500'>{errorName}</p>
                 </div>
@@ -349,7 +243,7 @@ useEffect(()=>{
                     onChange={(e)=>setEmail(e.target.value)}
                     value={email}
                     placeholder="example:name@patient.com"
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${errorEmail? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorEmail? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                    <p className='absolute text-red-500'>{errorEmail}</p>
                 </div>
@@ -368,7 +262,7 @@ useEffect(()=>{
                     onChange={(e)=>setPassword(e.target.value)}
                     value={password||""}
                     placeholder="••••••••"
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${errorPassword? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorPassword? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                    <p className='absolute text-red-500'>{errorPassword}</p>
                   {isShowpassword?(<Eye onClick={()=>setIsShowpassword(!isShowpassword)} className='absolute right-5 cursor-pointer top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>):(<EyeOff onClick={()=>setIsShowpassword(!isShowpassword)} className='absolute cursor-pointer right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>)}
@@ -393,7 +287,7 @@ useEffect(()=>{
                     onChange={(e)=>setPasswordConfirm(e.target.value)}
                     value={passwordConfirm||""}
                     placeholder="••••••••"
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${errorConfirmPassword? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorConfirmPassword? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                   {isShowConfirm?(<Eye onClick={()=>setIsShowConfirm(!isShowConfirm)} className='absolute right-5 cursor-pointer top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>):(<EyeOff onClick={()=>setIsShowConfirm(!isShowConfirm)} className='absolute cursor-pointer right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400'/>)}
                    <p className='absolute text-red-500'>{errorConfirmPassword}</p>
@@ -418,7 +312,7 @@ useEffect(()=>{
               )}
 
               {/* OTP PAGE */}
-              {OTPstate && (
+              {isOTPSent && (
                 // OTP Input
                 <>
                 <div>
@@ -430,15 +324,15 @@ useEffect(()=>{
                     onChange={(e)=>setOTPConfirm(e.target.value)}
                     value={OTPConfirm}
                     placeholder="Enter 6-digit code"
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 ${!isOTPmatch? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${!isOTPmatch? "focus:ring-red-500 border-red-500":" focus:ring-blue-500 border-slate-200"} focus:border-transparent transition-all`}
                   />
                   <p className='absolute text-red-500'>{errorOTP}</p>
                 </div>
               </div>
               {/* Check OTP Button */}
-              <button 
-                type="button" 
-                onClick={()=>handleCeckOTP()}
+              <button
+                type="button"
+                onClick={()=>handleCheckOTP()}
                 className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg shadow-lg shadow-blue-200 flex items-center justify-center gap-2 transition-all transform active:scale-[0.98]"
               >
                 CONFIRM
@@ -447,9 +341,9 @@ useEffect(()=>{
 
               {/* Resend OTP */}
               <div className='flex justify-center'>
-              <button 
-                type="button" 
-                onClick={()=>sendEmail()}
+              <button
+                type="button"
+                onClick={()=>handleResend()}
                 disabled={isActive}
                 className={`cursor-pointer text-[14px] text-center hover:underline ${isActive?"text-slate-500":"text-blue-500"} font-bold rounded-lg flex items-center justify-center gap-2 transition-all transform`}
               >
