@@ -135,9 +135,24 @@ useEffect(()=>{
       setErrorEmail("");
       setErrorPassword("");
       setErrorConfirmPassword("");
-      sendEmail();
-      console.log("Work");
-  
+      const checkPasswordDatabase = async () =>{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/check-register`,{
+          method:"POST",
+          headers:{'Content-Type':'application/json'},  
+          body:JSON.stringify({
+            email:email,
+            password:password,
+          }),
+        });
+        if(res.status === 401){
+          setErrorEmail("Email already exists. Please use another email.");
+        }
+        else{
+          sendEmail();
+      }
+      
+      
+      }
     }
   // Check Email Format 
   //  Work when User not input anything (Error prevent)
@@ -197,16 +212,6 @@ useEffect(()=>{
 
     }
 
-   
-    // console.log(name);
-    // console.log(password);
-    // console.log(email);
-    // console.log(passwordCon);
-    // console.log(!name.includes(" "));
-    // console.log(!password.includes(" "));
-    // console.log(!email.includes(" "));
-    // console.log(password === passwordConfirm);
-    
 
  }
  const generateRandomString = (length: number) => {
@@ -220,7 +225,6 @@ useEffect(()=>{
 
  const sendEmail = async () => {
     setSeconds(60);
-    console.log("WORK");
     setIsActive(true);
     const OTP = generateRandomString(6);
     setOTPstate(OTP);
@@ -234,7 +238,6 @@ useEffect(()=>{
             <p>Thank you,<br/>The Support Team</p>
         </div>
     `;
-    console.log(OTP);
     const response = await fetch('/api/send-email', {
       method: 'POST',
       body: JSON.stringify({
@@ -298,7 +301,7 @@ useEffect(()=>{
           </div>
         </div>
 
-        {/* Right Side: Login Form */}
+        {/* Right Side: Register Form */}
         <div className="md:w-7/12 p-8 md:p-16 flex flex-col justify-center">
           <div className="max-w-sm mx-auto w-full">
             {!OTPstate && (
@@ -307,6 +310,7 @@ useEffect(()=>{
              <p className="text-slate-500 mb-3 text-sm">Enter your username and password</p>
               </>
             )}
+
             {OTPstate && (
               <>
               <h2 className="text-3xl font-bold text-slate-800 mb-1">OTP</h2>
