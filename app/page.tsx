@@ -9,7 +9,6 @@ import { Skeleton } from "@heroui/react";
 import Result from "./components/Result";
 import DropDown from "./components/dropDown";
 import HealthcareRec from "./components/HealthcareRec";
-import { h1 } from "framer-motion/client";
 import {jwtDecode,JwtPayload} from "jwt-decode";
 const metrics = [
   "Body Mass Index",
@@ -53,17 +52,20 @@ const latest = (dataFetchData && dataFetchData.length > 0)
         router.push('/auth/login');
       }
     const handleFetch = async()=>{
-      const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
-        headers:{
-          'Content-Type':'application/json',
-          'Authorization':`Bearer ${token}`
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+          }
+        });
+        if(res.status === 401){ localStorage.removeItem('token'); router.push('/auth/login'); return; }
+        const data = await res.json();
+        if(res.ok){
+          setDataFetch(data);
+          setDataFetchData(Array.isArray(data.Data) ? data.Data : Array.isArray(data.data) ? data.data : []);
         }
-      })
-      const data = await res.json();
-      if(res.ok){
-        setDataFetch(data);
-        setDataFetchData(data.Data);
-      }
+      } catch { /* network error — keep empty state */ }
     }
     handleFetch();
   },[]);
