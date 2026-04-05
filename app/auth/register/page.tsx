@@ -81,81 +81,80 @@ useEffect(()=>{
   }
   return result;
 };
-
+// Send OTP function
  const sendEmail = async () => {
     setSeconds(60);
     setIsActive(true);
-    const OTP = generateRandomString(6);
-    setOTPstate(OTP);
-      const emailHtml = `
-        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-            <p>Hello,</p>
-            <p>Your One-Time Password (OTP) is:</p>
-            <h1 style="color: #4A90E2; font-size: 32px; letter-spacing: 5px;">${OTP}</h1>
-            <p>This code will expire in 2 minutes.</p>
-            <p style="font-size: 12px; color: #888;">If you did not request this code, please ignore this email.</p>
-            <p>Thank you,<br/>The Support Team</p>
-        </div>
-    `;
-    const response = await fetch('/api/send-email', {
+    setIsOTPSent(true);
+    const createAccount = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/register`, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        subject: "Your OTP Verification Code",
-        message: emailHtml,
-        sendTo: email
+        name:name,
+        email: email,
+        password: password,
       }),
     });
-if(response.ok){
+   
+  
+if(createAccount.ok){
  setIsOTPSent(true) 
+ setOTPstate("Create account successfully. Please check your email for the OTP code.");
 };
  }
+//  Resend OTP function
   const handleResend = async () => {
     setSeconds(60);
     setIsActive(true);
-    await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/resend-code`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/resend-code`, {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email:email, }),
     });
-  };
-const handleCheckOTP = async () => {
-    if (!OTPConfirm) {
-      setIsOTPmatch(false);
-      setErrorOTP("Please enter the code.");
-      return;
+    if(res.status === 400){
+      setOTPstate("Failed to resend code. Please try again later.");
     }
-  else if (OTPConfirm !== OTPstate) {
+  };
+
+const handleCheckOTP = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        code: OTPConfirm,
+      }),
+    });
+   
+    if(response.status === 400){
       setIsOTPmatch(false);
       setErrorOTP("Invalid code. Please try again.");
       return;
     }
-    else {
-      setIsOTPmatch(true);
-      setErrorOTP("");
-      const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/register`, {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, name }),
-    });
-    if (res.ok) {
+    else if(response.ok){
       setSeconds(60);
       setIsActive(true);
       setIsOTPSent(true);
       router.push('/auth/login');
     }
+    if (!OTPConfirm) {
+      setIsOTPmatch(false);
+      setErrorOTP("Please enter the code.");
+      return;
+    }
+   
     else {
-      const result = await res.json();
+      const result = await response.json();
       setErrorEmail(result?.message || "Registration failed. Try again.");
     }
         
 
-  }
+  
   
 
-  }
-
+  
+}
   const checkPasswordDatabase = async () =>{
-        console.log("Checking password in database...");
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/check-register`,{
           method:"POST",
@@ -166,7 +165,6 @@ const handleCheckOTP = async () => {
           }),
         });
         const result = await res.json();
-        console.log(result);
         if(res.status === 401){
           setErrorEmail("Email already exists. Please use another email.");
         }
@@ -270,10 +268,6 @@ const handleCheckOTP = async () => {
               </>
             )}
             
-          
-           
-            
-           
             <div  className="space-y-7">
               {/* IS OTP */}
               {!isOTPSent && (
