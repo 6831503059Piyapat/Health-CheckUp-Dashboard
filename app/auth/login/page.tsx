@@ -48,7 +48,8 @@ export default function Login() {
       setIspending(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/login`,{
     method:"POST",
-    headers:{'Content-Type':'application/json'},
+    headers:{'Content-Type':'application/json',
+    },
     body:JSON.stringify({
       email:name,
       password:password,

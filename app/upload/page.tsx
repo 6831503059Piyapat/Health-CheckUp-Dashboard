@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { UploadCloud, FileText, CheckCircle, Loader2, X, Sparkles } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { a, s } from 'framer-motion/client';
+import { set } from 'react-hook-form';
 
 const emptyForm = {
   fullName: '', gender: '', age: '', height: '', weight: '', bmi: '',
@@ -40,94 +42,10 @@ export default function UploadPage() {
   const [form, setForm] = useState<FormData>(emptyForm);
   const [step, setStep] = useState<'upload' | 'review'>('upload');
   const [isExtracting, setIsExtracting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);  
   const [saveOk, setSaveOk] = useState(false);
   const [suggestion, setSuggestion] = useState('');
   const [isSuggesting, setIsSuggesting] = useState(false);
-  const prompt =`Extract information from the provided image/file and map it into the following JSON structure. If data is missing for a field, use zero if it's number or double if it's text use text minus sign . Return strictly the JSON object without any Markdown formatting or extra text.
-  {
-  "fullName": "string", // Just name patient in paper or File
-  "provide":"string",
-  "age": "int",
-  "gender":"string",
-  "historical": "string",
-  "height": "double",
-  "weight": "double",
-  "bmi": "double",
-  "vital_signs": {
-    "temperature": "double",
-    "heart_rate": "int",
-    "blood_pressure": "string",
-    "respiratory_rate": "int",
-    "oxygen_saturation": "int",
-    "pulse":"int",
-  },
-  "blood_test": {
-    "cbc": {
-      "wbc": "double",
-      "rbc": "double",
-      "hemoglobin": "double",
-      "hematocrit": "double",
-      "platelets": "double",
-      "mcv": "double"
-    },
-    "fasting_blood_sugar": "double",
-    "hba1c":"int",
-    "lipid_profile": {
-      "total_cholesterol": "double",
-      "hdl": "double",
-      "ldl": "double",
-      "triglycerides": "double"
-    },
-    "liver_function_test": {
-      "ast": "double",
-      "alt": "double",
-      "alp": "double",
-      "total_bilirubin": "double",
-      "albumin": "double",
-      "ggt": "double",
-      "direct_bilirubin": "double"
-    },
-    "kidney_function_test": {
-      "bun": "double",
-      "creatinine": "double",
-      "egfr": "double"
-    },
-    "uric_acid": "double"
-  },
-  "urinalysis": {
-    "color": "string",
-    "clarity": "string",
-    "specific_gravity": "double",
-    "ph": "double",
-    "protein": "string",
-    "glucose": "string",
-    "ketones": "string",
-    "wbc": "int",
-    "rbc": "int"
-  },
-  "stool_examination": {
-    "macroscopic": "string",
-    "occult_blood": "string"
-  },
-  "chest_xray": {
-    "lung_opacity": "string",
-    "heart": {
-      "ctr": "double",
-      "cardiomegaly": "string"
-    }
-  },
-  "electrocardiogram": {
-    "rhythm": "string",
-    "heart_rate": "int",
-    "st_segment": "string",
-    "t_wave": "string"
-  },
-  "ultrasound": {
-    "upper_abdomen": "string",
-    "lower_abdomen": "string"
-  }
-}
-  `;
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) { router.push('/auth/login'); return; }
@@ -191,7 +109,6 @@ export default function UploadPage() {
       const token = localStorage.getItem('token');
       const fd = new FormData();
       fd.append('file', file);
-      fd.append('prompt', prompt);
       const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/ai/upload`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -217,8 +134,50 @@ export default function UploadPage() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave =async () => {
+    setIsSaving(true);
+    if(!suggestion){
+       const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/ai/suggest`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ObjData: form,
+          promptData: 'Based on these health results, give a brief summary of the patient\'s health status and any key areas of concern.',
+        }),
+      });
+      const text = await res.text();
+      let result: string;
+      try {
+        const json = JSON.parse(text);
+        result = typeof json === 'string' ? json : json?.suggestion ?? JSON.stringify(json, null, 2);
+      } catch {
+        result = text;
+      }
+      const saveSuggest = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/create-post`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+         },
+        body: JSON.stringify({
+          ...form, suggestion: result
+        })
+      });
+
+    }else{
+      const saveSuggest = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/create-post`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+         },
+        body: JSON.stringify({
+          ...form,suggestion: suggestion
+        })
+      });
+    }
+    
     setSaveOk(true);
+    setIsSaving(false);
+      
   };
 
   const handleSuggest = async () => {
@@ -242,6 +201,7 @@ export default function UploadPage() {
         result = text;
       }
       setSuggestion(result);
+      
     } catch {
       setSuggestion('Failed to get AI suggestion. Please try again.');
     } finally {
@@ -440,9 +400,9 @@ export default function UploadPage() {
                 </button>
                 <button
                   onClick={handleSave}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all"
+                  className={`flex-1 ${isSaving ? 'bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all`}
                 >
-                  Done
+                 {isSaving ?(<><Loader2 size={18} className="animate-spin" /> Saving…</>) : 'Save'}
                 </button>
               </div>
             </div>
