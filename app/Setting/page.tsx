@@ -2,12 +2,14 @@
 import Navbar from '@/app/components/Navbar';
 import { useState,useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import { Skeleton } from '@heroui/react';
 import {jwtDecode,JwtPayload} from "jwt-decode";
 export default function SettingsPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
   const [contact, setContact] = useState('');
+  const [dataFetch,setDataFetch] = useState<any>();
   const router = useRouter();
  useEffect(()=>{
   const token = localStorage.getItem("token");
@@ -27,7 +29,28 @@ export default function SettingsPage() {
           }else{
         router.push('/auth/login');
       }
- });
+     async function fetchData(){
+    
+      try{
+        
+        const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/users/me`,{
+          method:'GET',
+          headers:{
+            'Authorization':`Bearer ${token}`,
+            'Content-Type':'application/json'
+          }
+        });
+        if(res.status === 401){ localStorage.removeItem('token'); router.push('/auth/login'); return; }
+        const data = await res.json();
+        if(res.ok){
+          setDataFetch(data);
+        }
+      }finally{
+       
+      }
+    };
+    fetchData();
+ },[]);
   const [password, setPassword] = useState('');
   const [enable2FA, setEnable2FA] = useState(false);
 
@@ -70,11 +93,8 @@ export default function SettingsPage() {
         {/* profile */}
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 flex items-center gap-6">
           <div className="relative">
-            <img
-              src={avatar || '@/app/public/file.svg'}
-              alt="Profile"
-              className="w-20 h-20 rounded-full object-cover border"
-            />
+           
+            <Skeleton className='w-20 h-20 rounded-full object-cover border'/>
             <label className="absolute bottom-0 right-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer">
               Edit
               <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
@@ -83,10 +103,10 @@ export default function SettingsPage() {
 
           <div>
             <h2 className="text-lg font-semibold text-slate-900">
-              {firstName || "First Name"} {lastName || "Last Name"}
+              {dataFetch?.name}
             </h2>
-            <p className="text-sm text-slate-500">{contact || "No contact info"}</p>
-            <p className="text-sm text-slate-500">{address || "No address"}</p>
+            <p className="text-sm text-slate-500">{dataFetch?.email}</p>
+            <p className="text-sm  text-green-500">online</p>
           </div>
         </div>
 

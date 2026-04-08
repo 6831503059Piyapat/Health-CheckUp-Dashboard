@@ -46,6 +46,39 @@ export default function UploadPage() {
   const [saveOk, setSaveOk] = useState(false);
   const [suggestion, setSuggestion] = useState('');
   const [isSuggesting, setIsSuggesting] = useState(false);
+
+  const [suggestionList,setSuggestionList] = useState({
+    suggestion:"",
+    bmi_suggestion:"",
+    pulse_suggestion:"",
+    temperature_suggestion:"",
+    heartRate_suggestion:"",
+    bloodPressure_suggestion:"",
+    respiratoryRate_suggestion:"",
+    spo2_suggestion:"",
+    fbs_suggestion:"",
+    cholesterol_suggestion:"",
+    hdl_suggestion:"",
+    ldl_suggestion:"",
+    triglycerides_suggestion:"",
+    creatinine_suggestion:"",
+    sgpt_suggestion:"",
+    hemoglobin_suggestion:"",
+    wbc_suggestion:"",
+    platelets_suggestion:"",
+    rbc_suggestion:"",
+    hematocrit_suggestion:"",
+    mcv_suggestion:"",
+    hba1c_suggestion:"",
+    sgot_suggestion:"",
+    alp_suggestion:"",
+    total_bilirubin_suggestion:"",
+    albumin_suggestion:"",
+    ggt_suggestion:"",
+    direct_bilirubin_suggestion:"",
+    risk_if_disease:"",
+
+  });
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) { router.push('/auth/login'); return; }
@@ -137,19 +170,97 @@ export default function UploadPage() {
   const handleSave =async () => {
     setIsSaving(true);
     if(!suggestion){
+      
        const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/ai/suggest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ObjData: form,
-          promptData: 'Based on these health results, give a brief summary of the patient\'s health status and any key areas of concern.',
+          promptData: `คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์ผลตรวจสุขภาพ (Health Data Analyst) หน้าที่ของคุณคือรับข้อมูลสุขภาพจากไฟล์ที่แนบมาและข้อมูลในรูปแบบ JSON เพื่อทำการวิเคราะห์และสรุปผล
+
+### ภารกิจของคุณ:
+1. วิเคราะห์ข้อมูลภาพรวมจากไฟล์ที่ได้รับ และสรุปคำแนะนำในระดับภาพรวมลงในฟิลด์ "suggestion"
+2. วิเคราะห์ค่าสุขภาพเฉพาะเจาะจง (Individual Metrics) โดยพิจารณาเฉพาะฟิลด์ที่มีค่า (ไม่เป็นค่าว่าง และ ไม่เท่ากับ 0) เท่านั้น
+3. สำหรับแต่ละค่าที่มีข้อมูล ให้ระบุคำแนะนำลงในฟิลด์ "xxx_suggestion" ที่คู่กัน โดยในคำแนะนำต้องประกอบด้วย:
+   - Risk_of_disease: (ความเสี่ยงที่จะเกิดโรค)
+   - Prevention_Reduction: (วิธีลดความเสี่ยงหรือการดูแลตัวเอง)
+
+### รายชื่อฟิลด์ข้อมูลและฟิลด์คำแนะนำที่ต้องจับคู่:
+- bmi -> bmi_suggestion
+- pulse -> pulse_suggestion
+- temperature -> temperature_suggestion
+- heartRate -> heartRate_suggestion
+- bloodPressure -> bloodPressure_suggestion
+- respiratoryRate -> respiratoryRate_suggestion
+- spo2 -> spo2_suggestion
+- fbs -> fbs_suggestion
+- cholesterol -> cholesterol_suggestion
+- hdl -> hdl_suggestion
+- ldl -> ldl_suggestion
+- triglycerides -> triglycerides_suggestion
+- creatinine -> creatinine_suggestion
+- sgpt -> sgpt_suggestion
+- hemoglobin -> hemoglobin_suggestion
+- wbc -> wbc_suggestion
+- platelets -> platelets_suggestion
+- rbc -> rbc_suggestion
+- hematocrit -> hematocrit_suggestion
+- mcv -> mcv_suggestion
+- hba1c -> hba1c_suggestion
+- sgot -> sgot_suggestion
+- alp -> alp_suggestion
+- total_bilirubin -> total_bilirubin_suggestion
+- albumin -> albumin_suggestion
+- ggt -> ggt_suggestion
+- direct_bilirubin -> direct_bilirubin_suggestion
+
+### รูปแบบการตอบกลับ:
+- ให้ส่งคืนค่า (Return) เฉพาะไฟล์ JSON ที่สมบูรณ์แล้วเท่านั้น
+- ห้ามมีข้อความอธิบายอื่นนอกเหนือจากไฟล์ JSON
+- ใช้ภาษาไทยในการเขียนคำแนะนำ (Suggestions)
+
+อยากให้เพิ่มเงื่อไขนึงคือการ เพิ่มฟิลด์มา 1 ฟิลด์ชื่อว่า list_disease ที่ไว้สำหรับระบุรายชื่อของโรคที่มีความเสี่ยงจะเกิดจากข้อมูล
+`,
         }),
       });
       const text = await res.text();
       let result: string;
+      console.log(text);
       try {
         const json = JSON.parse(text);
         result = typeof json === 'string' ? json : json?.suggestion ?? JSON.stringify(json, null, 2);
+        setSuggestionList(prev=>({
+          ...prev,
+          suggestion: result,
+          bmi_suggestion: json.bmi_suggestion || 'Data not provided',
+          pulse_suggestion: json.pulse_suggestion || 'Data not provided',
+          temperature_suggestion: json.temperature_suggestion || 'Data not provided',
+          heartRate_suggestion: json.heartRate_suggestion || 'Data not provided',
+          bloodPressure_suggestion: json.bloodPressure_suggestion || 'Data not provided',
+          respiratoryRate_suggestion: json.respiratoryRate_suggestion || 'Data not provided',
+          spo2_suggestion: json.spo2_suggestion || 'Data not provided',
+          fbs_suggestion: json.fbs_suggestion || 'Data not provided',
+          cholesterol_suggestion: json.cholesterol_suggestion || 'Data not provided',
+          hdl_suggestion: json.hdl_suggestion || 'Data not provided',
+          ldl_suggestion: json.ldl_suggestion || 'Data not provided',
+          triglycerides_suggestion: json.triglycerides_suggestion || 'Data not provided',
+          creatinine_suggestion: json.creatinine_suggestion || 'Data not provided',
+          sgpt_suggestion: json.sgpt_suggestion || 'Data not provided',
+          hemoglobin_suggestion: json.hemoglobin_suggestion || 'Data not provided',
+          wbc_suggestion: json.wbc_suggestion || 'Data not provided',
+          platelets_suggestion: json.platelets_suggestion || 'Data not provided',
+          rbc_suggestion: json.rbc_suggestion || 'Data not provided',
+          hematocrit_suggestion: json.hematocrit_suggestion || 'Data not provided',
+          mcv_suggestion: json.mcv_suggestion || 'Data not provided',
+          hba1c_suggestion: json.hba1c_suggestion || 'Data not provided',
+          sgot_suggestion: json.sgot_suggestion || 'Data not provided',
+          alp_suggestion: json.alp_suggestion || 'Data not provided',
+          total_bilirubin_suggestion: json.total_bilirubin_suggestion || 'Data not provided',
+          albumin_suggestion: json.albumin_suggestion || 'Data not provided',
+          ggt_suggestion: json.ggt_suggestion || 'Data not provided',
+          direct_bilirubin_suggestion: json.direct_bilirubin_suggestion || 'Data not provided',
+          list_disease: json.list_disease || 'Data not provided',
+        }));
       } catch {
         result = text;
       }
@@ -159,7 +270,7 @@ export default function UploadPage() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
          },
         body: JSON.stringify({
-          ...form, suggestion: result
+          ...form, suggestionData:suggestionList
         })
       });
 
@@ -170,7 +281,7 @@ export default function UploadPage() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
          },
         body: JSON.stringify({
-          ...form,suggestion: suggestion
+          ...form, suggestionData:suggestionList
         })
       });
     }
@@ -189,7 +300,51 @@ export default function UploadPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ObjData: form,
-          promptData: 'Based on these health results, give a brief summary of the patient\'s health status and any key areas of concern.',
+          promptData: `คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์ผลตรวจสุขภาพ (Health Data Analyst) หน้าที่ของคุณคือรับข้อมูลสุขภาพจากไฟล์ที่แนบมาและข้อมูลในรูปแบบ JSON เพื่อทำการวิเคราะห์และสรุปผล
+
+### ภารกิจของคุณ:
+1. วิเคราะห์ข้อมูลภาพรวมจากไฟล์ที่ได้รับ และสรุปคำแนะนำในระดับภาพรวมลงในฟิลด์ "suggestion"
+2. วิเคราะห์ค่าสุขภาพเฉพาะเจาะจง (Individual Metrics) โดยพิจารณาเฉพาะฟิลด์ที่มีค่า (ไม่เป็นค่าว่าง และ ไม่เท่ากับ 0) เท่านั้น
+3. สำหรับแต่ละค่าที่มีข้อมูล ให้ระบุคำแนะนำลงในฟิลด์ "xxx_suggestion" ที่คู่กัน โดยในคำแนะนำต้องประกอบด้วย:
+   - Risk_of_disease: (ความเสี่ยงที่จะเกิดโรค)
+   - Prevention_Reduction: (วิธีลดความเสี่ยงหรือการดูแลตัวเอง)
+
+### รายชื่อฟิลด์ข้อมูลและฟิลด์คำแนะนำที่ต้องจับคู่:
+- bmi -> bmi_suggestion
+- pulse -> pulse_suggestion
+- temperature -> temperature_suggestion
+- heartRate -> heartRate_suggestion
+- bloodPressure -> bloodPressure_suggestion
+- respiratoryRate -> respiratoryRate_suggestion
+- spo2 -> spo2_suggestion
+- fbs -> fbs_suggestion
+- cholesterol -> cholesterol_suggestion
+- hdl -> hdl_suggestion
+- ldl -> ldl_suggestion
+- triglycerides -> triglycerides_suggestion
+- creatinine -> creatinine_suggestion
+- sgpt -> sgpt_suggestion
+- hemoglobin -> hemoglobin_suggestion
+- wbc -> wbc_suggestion
+- platelets -> platelets_suggestion
+- rbc -> rbc_suggestion
+- hematocrit -> hematocrit_suggestion
+- mcv -> mcv_suggestion
+- hba1c -> hba1c_suggestion
+- sgot -> sgot_suggestion
+- alp -> alp_suggestion
+- total_bilirubin -> total_bilirubin_suggestion
+- albumin -> albumin_suggestion
+- ggt -> ggt_suggestion
+- direct_bilirubin -> direct_bilirubin_suggestion
+
+### รูปแบบการตอบกลับ:
+- ให้ส่งคืนค่า (Return) เฉพาะไฟล์ JSON ที่สมบูรณ์แล้วเท่านั้น
+- ห้ามมีข้อความอธิบายอื่นนอกเหนือจากไฟล์ JSON
+- ใช้ภาษาไทยในการเขียนคำแนะนำ (Suggestions)
+
+อยากให้เพิ่มเงื่อไขนึงคือการ เพิ่มฟิลด์มา 1 ฟิลด์ชื่อว่า list_disease ที่ไว้สำหรับระบุรายชื่อของโรคที่มีความเสี่ยงจะเกิดจากข้อมูล
+`,
         }),
       });
       const text = await res.text();
@@ -197,6 +352,38 @@ export default function UploadPage() {
       try {
         const json = JSON.parse(text);
         result = typeof json === 'string' ? json : json?.suggestion ?? JSON.stringify(json, null, 2);
+         setSuggestionList(prev=>({
+          ...prev,
+          suggestion: result,
+          bmi_suggestion: json.bmi_suggestion ||  'Data not provided',
+          pulse_suggestion: json.pulse_suggestion || 'Data not provided',
+          temperature_suggestion: json.temperature_suggestion || 'Data not provided',
+          heartRate_suggestion: json.heartRate_suggestion || 'Data not provided',
+          bloodPressure_suggestion: json.bloodPressure_suggestion || 'Data not provided',
+          respiratoryRate_suggestion: json.respiratoryRate_suggestion || 'Data not provided',
+          spo2_suggestion: json.spo2_suggestion || 'Data not provided',
+          fbs_suggestion: json.fbs_suggestion || 'Data not provided',
+          cholesterol_suggestion: json.cholesterol_suggestion || 'Data not provided',
+          hdl_suggestion: json.hdl_suggestion || 'Data not provided',
+          ldl_suggestion: json.ldl_suggestion || 'Data not provided',
+          triglycerides_suggestion: json.triglycerides_suggestion || 'Data not provided',
+          creatinine_suggestion: json.creatinine_suggestion || 'Data not provided',
+          sgpt_suggestion: json.sgpt_suggestion || 'Data not provided',
+          hemoglobin_suggestion: json.hemoglobin_suggestion || 'Data not provided',
+          wbc_suggestion: json.wbc_suggestion || 'Data not provided',
+          platelets_suggestion: json.platelets_suggestion || 'Data not provided',
+          rbc_suggestion: json.rbc_suggestion || 'Data not provided',
+          hematocrit_suggestion: json.hematocrit_suggestion || 'Data not provided',
+          mcv_suggestion: json.mcv_suggestion || 'Data not provided',
+          hba1c_suggestion: json.hba1c_suggestion || 'Data not provided',
+          sgot_suggestion: json.sgot_suggestion || 'Data not provided',
+          alp_suggestion: json.alp_suggestion || 'Data not provided',
+          total_bilirubin_suggestion: json.total_bilirubin_suggestion || 'Data not provided',
+          albumin_suggestion: json.albumin_suggestion || 'Data not provided',
+          ggt_suggestion: json.ggt_suggestion || 'Data not provided',
+          direct_bilirubin_suggestion: json.direct_bilirubin_suggestion || 'Data not provided',
+          list_disease: json.list_disease || 'Data not provided',
+        }));
       } catch {
         result = text;
       }

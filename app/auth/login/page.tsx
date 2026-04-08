@@ -46,6 +46,7 @@ export default function Login() {
       setError("");
       setIsUiShow(true);
       setIspending(true);
+      
     const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/login`,{
     method:"POST",
     headers:{'Content-Type':'application/json',

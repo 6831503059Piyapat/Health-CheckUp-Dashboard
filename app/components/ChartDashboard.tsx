@@ -63,7 +63,7 @@ const ChartDashboard = ({typeData}:any) => {
   const handleCategory = (select:string) =>{
  
     switch(select){
-      case "Body Mass Index":   return dataFetch.map((item:any) => Number(item.weight));
+      case "Body Mass Index":   return dataFetch.map((item:any) => Number(item.bmi));
       case "Fasting blood sugar": return dataFetch.map((item:any) => Number(item.fbs));
       case "Cholesterol":       return dataFetch.map((item:any) => Number(item.cholesterol));
       case "HDL":               return dataFetch.map((item:any) => Number(item.hdl));
