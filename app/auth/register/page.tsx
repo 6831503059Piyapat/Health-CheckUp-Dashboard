@@ -149,17 +149,15 @@ const handleCheckOTP = async () => {
     }
         
 
-  
-  
 
   
 }
   const checkPasswordDatabase = async () =>{
-
         const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/check-register`,{
           method:"POST",
           headers:{'Content-Type':'application/json'},  
           body:JSON.stringify({
+            name:name,
             email:email,
             password:password,
           }),
@@ -170,6 +168,7 @@ const handleCheckOTP = async () => {
         }
         else if(result.canRegister === true){
           sendEmail();
+          console.log("Work at can register");
         }
       
     }
