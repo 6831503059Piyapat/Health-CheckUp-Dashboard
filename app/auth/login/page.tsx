@@ -159,7 +159,7 @@ export default function Login() {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="text-sm font-semibold text-slate-700">Password</label>
-                  <a href="#" className="text-xs font-bold text-blue-600 hover:underline">Forgot Password?</a>
+                  <button type="button" onClick={()=>router.push('/auth/forgot-password')} className="text-xs font-bold text-blue-600 hover:underline cursor-pointer">Forgot Password?</button>
                 </div>
                 <div className="relative">
 
