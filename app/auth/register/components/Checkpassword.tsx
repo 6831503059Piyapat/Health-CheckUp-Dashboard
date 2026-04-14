@@ -54,7 +54,7 @@ useEffect(()=>{
 },[condition])
     return(
         <>
-        <div className="text-[14px]">
+        <div className="text-[14px] grid grid-cols-2 gap-2">
          <p className={`flex gap-2 ${isAtleast?"text-green-500":"text-slate-500"}`}>
             {isAtleast?(<CircleCheck size={20}/>):(<CircleX size={20}/>)} 
             At least 6 characters

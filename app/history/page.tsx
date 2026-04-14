@@ -8,6 +8,7 @@ import { usePathname,useRouter } from "next/navigation";
 import {jwtDecode,JwtPayload} from "jwt-decode";
 import { Spinner } from "@heroui/react";
 import { set } from "react-hook-form";
+import AuthNavbar from "../auth/components/AuthNavbar";
 export default function History(){
   const pathName = usePathname();
   const [dataFetch,setDataFetch] = useState<any>([]);
@@ -39,6 +40,20 @@ export default function History(){
     });
     return filtered;
   },[dataFetch, searchQuery, sortKey, sortOrder]);
+  const uploadsSummary = useMemo(() => {
+    const list = Array.isArray(dataFetch?.Data) ? dataFetch.Data : Array.isArray(dataFetch?.data) ? dataFetch.data : [];
+    const now = new Date();
+    const total = list.length ||"-";
+    const thisYear = list.filter((d: any) => {
+      const dt = d?.dateFile ? new Date(d.dateupload) : null;
+      return dt ? dt.getFullYear() === now.getFullYear() : false;
+    }).length || "-";
+    const thisMonth = list.filter((d: any) => {
+      const dt = d?.dateFile ? new Date(d.dateupload) : null;
+      return dt ? dt.getFullYear() === now.getFullYear() && dt.getMonth() === now.getMonth() : false;
+    }).length || "-";
+    return { total, thisYear, thisMonth };
+  }, [dataFetch]);
   useEffect(()=>{
     const token = localStorage.getItem("token");
   if (token) {
@@ -78,24 +93,54 @@ export default function History(){
     }
     handleFetch();
   },[pathName])
+ 
     return(
+      <>
+      <div className="sticky top-0 z-50">
+          <AuthNavbar/>
+        </div>
       <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 ">
         <Navbar/>
         <main className="ml-64 flex-1 p-8 overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none ">
-       <div className="bg-slate-50 h-[100vh]  rounded-md p-5">
-       <div className="bg-white p-2 rounded-xl border border-slate-200 flex gap-4 mb-6 items-center">
+        <h1 className="text-[42px] mb-5">History Upload</h1>
+       
+       <div className="bg-white rounded-xl shadow mb-2 shadow-lg shadow-blue-500/10 py-4 justify-between flex">
+        <div className="flex-1 text-center border-r border-slate-200">
+          <p className="text-sm text-[#0068F0]/80 font-bold">Total Uploads</p>
+          <p className="text-2xl font-bold text-blue-700">{uploadsSummary.total}</p>
+        </div>
+        <div className="flex-1 text-center border-r border-slate-200">
+          <p className="text-sm text-[#0068F0]/80 font-bold">Uploads This Year</p>
+          <p className="text-2xl font-bold text-blue-700">{uploadsSummary.thisYear}</p>
+        </div>
+        <div className="flex-1 text-center">
+          <p className="text-sm text-[#0068F0]/80 font-bold">Uploads This Month</p>
+          <p className="text-2xl font-bold text-blue-700">{uploadsSummary.thisMonth}</p>
+        </div>
+       </div>
+       <div className="h-full rounded-md p-2 bg-white">
+       <div className="bg-white p-2 rounded-xl border border-blue-200 shadow shadow-blue-500/10 shadow-lg flex gap-4 mb-2 items-center">
             <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search reviews by name provider..." 
-              className="w-full bg-slate-50 border-none rounded-lg py-2.5 pl-10 text-sm focus:ring-2 focus:ring-blue-100 outline-none"
-              value={searchQuery}
-              onChange={(e)=>setSearchQuery(e.target.value)}
-            />
-          </div>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <input 
+                type="text" 
+                placeholder={`Search reviews by provider or name...`} 
+                className="w-full pl-10 border-none rounded-lg py-2.5 text-sm bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none"
+                value={searchQuery}
+                onChange={(e)=>setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  ×
+                </button>
+              )}
+            </div>
           <div className="flex items-center gap-2">
-            <select className="rounded-lg p-2 bg-slate-50 border border-slate-200 text-sm" value={`${sortKey}:${sortOrder}`} onChange={(e)=>{
+            <select className="rounded-lg p-2 bg-blue-50 border border-blue-200 text-sm" value={`${sortKey}:${sortOrder}`} onChange={(e)=>{
               const [k,o] = e.target.value.split(":");
               setSortKey(k); setSortOrder(o as 'asc'|'desc');
             }}>
@@ -109,16 +154,16 @@ export default function History(){
         </div>  
 
         {/* Table Container */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden ">
+        <div className="bg-white rounded-xl border border-blue-200 overflow-hidden ">
           <table className="w-full text-left text-sm">
-            <thead className="w-full border-b border-slate-100 bg-slate-100 ">
+            <thead className="w-full border-b border-slate-100 bg-[#006CFA] ">
               <tr>
-                 <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Date Upload</th>
-             <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Date info</th>
+                 <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10 border-r border-slate-200 text-center">Date Upload</th>
+             <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10 border-r border-slate-200 text-center">Date info</th>
 
-             <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Provider</th>
+             <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10  text-center">Provider</th>
           
-             <th className=" text-slate-400 uppercase text-[14px] font-bold p-5 pl-10 ">Status</th>
+             <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10 text-center  border-r border-slate-200"></th>
              <th></th>
               </tr>
             </thead>
@@ -162,5 +207,6 @@ export default function History(){
        </div>
     </main>
       </div>
+      </>
     )
     }

@@ -27,6 +27,10 @@
     color: var(--accent);
   }
 }
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
 body {
   background: var(--background);
   color: var(--foreground);
