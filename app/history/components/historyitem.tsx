@@ -303,7 +303,7 @@ export default function Historyitem({data}:any){
                     <h2 className="text-xl font-bold">Record Details, {data.dateFile ? formatDate(data.dateFile) : 'N/A'}</h2>
                     <div className="flex gap-5 justify-end px-10 py-1 items-center mb-2 ">
                      <div className="rounded-full p-1 hover:bg-slate-100 cursor-pointer"> 
-                      <FileDown onClick={()=>handleDownload()} className="text-slate-800 cursor-pointer"/>                            </div>
+                      <FileDown onClick={()=>handleDownload(data)} className="text-slate-800 cursor-pointer"/>                            </div>
                      </div>
                     <div className="flex gap-2 cursor-pointer  items-center justify-center">
                       <button onClick={closeFull} className="px-3 py-1 rounded  text-red-500 items-center flex cursor-pointer gap-2"><X className="text-red-500" size={20}/>Close</button>
