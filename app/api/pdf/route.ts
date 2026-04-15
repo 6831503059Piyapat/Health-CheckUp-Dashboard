@@ -27,8 +27,7 @@ function formatDate(d: any) {
         return String(d);
       }
     }
-    await page.setContent( `
-<html>
+    const html = `<html>
 <head>
   <style>
     body {
@@ -179,9 +178,10 @@ function formatDate(d: any) {
  
 </div>
 </body>
-</html>
-    
-    `);
+</html>`
+    await page.setContent(html, {
+  waitUntil: "networkidle0",
+});
 
     const pdfBuffer = await page.pdf({
       format: "A4",
@@ -189,10 +189,12 @@ function formatDate(d: any) {
 
     await browser.close();
 const buffer = Buffer.from(pdfBuffer);
+
     return new Response(buffer, {
       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": "inline; filename=test.pdf",
+    "Content-Type": "application/pdf",
+    "Content-Disposition": "inline; filename=test.pdf",
+    "Content-Length": buffer.length.toString(),
       },
     });
   } catch (error) {
