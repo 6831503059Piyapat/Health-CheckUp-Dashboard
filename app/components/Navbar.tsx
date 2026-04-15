@@ -1,5 +1,5 @@
 'use client';
-import { Plus, LayoutDashboard, Settings,History,ArrowDownToLine, LogOut, CalendarDays, Menu, ChevronLeft } from "lucide-react";
+import { Plus, LayoutDashboard, Settings,History,ArrowDownToLine, LogOut, CalendarDays, Menu, ChevronLeft, TrendingUp } from "lucide-react";
 import NavItem from "./NavItem";
 import { useRouter,usePathname } from "next/navigation";
 import { useState,useEffect } from "react";
@@ -65,7 +65,7 @@ export default function Navbar() {
           <div onClick={() => router.push('/upload')}><NavItem icon={<ArrowDownToLine size={20}/>} label="Upload" active={pathname === '/upload'} /></div>
           <div onClick={() => router.push('/dashboard')}><NavItem icon={<LayoutDashboard size={20}/>} label="Dashboard" active={pathname === '/dashboard'} /></div>
           <div onClick={() => router.push('/history')}><NavItem icon={<History  size={20}/>} label="History" active={pathname === '/history'} /></div>
-          
+          <div onClick={() => router.push('/predict')}><NavItem icon={<TrendingUp  size={20}/>} label="Predict" active={pathname === '/predict'} /></div>
           <div onClick={() => router.push('/calendar')}><NavItem icon={<CalendarDays  size={20}/>} label="Calendar" active={pathname === '/calendar'} /></div>
           <div onClick={()=>router.push('/profile')}><NavItem  icon={<Settings size={20}/>} label="Profile" active={pathname === '/profile'}  /></div>
         </nav>

@@ -1,0 +1,101 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+import Navbar from "../components/Navbar";
+import DropDown from "../dashboard/components/dropDown";
+import PredictChart from "./components/PredictChart";
+import AuthNavbar from "../auth/components/AuthNavbar";
+
+const metrics = [
+  "Body Mass Index",
+  "Fasting blood sugar",
+  "Cholesterol",
+  "HDL",
+  "LDL",
+  "Blood pressure",
+  "Triglyceride",
+  "Creatinine",
+  "ALT",
+  "Hemoglobin",
+  "White blood cell",
+  "Platelet",
+  "Oxygen level",
+  "Heart rate",
+];
+
+export default function PredictPage() {
+  const router = useRouter();
+  const [typeData, setTypeData] = useState<string>("Body Mass Index");
+  const [horizon, setHorizon] = useState<number>(3);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/auth/login");
+      return;
+    }
+    try {
+      const decoded = jwtDecode<JwtPayload>(token);
+      if (decoded.exp! < Date.now() / 1000) {
+        localStorage.removeItem("token");
+        router.push("/auth/login");
+      }
+    } catch {
+      localStorage.removeItem("token");
+      router.push("/auth/login");
+    }
+  }, []);
+
+  return (
+    <>
+      <div className="sticky top-0 z-40">
+        <AuthNavbar />
+      </div>
+      <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
+        <Navbar />
+        <main className="ml-64 flex-1">
+          <div className="min-h-screen bg-slate-50 p-6 text-gray-700">
+            <h1 className="text-[45px] text-black pl-5 mb-5">Predict</h1>
+
+            <div className="rounded-2xl bg-blue-50/80 border border-blue-200 p-6 shadow-sm">
+              <div className="flex flex-wrap gap-4 items-end mb-6">
+                <div>
+                  <p className="text-xs text-slate-500 mb-1">Metric</p>
+                  <DropDown
+                    data={metrics}
+                    type={"Body Mass Index"}
+                    setData={setTypeData}
+                  />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 mb-1">Years ahead</p>
+                  <select
+                    value={horizon}
+                    onChange={(e) => setHorizon(Number(e.target.value))}
+                    className="rounded-xl bg-white border border-slate-200 px-4 py-2 text-sm"
+                  >
+                    {[1, 2, 3, 5, 10].map((n) => (
+                      <option key={n} value={n}>
+                        {n} {n === 1 ? "year" : "years"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <PredictChart typeData={typeData} horizon={horizon} />
+
+              <p className="mt-4 text-xs text-slate-500">
+                Forecast uses a linear regression over your uploaded records.
+                Accuracy improves with more data points and may not reflect
+                lifestyle or medical changes.
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+    </>
+  );
+}
