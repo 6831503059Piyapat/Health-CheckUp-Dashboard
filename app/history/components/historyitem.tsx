@@ -172,7 +172,7 @@ export default function Historyitem({data}:any){
     );
   }
   
-   const handleDownload = async () => {
+   const handleDownload = async (data:any) => {
       const res = await fetch("/api/pdf",{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -238,7 +238,7 @@ export default function Historyitem({data}:any){
                             <div className="flex gap-5 justify-end items-center mb-2 px-5 ">
                               <div className="flex gap-5 p-1 ">
                                 <div className="p-1 border rounded-full shadow-sm cursor-pointer hover:bg-slate-100" onClick={()=>closeFull()}>
-                              <FileDown onClick={()=>handleDownload()} className="text-slate-800 cursor-pointer hover:text-slate-600  "/>
+                              <FileDown onClick={()=>handleDownload(data)} className="text-slate-800 cursor-pointer hover:text-slate-600  "/>
                                 </div>
                                 <div className="p-1 border rounded-full shadow-sm cursor-pointer hover:bg-slate-100">
                               <Eye onClick={()=> openFull()} className="text-slate-800 cursor-pointer hover:text-slate-600" />

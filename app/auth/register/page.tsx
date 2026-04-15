@@ -177,7 +177,7 @@ export default function Register() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter username"
-                      className={`w-full pl-12 pr-4 py-3 bg-[#F3F8FF] border-2 ${errorName ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
+                      className={`w-full pl-12 text-slate-800 pr-4 py-3 bg-[#F3F8FF] border-2 ${errorName ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
                     />
                   </div>
                   {errorName && <p className="text-red-500 text-xs mt-1 ml-1">{errorName}</p>}
@@ -193,7 +193,7 @@ export default function Register() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className={`w-full pl-12 pr-4 py-3 bg-[#F3F8FF] border-2 ${errorEmail ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
+                      className={`w-full pl-12 pr-4 text-slate-800 py-3 bg-[#F3F8FF] border-2 ${errorEmail ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
                     />
                   </div>
                   {errorEmail && <p className="text-red-500 text-xs mt-1 ml-1">{errorEmail}</p>}
@@ -210,7 +210,7 @@ export default function Register() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-12 pr-12 py-3 bg-[#F3F8FF] border-transparent rounded-2xl focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] outline-none transition-all"
+                        className="w-full pl-12 pr-12 py-3 text-slate-800 bg-[#F3F8FF] border-transparent rounded-2xl focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] outline-none transition-all"
                       />
                       <button type="button" onClick={() => setIsShowpassword(!isShowpassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                         {isShowpassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
@@ -230,7 +230,7 @@ export default function Register() {
                         value={passwordConfirm}
                         onChange={(e) => setPasswordConfirm(e.target.value)}
                         placeholder="••••••••"
-                        className={`w-full pl-12 pr-12 py-3.5 bg-[#F3F8FF] border-2 ${errorConfirmPassword ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
+                        className={`w-full pl-12 text-slate-800 pr-12 py-3.5 bg-[#F3F8FF] border-2 ${errorConfirmPassword ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
                       />
                       <button type="button" onClick={() => setIsShowConfirm(!isShowConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                         {isShowConfirm ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
@@ -267,7 +267,7 @@ export default function Register() {
                     value={OTPConfirm}
                     onChange={(e) => setOTPConfirm(e.target.value)}
                     placeholder="xxxxxx"
-                    className={`w-full pl-12 pr-4 py-4 bg-[#F3F8FF] border-2 ${!isOTPmatch ? 'border-red-200' : 'border-[#2563EB]/20'} rounded-2xl text-center text-2xl font-bold tracking-[0.5em] focus:bg-white outline-none transition-all`}
+                    className={`w-full text-slate-800 pl-12 pr-4 py-4 bg-[#F3F8FF] border-2 ${!isOTPmatch ? 'border-red-200' : 'border-[#2563EB]/20'} rounded-2xl text-center text-2xl font-bold tracking-[0.5em] focus:bg-white outline-none transition-all`}
                   />
                 </div>
                 {errorOTP && <p className="text-red-500 text-center text-sm">{errorOTP}</p>}
