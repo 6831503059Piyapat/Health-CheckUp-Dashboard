@@ -1,16 +1,19 @@
-import puppeteer from "puppeteer";
-import { parseISO, format } from 'date-fns';
-
-export async function POST(request: Request) {
-    const { data } = await request.json();
+export const runtime = "nodejs";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
+import { parseISO,format } from "date-fns";
+export async function POST(req:Request) {
+   const data = await req.json();
   try {
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();
- function formatDate(d: any) {
+function formatDate(d: any) {
       if (!d) return 'N/A';
       try {
         const dt = typeof d === 'string' ? parseISO(d) : (d instanceof Date ? d : new Date(d));
@@ -19,8 +22,7 @@ export async function POST(request: Request) {
         return String(d);
       }
     }
-    // HTML to convert to PDF
-    const html = `
+    await page.setContent( `
 <html>
 <head>
   <style>
@@ -106,7 +108,7 @@ export async function POST(request: Request) {
   <!-- HEADER -->
   <div class="header">
     <h1>Health Checkup Report</h1>
-    <p1 class="LifeMarkersText">LIFEMARKERS</p1>
+    <p class="LifeMarkersText">LIFEMARKERS</p>
   </div>
 
   <!-- PATIENT INFO -->
@@ -174,29 +176,28 @@ export async function POST(request: Request) {
 </body>
 </html>
     
-    `;
+    `);
 
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-
-    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+    });
 
     await browser.close();
 
-    const uint8 = new Uint8Array(pdfBuffer);
-    return new Response(uint8, {
-      status: 200,
+    return new Response(pdfBuffer, {
       headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename=report.pdf',
-        'Content-Length': String(uint8.byteLength),
+        "Content-Type": "application/pdf",
+        "Content-Disposition": "inline; filename=test.pdf",
       },
     });
-  } catch (err: any) {
-    // Return JSON error to avoid crashing the serverless function
-    const msg = err?.message || String(err);
-    return new Response(JSON.stringify({ error: 'Failed to generate PDF', message: msg }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  } catch (error) {
+    console.error("PDF ERROR:", error);
+    return new Response("Failed to generate PDF", { status: 500 });
   }
 }
+
+
+
+
+
+
