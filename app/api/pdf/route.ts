@@ -151,20 +151,20 @@ function formatDate(d: any) {
     <tr><td>Heart Rate</td><td>${data.heartRate || "-"}</td><td>bpm</td><td>60-100</td></tr>
     <tr><td>Respiratory Rate</td><td>${data.respiratoryRate || "-"}</td><td>breaths/min</td><td>12-20</td></tr>
     <tr><td>Temperature</td><td>${data.temperature || "-"}</td><td>°C</td><td>36.5-37.5</td></tr>
-    <tr><td>SpO2</td><td>${data.spo2 || "-"}</td><td>%</td><td>>95</td></tr>
+    <tr><td>SpO2</td><td>${data.spo2 || "-"}</td><td>%</td><td>&lt;95</td></tr>
     <tr><td>BMI</td><td>${data.bmi || "-"}</td><td>kg/m²</td><td>18.5-24.9</td></tr>
     <tr><td>FBS</td><td>${data.fbs || "-"}</td><td>mg/dL</td><td>70-99</td></tr>
-    <tr><td>HbA1c</td><td>${data.hba1c || "-"}</td><td>%</td><td><5.7</td></tr>
-    <tr><td>Total Cholesterol</td><td>${data.cholesterol || "-"}</td><td>mg/dL</td><td><200</td></tr>
-    <tr><td>HDL</td><td>${data.hdl || "-"}</td><td>mg/dL</td><td>>40</td></tr>
-    <tr><td>LDL</td><td>${data.ldl || "-"}</td><td>mg/dL</td><td><100</td></tr>
-    <tr><td>Triglycerides</td><td>${data.triglycerides || "-"}</td><td>mg/dL</td><td><150</td></tr>
-    <tr><td>ALT (SGPT)</td><td>${data.sgpt || "-"}</td><td>U/L</td><td><40</td></tr>
-    <tr><td>AST (SGOT)</td><td>${data.sgot || "-"}</td><td>U/L</td><td><40</td></tr>
+    <tr><td>HbA1c</td><td>${data.hba1c || "-"}</td><td>%</td><td>&lt;5.7</td></tr>
+    <tr><td>Total Cholesterol</td><td>${data.cholesterol || "-"}</td><td>mg/dL</td><td>&lt;200</td></tr>
+    <tr><td>HDL</td><td>${data.hdl || "-"}</td><td>mg/dL</td><td>&lt;40</td></tr>
+    <tr><td>LDL</td><td>${data.ldl || "-"}</td><td>mg/dL</td><td>&lt;100</td></tr>
+    <tr><td>Triglycerides</td><td>${data.triglycerides || "-"}</td><td>mg/dL</td><td>&lt;150</td></tr>
+    <tr><td>ALT (SGPT)</td><td>${data.sgpt || "-"}</td><td>U/L</td><td>&lt;40</td></tr>
+    <tr><td>AST (SGOT)</td><td>${data.sgot || "-"}</td><td>U/L</td><td>&lt;40</td></tr>
     <tr><td>ALP</td><td>${data.alp || "-"}</td><td>U/L</td><td>30-120</td></tr>
-    <tr><td>GGT</td><td>${data.ggt || "-"}</td><td>U/L</td><td><55</td></tr>
+    <tr><td>GGT</td><td>${data.ggt || "-"}</td><td>U/L</td><td>&lt;55</td></tr>
     <tr><td>Total Bilirubin</td><td>${data.total_bilirubin || "-"}</td><td>mg/dL</td><td>0.2-1.2</td></tr>
-    <tr><td>Direct Bilirubin</td><td>${data.direct_bilirubin || "-"}</td><td>mg/dL</td><td><0.3</td></tr>
+    <tr><td>Direct Bilirubin</td><td>${data.direct_bilirubin || "-"}</td><td>mg/dL</td><td>&lt;0.3</td></tr>
     <tr><td>Creatinine</td><td>${data.creatinine || "-"}</td><td>mg/dL</td><td>0.5-1.2</td></tr>
     <tr><td>Hemoglobin</td><td>${data.hemoglobin || "-"}</td><td>g/dL</td><td>13-17</td></tr>
     <tr><td>WBC</td><td>${data.wbc || "-"}</td><td>cells/uL</td><td>4000-11000</td></tr>
