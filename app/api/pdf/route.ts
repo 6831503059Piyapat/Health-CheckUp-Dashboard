@@ -5,12 +5,17 @@ import { parseISO,format } from "date-fns";
 export async function POST(req:Request) {
    const data = await req.json();
   try {
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-    });
+    const isDev = process.env.NODE_ENV === "development";
+const browser = await puppeteer.launch({
+  args: isDev ? [] : chromium.args,
+  executablePath: isDev
+    ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    : await chromium.executablePath(),
+  headless: true,
+});
+
+
+   
 
     const page = await browser.newPage();
 function formatDate(d: any) {
@@ -183,8 +188,8 @@ function formatDate(d: any) {
     });
 
     await browser.close();
-
-    return new Response(pdfBuffer, {
+const buffer = Buffer.from(pdfBuffer);
+    return new Response(buffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": "inline; filename=test.pdf",
