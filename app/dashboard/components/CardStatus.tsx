@@ -55,6 +55,7 @@ const ranges: Record<string, { min?: number; max?: number; higherIsBetter?: bool
   ALT: { min: 0.1, max: 40 },
   Hemoglobin: { min: 12, max: 17 },
   'White blood cell': { min: 4500, max: 11000 },
+  'Blood pressure': { min: 90, max: 140 },
   Platelet: { min: 150000, max: 450000 },
   'Oxygen level': { min: 95, max: 100 },
   'Heart rate': { min: 60, max: 100 },
@@ -210,16 +211,7 @@ const CardStatus: React.FC<Props> = ({ typeData, setTypeData, dataFetchData,setI
   return (
     <div>
       <div className='overflow-y-auto h-[40vh] md:h-[50vh] [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none'>
-        {/* <div className={`flex justify-between gap-5 items-center transition-all mb-4 bg-white p-5  ${typeData === 'Blood pressure' ? 'border border-blue-500 border-2' : 'border-2 border border-white'}  rounded-xl`} onClick={() => setTypeData('Blood pressure')}>
-        <div className="flex items-center gap-5">
-          <HeartPulse />
-          <div>
-            <p className="text-sm text-slate-500">Blood Pressure</p>
-            <p className={`font-bold`}>118/76 mmHg</p>
-          </div>
-        </div>
-        <p className="mr-5 bg-green-100 text-green-500 px-2 py-1 rounded-full font-bold text-[11px] text-center">Normal</p>
-      </div> */}
+     
 
       {metrics.map((metric) => {
         const val = displayValue(metric);
@@ -227,6 +219,9 @@ const CardStatus: React.FC<Props> = ({ typeData, setTypeData, dataFetchData,setI
         const cls = classesForStatus(status);
         const cardBorder = typeData === metric ? `border  ${status === 'high' ? 'border-red-500' : status === 'low' ? 'border-yellow-500' : 'border-blue-500'  } border-2` : `border-2 ${cls.border}`;
         const pillText = status === 'normal' ? 'Normal' : status === 'high' ? 'High' : status === 'low' ? 'Low' : 'N/A';
+        if(metric === "Blood pressure"){
+          return;
+        }else{
         return (
           <div
             key={metric}
@@ -248,7 +243,7 @@ const CardStatus: React.FC<Props> = ({ typeData, setTypeData, dataFetchData,setI
             </div>
             <p className={`mr-5 px-2 py-1 rounded-full font-bold text-[11px] text-center ${cls.pill}`}>{pillText}</p>
           </div>
-        );
+        );}
       })}
 
     </div>

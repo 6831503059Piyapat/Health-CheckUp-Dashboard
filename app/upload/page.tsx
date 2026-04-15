@@ -226,7 +226,6 @@ export default function UploadPage() {
       });
       const text = await res.text();
       let result: string;
-      console.log(text);
       try {
         const json = JSON.parse(text);
         result = typeof json === 'string' ? json : json?.suggestion ?? JSON.stringify(json, null, 2);

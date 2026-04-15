@@ -20,10 +20,10 @@ export default function Home() {
 
         <div className="flex items-center gap-4">
           <div className="gap-4 flex">
-            <button onClick={()=>router.push('/auth/login')} className="text-sm text-slate-600 hover:text-slate-800 inline-flex items-center gap-2">
+            <button onClick={()=>router.push('/auth/login')} className="text-sm cursor-pointer text-slate-600 hover:text-slate-800 inline-flex items-center gap-2">
               Login
             </button>
-            <button onClick={()=>router.push('/auth/register')} className="bg-blue-700 p-2 rounded-md text-sm text-slate-100 hover:bg-blue-800 inline-flex items-center gap-2">
+            <button onClick={()=>router.push('/auth/register')} className="cursor-pointer bg-blue-700 p-2 rounded-md text-sm text-slate-100 hover:bg-blue-800 inline-flex items-center gap-2">
               Get Started
             </button>
           </div>
@@ -34,7 +34,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="grid bg-white  gap-8 px-10 py-35 justify-center items-center">
-        <div className="justify-center ">
+        <div className="justify-center z-49">
           <h1 className="text-4xl font-bold mb-4 uppercase text-center w-[450px]">
             Your clinical data beautifully mastered
            </h1>
@@ -70,9 +70,11 @@ export default function Home() {
         style={{
           perspective: 1000,      
         }}
-        className="w-full rounded-xl max-w-[720px] h-[220px] sm:h-[260px] md:h-[320px] lg:h-[380px] border border-slate-300"
+        className="w-full z-0 rounded-xl max-w-[720px] h-[220px] sm:h-[260px] md:h-[320px] lg:h-[380px]"
       >
-        <ChartLanding />
+        <div className="bg-slate-500 border border-black w-100 h-full rounded">
+
+        </div>
       </motion.div>
             </div>
           </div>
@@ -85,10 +87,12 @@ export default function Home() {
           Generate TrendLine Graph
         </h2>
 
-        <div className="bg-white rounded-xl shadow p-6 h-[50vh]">
+        <div className="bg-slate-50 rounded-xl shadow justify-center flex
+         p-6 h-[60vh] ">
           {/* GRAPH PLACEHOLDER */}
          
-         <ChartLanding/>  
+                 <Image src="/Graph.png" width={1000} height={700} alt="Graph"/>
+ 
           
         </div>
       </section>
