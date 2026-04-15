@@ -32,7 +32,7 @@ export default function CalendarPage() {
   
   // --- State สำหรับฟอร์มใหม่ ---
   const [newEventTitle, setNewEventTitle] = useState<string>("");
-  const [newEventTime, setNewEventTime] = useState<string>("09:00"); // Default เวลา
+  const [newEventTime, setNewEventTime] = useState<string>("09:00"); // Default time
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -61,7 +61,7 @@ const router = useRouter();
     const formattedEvents: EventsState = {};
     
     data.forEach((event: any) => {
-      const dateKey = event.date; // เช่น '2024-05-20'
+      const dateKey = event.date; 
       if (!formattedEvents[dateKey]) {
         formattedEvents[dateKey] = [];
       }

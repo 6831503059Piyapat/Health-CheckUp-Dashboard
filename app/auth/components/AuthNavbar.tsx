@@ -44,9 +44,9 @@ export default function AuthNavbar({ isLoading, userData }: Props) {
       fetcProfile();
       },[pathname])
   return (
-    <div className="w-full bg-white border-b border-slate-100 ">
+    <div className="w-full bg-white border-b border-slate-100  font-sans">
       <div className="w-full px-5 mx-auto py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 p-2 ">
+        <Link href="/dashboard" className="flex items-center gap-3 p-2 ">
           <div className="bg-blue-600 p-2 rounded-md text-white">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M2 12L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </div>

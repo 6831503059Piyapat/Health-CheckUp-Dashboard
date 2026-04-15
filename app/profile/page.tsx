@@ -82,37 +82,36 @@ export default function SettingsPage() {
 
   return (
     <>
-    <div className="sticky top-0">
+    <div className="sticky top-0 z-50">
         <AuthNavbar/>
       </div>
-    
-    <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
-<Navbar/>
-      <div className="max-w-5xl mx-auto space-y-6 mb-6 mt-6">
+    <Navbar/>
+    <div className="flex min-h-screen ml-64 bg-slate-50 font-sans text-slate-900">
+
+      <div className="max-w-5xl flex-1  mx-auto space-y-6 mb-6 mt-6">
     
         {/* header */}
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
           <p className="text-sm text-slate-500">Manage your profile and security preferences</p>
         </div>
 
         {/* profile */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 flex items-center gap-6">
-          <div className="relative">
+        <div className="bg-white justify-center border border-slate-200 rounded-xl shadow-sm p-6 flex items-center gap-6">
+          <div className="absolute top-20 z-0">
            
-            <Skeleton className='w-20 h-20 rounded-full object-cover border'/>
+            <Skeleton className='w-40 h-40 rounded-full object-cover border'/>
             <label className="absolute bottom-0 right-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer">
               Edit
               <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
             </label>
           </div>
 
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+          <div className='mt-15 justify-center'>
+            <h2 className="text-lg text-center font-semibold text-slate-900">
               {dataFetch?.name}
             </h2>
             <p className="text-sm text-slate-500">{dataFetch?.email}</p>
-            <p className="text-sm  text-green-500">online</p>
           </div>
         </div>
 
@@ -125,8 +124,8 @@ export default function SettingsPage() {
               <label className="text-sm text-slate-600">First Name</label>
               <input
                 className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                value={firstName || "-"}
+              disabled
               />
             </div>
 
@@ -134,8 +133,8 @@ export default function SettingsPage() {
               <label className="text-sm text-slate-600">Last Name</label>
               <input
                 className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                value={lastName || "-"}
+                disabled
               />
             </div>
 
@@ -143,8 +142,8 @@ export default function SettingsPage() {
               <label className="text-sm text-slate-600">Address</label>
               <input
                 className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                value={address || "-"}
+                disabled
               />
             </div>
 
@@ -152,49 +151,16 @@ export default function SettingsPage() {
               <label className="text-sm text-slate-600">Contact Info</label>
               <input
                 className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
-              />
+                value={contact || "-"}
+                disabled
+/>
             </div>
           </div>
         </div>
 
-        {/* pass */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Security</h2>
+       
 
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm text-slate-600">Change Password</label>
-              <input
-                type="password"
-                className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={enable2FA}
-                onChange={(e) => setEnable2FA(e.target.checked)}
-              />
-              <label className="text-sm text-slate-600">
-                Enable Two-Factor Authentication (2FA)
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* save botton not working */}
-        <button
-          onClick={handleSave}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition"
-        >
-          Save Settings
-        </button>
-
+      
       </div>
     </div>
     </>

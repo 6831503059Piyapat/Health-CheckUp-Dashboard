@@ -105,7 +105,7 @@ export default function Login() {
             </div>
           )}
           {success && (
-            <div className="mb-6 p-3 bg-greens-50 border-l-4 rounded-md border-green-500 text-green-700 text-sm rounded-r-lg">
+            <div className="mb-6 p-3 bg-green-50 border-l-4 rounded-md border-green-500 text-green-700 text-sm rounded-r-lg">
               {success}
             </div>
           )}

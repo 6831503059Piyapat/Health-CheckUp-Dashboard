@@ -67,7 +67,7 @@ export default function Navbar() {
           <div onClick={() => router.push('/history')}><NavItem icon={<History  size={20}/>} label="History" active={pathname === '/history'} /></div>
           
           <div onClick={() => router.push('/calendar')}><NavItem icon={<CalendarDays  size={20}/>} label="Calendar" active={pathname === '/calendar'} /></div>
-          <div onClick={()=>router.push('/Setting')}><NavItem  icon={<Settings size={20}/>} label="Settings" active={pathname === '/Setting'}  /></div>
+          <div onClick={()=>router.push('/profile')}><NavItem  icon={<Settings size={20}/>} label="Profile" active={pathname === '/profile'}  /></div>
         </nav>
 
       {/* Setting button */}
