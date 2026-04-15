@@ -8,10 +8,8 @@ export async function POST(req:Request) {
   try {
     const isDev = process.env.NODE_ENV === "development";
 const browser = await puppeteer.launch({
-  args: isDev ? [] : chromium.args,
-  executablePath: isDev
-    ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-    : await chromium.executablePath(),
+  args: chromium.args,
+  executablePath: await chromium.executablePath(),
   headless: true,
 });
 
