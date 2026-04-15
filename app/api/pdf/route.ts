@@ -1,4 +1,5 @@
 export const runtime = "nodejs";
+import { NextResponse } from "next/server";
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 import { parseISO,format } from "date-fns";
@@ -188,8 +189,12 @@ function formatDate(d: any) {
     });
 
     await browser.close();
+    
 const buffer = Buffer.from(pdfBuffer);
 
+if (!pdfBuffer || pdfBuffer.length === 0) {
+  throw new Error("PDF Buffer is empty");
+}
     return new Response(buffer, {
       headers: {
     "Content-Type": "application/pdf",
