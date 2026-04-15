@@ -173,7 +173,7 @@ export default function Historyitem({data}:any){
   }
   
    const handleDownload = async (data:any) => {
-      const res = await fetch("/api/pdf",{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/pdf`,{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data:data}),
