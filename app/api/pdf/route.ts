@@ -28,7 +28,13 @@ function formatDate(d: any) {
         return String(d);
       }
     }
-    const html = `<html>
+    const html = `
+    <html>
+    <body>
+      <h1>HELLO PDF</h1>
+    </body>
+  </html>`
+    const htm = `<html>
 <head>
   <style>
     body {
