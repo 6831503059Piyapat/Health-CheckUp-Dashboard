@@ -4,6 +4,7 @@ import { useState,useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@heroui/react';
 import {jwtDecode,JwtPayload} from "jwt-decode";
+import AuthNavbar from '../auth/components/AuthNavbar';
 export default function SettingsPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -80,6 +81,11 @@ export default function SettingsPage() {
   }
 
   return (
+    <>
+    <div className="sticky top-0">
+        <AuthNavbar/>
+      </div>
+    
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
 <Navbar/>
       <div className="max-w-5xl mx-auto space-y-6 mb-6 mt-6">
@@ -191,5 +197,6 @@ export default function SettingsPage() {
 
       </div>
     </div>
+    </>
   );
 }

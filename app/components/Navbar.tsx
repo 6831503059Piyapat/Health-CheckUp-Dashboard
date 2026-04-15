@@ -55,35 +55,18 @@ export default function Navbar() {
         )}
 
         <aside className={`w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full transform transition-transform duration-300 ${isCollapsed ? '-translate-x-64' : 'translate-x-0'}`}>
-        <div className="p-6 flex items-center gap-3 text-blue-600 font-bold text-xl">
-          <div className="flex items-center gap-3">
-            <div className="bg-blue-600 p-1.5 rounded-lg text-white">
-              <Plus size={20} className="rotate-45" />
-            </div>
-            <span>LifeMarkers</span>
-          </div>
-          {/* <button aria-label="Collapse sidebar" onClick={() => setIsCollapsed(true)} className="ml-auto p-2 rounded-md text-slate-500 hover:bg-slate-100">
-            <ChevronLeft size={18} />
-          </button> */}
-        </div>
+        
 
            {/* Profile Icon */}
-        <div className="px-4 mb-8 cursor-default" >
-          <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
-            <Skeleton className="w-10 h-10 rounded-full border border-white"/>
-            <div>
-                <p className="text-sm font-bold">{isLoading ? 'Loading…' : userData?.name}</p>
-              <p className="text-[8px] text-slate-500 uppercase tracking-wider">{isLoading ? 'Loading…' : userData?.email}</p>
-            </div>
-          </div>
-        </div>
+       
 
       {/* UI Select page */}
-        <nav className="flex-1 px-3 space-y-1">
+        <nav className="flex-1 px-5 space-y-1 mt-1">
           <div onClick={() => router.push('/upload')}><NavItem icon={<ArrowDownToLine size={20}/>} label="Upload" active={pathname === '/upload'} /></div>
-          <div onClick={() => router.push('/')}><NavItem icon={<LayoutDashboard size={20}/>} label="Dashboard" active={pathname === '/'} /></div>
+          <div onClick={() => router.push('/dashboard')}><NavItem icon={<LayoutDashboard size={20}/>} label="Dashboard" active={pathname === '/dashboard'} /></div>
           <div onClick={() => router.push('/history')}><NavItem icon={<History  size={20}/>} label="History" active={pathname === '/history'} /></div>
-          {/* <div onClick={() => router.push('/calendar')}><NavItem icon={<CalendarDays  size={20}/>} label="Calendar" active={pathname === '/calendar'} /></div> */}
+          
+          <div onClick={() => router.push('/calendar')}><NavItem icon={<CalendarDays  size={20}/>} label="Calendar" active={pathname === '/calendar'} /></div>
           <div onClick={()=>router.push('/Setting')}><NavItem  icon={<Settings size={20}/>} label="Settings" active={pathname === '/Setting'}  /></div>
         </nav>
 

@@ -6,6 +6,7 @@ import { UploadCloud, FileText, CheckCircle, Loader2, X, Sparkles } from 'lucide
 import Navbar from '../components/Navbar';
 import { a, s } from 'framer-motion/client';
 import { set } from 'react-hook-form';
+import AuthNavbar from '../auth/components/AuthNavbar';
 
 const emptyForm = {
   fullName: '', gender: '', age: '', height: '', weight: '', bmi: '',
@@ -225,7 +226,6 @@ export default function UploadPage() {
       });
       const text = await res.text();
       let result: string;
-      console.log(text);
       try {
         const json = JSON.parse(text);
         result = typeof json === 'string' ? json : json?.suggestion ?? JSON.stringify(json, null, 2);
@@ -410,6 +410,10 @@ export default function UploadPage() {
 
   if (saveOk) {
     return (
+      <>
+      <div className="sticky top-0">
+          <AuthNavbar/>
+        </div>
       <div className="flex min-h-screen bg-slate-50">
         <Navbar />
         <main className="ml-64 flex-1 flex items-center justify-center">
@@ -419,15 +423,20 @@ export default function UploadPage() {
             <p className="text-slate-500">Your health data has been recorded.</p>
             <div className="flex gap-3 justify-center">
               <button onClick={() => { setForm(emptyForm); setFile(null); setExtractedText(''); setStep('upload'); setSaveOk(false); }} className="px-5 py-2 rounded-lg border border-slate-200 text-sm font-medium hover:bg-slate-100">Upload another</button>
-              <button onClick={() => router.push('/')} className="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">Go to Dashboard</button>
+              <button onClick={() => router.push('/dashboard')} className="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">Go to Dashboard</button>
             </div>
           </div>
         </main>
       </div>
+      </>
     );
   }
 
   return (
+    <>
+    <div className="sticky top-0">
+        <AuthNavbar/>
+      </div>
     <div className="flex min-h-screen bg-slate-50 text-slate-900">
       <Navbar />
       <main className="ml-64 flex-1 p-8 overflow-y-auto">
@@ -597,5 +606,6 @@ export default function UploadPage() {
         </div>
       </main>
     </div>
+    </>
   );
 }

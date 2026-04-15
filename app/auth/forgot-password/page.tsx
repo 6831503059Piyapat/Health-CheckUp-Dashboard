@@ -1,7 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Shield, Lock, Mail, KeyRound, ArrowRight, Eye, EyeOff, Headset, FileText } from 'lucide-react';
+import { Shield, Lock, Mail, KeyRound, ArrowRight, Eye, EyeOff, Headset, FileText, Key } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Spinner } from '@heroui/react';
+import AuthNavbar from '../components/AuthNavbar';
 import Checkpassword from '../register/components/Checkpassword';
 
 type Step = 'email' | 'reset';
@@ -114,196 +116,175 @@ export default function ForgotPassword() {
   }
 
   return (
+    <>
+    <AuthNavbar/>
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
-        <div className="md:w-5/12 bg-blue-600 p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <div className="absolute -top-24 -left-24 w-64 h-64 rounded-full bg-white"></div>
-          </div>
-
-          <div className="relative z-10">
-            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-8">
-              <div className="text-white">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
-                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
-                </svg>
-              </div>
+    
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-12">
+      
+        {/* Login Card */}
+        <div className="bg-white p-8  shadow shadow-xl w-full max-w-[500px]">
+          <h1 className="text-center text-[#1E40AF] mb-5 text-3xl font-bold tracking-tight mb-2">
+          {step === "reset" && "Reset Password"}
+          {step === "email" && "Forgot Password"}
+            
+          
+          </h1>
+          {step === "email" && (
+          <h1 className='text-slate-600 mb-2'>
+            Enter your email to receive a reset code
+          </h1>
+          )}
+          {errorEmail && (
+            <div className="mb-6 p-3 bg-red-50 border-l-4 rounded-md border-red-500 text-red-700 text-sm rounded-r-lg">
+              {errorEmail}
             </div>
-
-            <h1 className="text-4xl font-bold mb-6 leading-tight">Life Markers <br /></h1>
-            <p className="text-blue-100 text-lg leading-relaxed">
-              Reset your password securely. We'll send a verification code to your email.
-            </p>
-          </div>
-
-          <div className="relative z-10 space-y-8">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                <Shield className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-sm">HIPAA Compliant</p>
-                <p className="text-xs text-blue-200 uppercase tracking-wider">End-to-end encrypted data</p>
-              </div>
+          )}
+          {errorPassword && (
+            <div className="mb-6 p-3 bg-red-50 border-l-4 rounded-md border-red-500 text-red-700 text-sm rounded-r-lg">
+              {errorPassword}
             </div>
-            <p className="italic text-blue-200 text-sm border-t border-white/10 pt-6">
-              "Technology at the service of healthcare excellence."
-            </p>
-          </div>
-        </div>
-
-        <div className="md:w-7/12 p-8 md:p-16 flex flex-col justify-center">
-          <div className="max-w-sm mx-auto w-full">
-            <h2 className="text-3xl font-bold text-slate-800 mb-1">
-              {step === 'email' ? 'Forgot Password' : 'Reset Password'}
-            </h2>
-            <p className="text-slate-500 mb-3 text-sm">
-              {step === 'email'
-                ? 'Enter your email to receive a reset code.'
-                : `Enter the 6-digit code sent to ${email} and your new password.`}
-            </p>
-
-            {info && step === 'reset' && (
-              <p className="text-sm text-green-700 p-2 bg-green-50 rounded mb-2">{info}</p>
-            )}
-
+          )}
+           {step === "reset" && (
             <div className="space-y-6">
-              {step === 'email' && (
-                <>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2 mt-3">Email</label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="text"
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                        placeholder="example:name@hospital.com"
-                        className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorEmail ? 'focus:ring-red-500 border-red-500' : ' focus:ring-blue-500 border-slate-200'} focus:border-transparent transition-all`}
-                      />
-                    </div>
-                    {errorEmail && <p className="text-sm text-red-600 mt-1">{errorEmail}</p>}
+            
+              <>
+                {/* Full Name */}
+                <div>
+                  <label className="block text-[13px] font-bold text-gray-700 mb-2 uppercase tracking-wider">Reset Code</label>
+                  <div className="relative group">
+                    <Key className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 ${errorCode ? 'text-red-400' : 'text-gray-400 group-focus-within:text-[#2563EB]'} transition-colors`} />
+                    <input
+                      type="text"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      placeholder="Enter 6-digit code"
+                      className={`w-full pl-12 pr-4 py-3 bg-[#F3F8FF] border-2 text-slate-800 ${errorCode ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
+                    />
                   </div>
+                  {errorCode && <p className="text-red-500 text-xs mt-1 ml-1">{errorCode}</p>}
+                </div>
 
-                  <button
-                    type="button"
-                    onClick={handleSendCode}
-                    disabled={isPending}
-                    className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-4 rounded-lg shadow-lg shadow-blue-200 flex items-center justify-center gap-2 transition-all transform active:scale-[0.98]"
-                  >
-                    {isPending ? 'Sending...' : 'Send Reset Code'}
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
 
-                  <h1 className="text-center">
-                    Remembered your password?{' '}
-                    <button className="underline text-blue-500 cursor-pointer" onClick={() => router.push('/auth/login')}>
-                      Login
-                    </button>
-                  </h1>
-                </>
-              )}
-
-              {step === 'reset' && (
-                <>
+                {/* Password Fields */}
+                <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Reset Code</label>
-                    <div className="relative">
-                      <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <label className="block text-[13px] font-bold text-gray-700 mb-2 uppercase tracking-wider">New Password</label>
+                    <div className="relative group">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-[#2563EB]" />
                       <input
-                        type="text"
-                        onChange={(e) => setCode(e.target.value)}
-                        value={code}
-                        placeholder="Enter 6-digit code"
-                        className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorCode ? 'focus:ring-red-500 border-red-500' : ' focus:ring-blue-500 border-slate-200'} focus:border-transparent transition-all`}
-                      />
-                    </div>
-                    {errorCode && <p className="text-sm text-red-600 mt-1">{errorCode}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">New Password</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type={isShowPassword ? 'text' : 'password'}
-                        onChange={(e) => setPassword(e.target.value)}
+                        type={isShowPassword ? "text" : "password"}
                         value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorPassword ? 'focus:ring-red-500 border-red-500' : ' focus:ring-blue-500 border-slate-200'} focus:border-transparent transition-all`}
+                        className="w-full pl-12 pr-12 py-3 bg-[#F3F8FF] text-slate-800 border-transparent rounded-2xl focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] outline-none transition-all"
                       />
-                      {isShowPassword ? (
-                        <Eye onClick={() => setIsShowPassword(!isShowPassword)} className="absolute right-5 cursor-pointer top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      ) : (
-                        <EyeOff onClick={() => setIsShowPassword(!isShowPassword)} className="absolute cursor-pointer right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      )}
-                    </div>
-                    {errorPassword && <p className="text-sm text-red-600 mt-1">{errorPassword}</p>}
-                    <div className="mt-4">
-                      <Checkpassword condition={password} setPasswordCons={setPasswordCons} />
+                      <button type="button" onClick={() => setIsShowPassword(!isShowPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        {isShowPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+                      </button>
                     </div>
                   </div>
+                  
+                  {/* Password Checker Component */}
+                  <Checkpassword condition={password} setPasswordCons={setPasswordCons} />
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Confirm New Password</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <label className="block text-[13px] font-bold text-gray-700 mb-2 uppercase tracking-wider">Confirm Password</label>
+                    <div className="relative group">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-[#2563EB]" />
                       <input
-                        type={isShowConfirm ? 'text' : 'password'}
-                        onChange={(e) => setPasswordConfirm(e.target.value)}
+                        type={isShowConfirm ? "text" : "password"}
                         value={passwordConfirm}
+                        onChange={(e) => setPasswordConfirm(e.target.value)}
                         placeholder="••••••••"
-                        className={`w-full pl-10 pr-4 py-3 bg-slate-50 text-slate-900 border rounded-lg focus:outline-none focus:ring-2 ${errorConfirm ? 'focus:ring-red-500 border-red-500' : ' focus:ring-blue-500 border-slate-200'} focus:border-transparent transition-all`}
+                        className={`w-full pl-12 pr-12 py-3.5 bg-[#F3F8FF] border-2 text-slate-800 ${errorConfirm ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
                       />
-                      {isShowConfirm ? (
-                        <Eye onClick={() => setIsShowConfirm(!isShowConfirm)} className="absolute right-5 cursor-pointer top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      ) : (
-                        <EyeOff onClick={() => setIsShowConfirm(!isShowConfirm)} className="absolute cursor-pointer right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      )}
+                      <button type="button" onClick={() => setIsShowConfirm(!isShowConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        {isShowConfirm ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+                      </button>
                     </div>
-                    {errorConfirm && <p className="text-sm text-red-600 mt-1">{errorConfirm}</p>}
+                    {errorConfirm && <p className="text-red-500 text-xs mt-1 ml-1">{errorConfirm}</p>}
                   </div>
+                </div>
 
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    disabled={isPending}
-                    className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-4 rounded-lg shadow-lg shadow-blue-200 flex items-center justify-center gap-2 transition-all transform active:scale-[0.98]"
+                <button
+                  onClick={handleReset}
+                  className="w-full bg-[#0052EA] text-white font-bold py-3 rounded-full hover:bg-[#0041C2] shadow-lg shadow-blue-100 transition-all flex items-center justify-center space-x-2 active:scale-95"
+                >
+                  <span>Reset Password</span>
+  
+                  <ArrowRight className="h-5 w-5" />
+                </button>
+              <div className='justify-center flex'>
+                 <button
+                    disabled={isActive}
+                    onClick={handleResend}
+                    className={`text-sm font-bold ${isActive ? 'text-gray-400 cursor-not-allowed' : 'text-[#2563EB] hover:underline'}`}
                   >
-                    {isPending ? 'Resetting...' : 'Reset Password'}
-                    <ArrowRight className="w-5 h-5" />
+                    resend code {isActive ? `(${seconds}s)` : ""}
                   </button>
-
-                  <div className="flex justify-center">
-                    <button
-                      type="button"
-                      onClick={handleResend}
-                      disabled={isActive}
-                      className={`cursor-pointer text-[14px] text-center hover:underline ${isActive ? 'text-slate-500' : 'text-blue-500'} font-bold rounded-lg flex items-center justify-center gap-2 transition-all transform`}
-                    >
-                      resend code {isActive ? `(${seconds})` : ''}
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="mt-12">
-              <div className="flex justify-center gap-6 mb-4">
-                <button className="flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors text-xs font-medium uppercase tracking-wide">
-                  <Headset className="w-4 h-4" /> Technical Support
-                </button>
-                <button className="flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors text-xs font-medium uppercase tracking-wide">
-                  <FileText className="w-4 h-4" /> IT Policy
-                </button>
-              </div>
-              <p className="text-[10px] text-center text-slate-400 font-bold uppercase tracking-[0.15em]">
-                Restricted to authorized medical personnel only
-              </p>
-            </div>
+               </div>
+              </>
+            
           </div>
+           )}
+          {step === "email" && (
+<div className="space-y-5">
+            {/* Email Field */}
+            <div>
+              <label className="block text-[13px] font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                Email
+              </label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Mail className={`h-5 w-5 ${errorEmail ? 'text-red-400' : 'text-gray-400 group-focus-within:text-[#2563EB]'} transition-colors`} />
+                </div>
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@hospital.com"
+                  className={`w-full pl-11 pr-4 py-3 bg-[#F3F8FF] text-black border-2 ${errorEmail ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-xl focus:bg-white outline-none transition-all placeholder:text-gray-400`}
+                />
+              </div>
+            </div>
+
+            
+
+            {/* Login Button */}
+            <button
+              type="button"
+              onClick={handleSendCode}
+              disabled={isPending}
+              className={`w-full  ${isPending ?"bg-[#0052EA]/50":"bg-[#0052EA] hover:bg-[#0041C2] hover:shadow-lg hover:shadow-blue-200"} text-white font-bold py-3.5 rounded-full  active:scale-[0.98] transition-all flex items-center justify-center space-x-2`}
+            >
+              <span>Send Reset Code</span>
+              {!isPending &&(
+            <ArrowRight className="w-5 h-5" />
+              )}
+              
+               {isPending && (
+              <Spinner color="current"/>
+            )}
+            </button>
+             <p className="text-sm text-gray-600 text-center">
+            Remember your password?{' '}
+            <button onClick={() => router.push('/auth/Login')} className="text-[#2563EB] font-bold hover:underline">
+              Login
+            </button>
+          </p>
+          </div>
+          )}
+          
+          
         </div>
-      </div>
+
+       
+      </main>
+
+     
+      
     </div>
+    </>
   );
 }
