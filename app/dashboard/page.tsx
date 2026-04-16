@@ -8,7 +8,7 @@ import Result from "./components/Result";
 import DropDown from "./components/dropDown";
 import {jwtDecode,JwtPayload} from "jwt-decode";
 import CardStatus from "./components/CardStatus";
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, Sparkles } from "lucide-react";
 import { parseISO, format } from 'date-fns';
 import { div } from "framer-motion/client";
 import AuthNavbar from "../auth/components/AuthNavbar";
@@ -153,7 +153,7 @@ function typeDataRisk(typeDisease:string){
 }
 return(
   <>
-  <div className="sticky top-0">
+  <div className="sticky top-0 z-50">
     <AuthNavbar/>
   </div>
    
@@ -173,7 +173,7 @@ return(
     <main className={`col-span-2 rounded-2xl  ${isDanger ?'bg-red-50 border border-red-200' : 'bg-blue-50/80 border border-blue-200'} p-6 shadow-sm h-full flex flex-col`}>
      
 
-      <div className="relative justify-end pb-4 ">
+      <div className="relative justify-end pb-4 z-0"> 
 
        <ChartDashboard typeData={typeData} lengthData={lengthData} isDanger={isDanger}/>
 
@@ -236,14 +236,21 @@ return(
                       <div className={`gap-5 border border-purple-500/50 bg-purple-50 shadow shadow-lg shadow-purple-200 p-5 w-full rounded-lg flex`}>
                         <div>
                           <div className="flex gap-5 items-center mb-3">
-                            <Lightbulb className="text-purple-500"/>
-                            <h3 className='text-lg font-semibold text-purple-500'>Health Suggestion {typeData}</h3>
+                            <Sparkles size={18} className="text-purple-600 mt-1 flex-shrink-0"/>
+                            <h3 className='font-semibold text-purple-900 text-sm'>Health Suggestion {typeData}</h3>
                           </div>
+                        <div className="p-1">
+                          <div className="mb-4">
+                            <span className="text-purple-900 text-[14px]">{dataFetchData[dataFetchData.length - 1]?.suggestionData.suggestion}</span>
+                          </div>
+                          
                           
                           <span className='text-sm flex items-center text-red-700'><p className="font-bold mr-9 text-red-800">Risk:</p>  {match.risk ?? 'N/A'}</span>
 
                           <span className='text-sm text-green-700 flex items-center'><p className="font-bold mr-2 text-green-800">Suggest:</p> {match.suggestion || 'N/A'}</span>
-                        
+
+                        </div>
+                                                  
                         </div>
                       </div>
                     </div>

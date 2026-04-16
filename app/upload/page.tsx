@@ -218,7 +218,7 @@ export default function UploadPage() {
 ### รูปแบบการตอบกลับ:
 - ให้ส่งคืนค่า (Return) เฉพาะไฟล์ JSON ที่สมบูรณ์แล้วเท่านั้น
 - ห้ามมีข้อความอธิบายอื่นนอกเหนือจากไฟล์ JSON
-- ใช้ภาษาไทยในการเขียนคำแนะนำ (Suggestions)
+- ใช้ภาษาอังกฤษในการเขียน (Suggestions,risk,prevention)
 
 อยากให้เพิ่มเงื่อไขนึงคือการ เพิ่มฟิลด์มา 1 ฟิลด์ชื่อว่า list_disease ที่ไว้สำหรับระบุรายชื่อของโรคที่มีความเสี่ยงจะเกิดจากข้อมูล
 `,
@@ -341,9 +341,9 @@ export default function UploadPage() {
 ### รูปแบบการตอบกลับ:
 - ให้ส่งคืนค่า (Return) เฉพาะไฟล์ JSON ที่สมบูรณ์แล้วเท่านั้น
 - ห้ามมีข้อความอธิบายอื่นนอกเหนือจากไฟล์ JSON
-- ใช้ภาษาไทยในการเขียนคำแนะนำ (Suggestions)
+- ใช้ภาษาอังกฤษในการเขียน (Suggestions,risk,prevention)
 
-อยากให้เพิ่มเงื่อไขนึงคือการ เพิ่มฟิลด์มา 1 ฟิลด์ชื่อว่า list_disease ที่ไว้สำหรับระบุรายชื่อของโรคที่มีความเสี่ยงจะเกิดจากข้อมูล
+อยากให้เพิ่มเงื่อนไขนึงคือการ เพิ่มฟิลด์มา 1 ฟิลด์ชื่อว่า list_disease ที่ไว้สำหรับระบุรายชื่อของโรคที่มีความเสี่ยงจะเกิดจากข้อมูล
 `,
         }),
       });
@@ -422,7 +422,7 @@ export default function UploadPage() {
             <h2 className="text-2xl font-bold text-slate-800">Saved successfully</h2>
             <p className="text-slate-500">Your health data has been recorded.</p>
             <div className="flex gap-3 justify-center">
-              <button onClick={() => { setForm(emptyForm); setFile(null); setExtractedText(''); setStep('upload'); setSaveOk(false); }} className="px-5 py-2 rounded-lg border border-slate-200 text-sm font-medium hover:bg-slate-100">Upload another</button>
+              <button onClick={() => { setForm(emptyForm); setFile(null); setExtractedText(''); setStep('upload'); setSaveOk(false); }} className="px-5 py-2 rounded-lg border border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-100">Upload another</button>
               <button onClick={() => router.push('/dashboard')} className="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">Go to Dashboard</button>
             </div>
           </div>
@@ -495,7 +495,7 @@ export default function UploadPage() {
             </div>
           )}
 
-          {step === 'review' && (
+          {step === 'review' &&  (
             <div className="space-y-6">
               {/* AI extracted text */}
               {extractedText && (
