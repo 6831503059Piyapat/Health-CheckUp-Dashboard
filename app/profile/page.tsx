@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '@heroui/react';
 import {jwtDecode,JwtPayload} from "jwt-decode";
 import AuthNavbar from '../auth/components/AuthNavbar';
-export default function SettingsPage() {
+export default function Profile() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');

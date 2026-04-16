@@ -96,7 +96,7 @@ Format your response as JSON:
     if (!res.ok) {
       // Fallback: use simple linear regression if backend fails
       const { slope, intercept } = linearRegression(
-        values.map((_, i) => i),
+        values.map((_:any, i:number) => i),
         values
       );
       const predictions = Array.from({ length: horizon }, (_, i) => ({
