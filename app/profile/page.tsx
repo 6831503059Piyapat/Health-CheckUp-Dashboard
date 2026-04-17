@@ -82,44 +82,43 @@ export default function Profile() {
 
   return (
     <>
-    <div className="sticky top-0 z-50">
-        <AuthNavbar/>
+      <div className="sticky top-0 z-50">
+        <AuthNavbar />
       </div>
-    <Navbar/>
-    <div className="flex min-h-screen ml-64 bg-slate-50 font-sans text-slate-900">
-
-      <div className="max-w-5xl flex-1  mx-auto space-y-6 mb-6 mt-6">
+      <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
+        <Navbar />
+        <main className="flex-1 md:ml-64 px-4 sm:px-6 pt-16 sm:pt-8 pb-6 sm:py-8 overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none">
+          <div className="max-w-5xl mx-auto space-y-6">
     
         {/* header */}
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
+          <h1 className="text-2xl sm:text-3xl ml-5 font-bold text-slate-900">Profile</h1>
           <p className="text-sm text-slate-500">Manage your profile and security preferences</p>
         </div>
 
         {/* profile */}
-        <div className="bg-white justify-center border border-slate-200 rounded-xl shadow-sm p-6 flex items-center gap-6">
-          <div className="absolute top-20 z-0">
-           
-            <Skeleton className='w-40 h-40 rounded-full object-cover border'/>
-            <label className="absolute bottom-0 right-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+          <div className="relative flex-shrink-0">
+            <Skeleton className="w-28 h-28 sm:w-40 sm:h-40 rounded-full object-cover border" />
+            <label className="absolute bottom-1 right-1 bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer shadow-sm">
               Edit
               <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
             </label>
           </div>
 
-          <div className='mt-15 justify-center'>
-            <h2 className="text-lg text-center font-semibold text-slate-900">
+          <div className="text-center sm:text-left min-w-0">
+            <h2 className="text-lg font-semibold text-slate-900 truncate">
               {dataFetch?.name}
             </h2>
-            <p className="text-sm text-slate-500">{dataFetch?.email}</p>
+            <p className="text-sm text-slate-500 truncate">{dataFetch?.email}</p>
           </div>
         </div>
 
         {/* user info */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 sm:p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">User Info</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-sm text-slate-600">First Name</label>
               <input
@@ -138,7 +137,7 @@ export default function Profile() {
               />
             </div>
 
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="text-sm text-slate-600">Address</label>
               <input
                 className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -147,7 +146,7 @@ export default function Profile() {
               />
             </div>
 
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="text-sm text-slate-600">Contact Info</label>
               <input
                 className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -157,12 +156,9 @@ export default function Profile() {
             </div>
           </div>
         </div>
-
-       
-
-      
+          </div>
+        </main>
       </div>
-    </div>
     </>
   );
 }

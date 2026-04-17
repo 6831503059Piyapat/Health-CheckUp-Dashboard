@@ -239,7 +239,7 @@ export default function PredictChart({ typeData, horizon = 3 }: Props) {
       ...(range?.max !== undefined
         ? [
             {
-              label: "Upper Limit",
+              label: "Upper or Lower Limit",
               data: allYears.map(() => range.max!),
               borderColor: "rgba(220, 38, 38, 0.4)",
               borderWidth: 2,
@@ -254,6 +254,7 @@ export default function PredictChart({ typeData, horizon = 3 }: Props) {
         ? [
             {
               label: "Lower Limit",
+              
               data: allYears.map(() => range.min!),
               borderColor: "rgba(220, 38, 38, 0.4)",
               borderWidth: 2,
@@ -271,7 +272,13 @@ export default function PredictChart({ typeData, horizon = 3 }: Props) {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: true, position: "top" as const },
+      legend: {
+        display: true,
+        position: "top" as const,
+        labels: {
+          filter: (legendItem: any) => legendItem.text !== "Lower Limit",
+        },
+      },
       title: { display: false },
     },
     scales: {
@@ -282,7 +289,7 @@ export default function PredictChart({ typeData, horizon = 3 }: Props) {
 
   return (
     <div className="w-full">
-      <div className="h-[55vh] w-full bg-white p-4 rounded-xl">
+      <div className="h-[42vh] sm:h-[55vh] w-full bg-white p-3 sm:p-4 rounded-xl">
         <Line options={options} data={data} />
       </div>
 
@@ -298,7 +305,7 @@ export default function PredictChart({ typeData, horizon = 3 }: Props) {
         </div>
       )}
 
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {predictions.map((p) => {
           const outOfRange =
             (range?.max !== undefined && p.value > range.max) ||

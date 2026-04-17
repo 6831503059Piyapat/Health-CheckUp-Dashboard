@@ -10,7 +10,6 @@ import {jwtDecode,JwtPayload} from "jwt-decode";
 import CardStatus from "./components/CardStatus";
 import { Lightbulb, Sparkles } from "lucide-react";
 import { parseISO, format } from 'date-fns';
-import { div } from "framer-motion/client";
 import AuthNavbar from "../auth/components/AuthNavbar";
 
 export default function Home() {
@@ -162,15 +161,15 @@ return(
       <Navbar />
       {/* DASHBOARD PAGE */}
   
-    <main className="ml-64 flex-1 ">
+    <main className="flex-1 md:ml-64 ">
       
-      <div className="min-h-screen bg-slate-50 p-6 font-sans text-gray-700">
+      <div className="min-h-screen bg-slate-50 pt-10 sm:pt-6 px-4 sm:px-6 pb-4 sm:pb-6 font-sans text-gray-700">
         
-  <h1 className="text-[45px] text-black pl-5 mb-5">Dashboard</h1>
+  <h1 className="text-3xl sm:text-[45px] text-black mb-5 pl-5 sm:pl-0">Dashboard</h1>
 
-  <div className="grid grid-cols-3 gap-6">
+  <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-    <main className={`col-span-2 rounded-2xl  ${isDanger ?'bg-red-50 border border-red-200' : 'bg-blue-50/80 border border-blue-200'} p-6 shadow-sm h-full flex flex-col`}>
+    <main className={`xl:col-span-2 rounded-2xl  ${isDanger ?'bg-red-50 border border-red-200' : 'bg-blue-50/80 border border-blue-200'} p-4 sm:p-6 shadow-sm h-full flex flex-col`}>
      
 
       <div className="relative justify-end pb-4 z-0"> 
@@ -184,7 +183,7 @@ return(
     <aside className="space-y-6">
       <section className="rounded-2xl shadow-sm overflow-hidden bg-white ">
       
-        <div className="p-6 pb-2 mb-6">
+        <div className="p-4 sm:p-6 pb-2 mb-6">
        <h2 className="mb-4 font-semibold">Status Overview, {dataFetchData && dataFetchData.length > 0 ? formatDate(safeGetLatest(dataFetchData)?.dateFile) : 'N/A'}</h2>
      
         <div className="justify-between">
@@ -231,9 +230,9 @@ return(
               </div>
                 );
                 return (
-                  <div className=' transition-all w-full justify-center mt-5'>
-                    <div className='flex w-full gap-5 justfy-center items-center '>
-                      <div className={`gap-5 border border-purple-500/50 bg-purple-50 shadow shadow-lg shadow-purple-200 p-5 w-full rounded-lg flex`}>
+                  <div className='transition-all w-full justify-center mt-5'>
+                    <div className='flex w-full gap-5 justify-center items-center'>
+                      <div className={`gap-5 border border-purple-500/50 bg-purple-50 shadow shadow-lg shadow-purple-200 p-4 sm:p-5 w-full rounded-lg flex flex-col sm:flex-row`}>
                         <div>
                           <div className="flex gap-5 items-center mb-3">
                             <Sparkles size={18} className="text-purple-600 mt-1 flex-shrink-0"/>

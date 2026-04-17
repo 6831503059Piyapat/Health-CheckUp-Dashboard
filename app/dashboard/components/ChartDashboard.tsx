@@ -159,7 +159,14 @@ const ChartDashboard = ({typeData,isDanger}:any) => {
         label: typeData ,
         
         data: processedWeights,
-        borderColor: isDanger ? 'rgb(220, 38, 38)' : 'rgb(0, 108, 249)', // Blue to match your "LifeMarkers" UI
+        borderColor: isDanger ? 'rgb(220, 38, 38)' : 'rgb(0, 108, 249)', 
+        segment: {
+          borderColor: (ctx: any) => {
+            const p1 = ctx.p1DataIndex;
+            if (Array.isArray(pointBorderColor) && pointBorderColor[p1]) return pointBorderColor[p1];
+            return isDanger ? 'rgb(220, 38, 38)' : 'rgb(0, 108, 249)';
+          },
+        },
         backgroundColor: isDanger ? 'rgba(220, 38, 38, 0.1)' : 'rgba(59, 130, 246, 0.1)', 
         tension: 0.2, 
         fill: true,   
@@ -250,37 +257,62 @@ const ChartDashboard = ({typeData,isDanger}:any) => {
     );
   }
 
+  const legendItems = [
+    {
+      key: 'range',
+      label: isDanger ? 'Risk Range' : 'Good Range',
+      markerClassName: isDanger
+        ? 'bg-red-500/50 border border-red-500 border-2 border-dashed'
+        : 'bg-[#008038]/20 border border-[#008038] border-2 border-dashed',
+      labelClassName: isDanger ? 'text-red-700' : 'text-[#008038]',
+    },
+    {
+      key: 'line',
+      label: isDanger ? 'Danger Line' : 'Good Line',
+      markerClassName: isDanger
+        ? 'bg-red-500/50 border border-red-500 border-2'
+        : 'bg-blue-500/20 border border-blue-700 border-2',
+      labelClassName: isDanger ? 'text-red-700' : 'text-blue-700',
+    },
+    {
+      key: 'normal',
+      label: 'Normal',
+      markerClassName: 'border border-blue-500 border-2 rounded-full bg-white',
+      labelClassName: 'text-blue-700',
+    },
+    {
+      key: 'abnormal',
+      label: 'Higher or Lower than Normal',
+      markerClassName: 'border border-red-500 border-2 rounded-full bg-white',
+      labelClassName: 'text-red-700',
+    },
+  ];
+
   return (
-    <div className="h-[50vh] w-full p-2 rounded-xl">
+    <div className="w-full rounded-lg p-3 sm:p-4 flex flex-col min-h-[58vh] sm:min-h-[50vh]">
       {isLoading ? (
         <div className="h-full flex items-center justify-center">Loading chart…</div>
       ) : (
         <>
-      <div className='flex gap-5 justify-between mb-5'>
+      <div className='flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-5'>
         <div className='items-center'>
-          <h2 className="text-xl font-semibold mb-1">{typeData}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold mb-1 break-words">{typeData}</h2>
         </div>
 
-      <div className='flex items-center gap-3 '>
-        <div className='flex justify-end items-center gap-3 '>
-          <div className='flex justify-end items-center gap-3 '>
-          <p className='bg-[#008038]/40  px-4 py-1 '></p>
-          <p className=' text-[#008038] text-[12px] font-bold'>Good Range</p> 
-        </div>
-          <p className='bg-red-500/50  px-4 py-1 '></p>
-          <p className=' text-red-700 text-[12px] font-bold'>Risk Range</p> 
-        </div>
-        <div className='flex justify-end items-center gap-3 '>
-          <p className='border border-blue-500 border-2 p-2 rounded-full bg-white'></p>
-          <p className=' text-blue-700 text-[12px] font-bold'>Normal</p> 
-        </div>
-        <div className='flex items-center gap-3 '>
-          <p className='border border-red-500 border-2 p-2 rounded-full bg-white'></p>
-          <p className=' text-red-700 text-[12px] font-bold'>Higher or Lower than Normal</p> 
+        <div className="grid grid-cols-2 gap-x-3 gap-y-2 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
+          {legendItems.map((item) => (
+            <div key={item.key} className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <p className={`${item.markerClassName} px-4 py-1 shrink-0`} />
+              <p className={`${item.labelClassName} text-[11px] sm:text-[12px] font-bold leading-tight truncate`}>
+                {item.label}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
-      </div>
-        <Line options={options} data={data} />
+        <div className="relative flex-1 min-h-[320px] sm:min-h-[340px]">
+          <Line options={options} data={data} />
+        </div>
         </>
         
       )}

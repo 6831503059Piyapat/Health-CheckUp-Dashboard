@@ -92,11 +92,11 @@ export default function Login() {
       <AuthNavbar />
       {/* <PendingState ispending={ispending} isOK={isOK} setIsUiShow={setIsUiShow} isUiShow={isUiShow} /> */}
 
-      <main className="flex-grow flex flex-col items-center justify-center px-4 py-12">
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-8">
       
         {/* Login Card */}
-        <div className="bg-white p-8  shadow shadow-xl w-full max-w-[500px]">
-          <h1 className="text-center text-[#1E40AF] mb-5 text-3xl font-bold tracking-tight mb-2">
+        <div className="bg-white p-6 sm:p-8 shadow-xl w-full max-w-full sm:max-w-[500px] mx-4 rounded-lg">
+          <h1 className="text-center text-[#1E40AF] mb-4 text-2xl sm:text-3xl font-bold tracking-tight">
             Sign in
           </h1>
           {error && (
@@ -126,7 +126,7 @@ export default function Login() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="name@hospital.com"
-                  className={`w-full pl-11 pr-4 py-3 bg-[#F3F8FF] text-black border-2 ${error ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-xl focus:bg-white outline-none transition-all placeholder:text-gray-400`}
+                  className={`w-full pl-11 pr-4 py-2 sm:py-3 text-sm sm:text-base bg-[#F3F8FF] text-black border-2 ${error ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-xl focus:bg-white outline-none transition-all placeholder:text-gray-400`}
                 />
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full pl-11 pr-12 text-black py-3 bg-[#F3F8FF] border-2 ${error ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-xl focus:bg-white outline-none transition-all placeholder:text-gray-400`}
+                  className={`w-full pl-11 pr-12 text-black py-2 sm:py-3 text-sm sm:text-base bg-[#F3F8FF] border-2 ${error ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-xl focus:bg-white outline-none transition-all placeholder:text-gray-400`}
                 />
                 <button 
                   type="button"
@@ -179,7 +179,7 @@ export default function Login() {
               <Spinner color="current"/>
             )}
             </button>
-             <p className="text-sm text-gray-600 text-center">
+             <p className="text-sm text-gray-600 text-center mt-3">
             Don't have an account?{' '}
             <button onClick={() => router.push('/auth/register')} className="text-[#2563EB] font-bold hover:underline">
               Register Now

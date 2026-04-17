@@ -101,25 +101,25 @@ export default function History(){
         </div>
       <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 ">
         <Navbar/>
-        <main className="ml-64 flex-1 p-8 overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none ">
-        <h1 className="text-[42px] mb-5">History Upload</h1>
+        <main className="flex-1 md:ml-64 px-4 sm:px-6 pt-10 sm:pt-8 pb-6 sm:py-8 overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none ">
+        <h1 className="text-3xl sm:text-[42px] ml-5 mb-5">History Upload</h1>
        
-       <div className="bg-white rounded-xl shadow mb-2 shadow-lg shadow-blue-500/10 py-4 justify-between flex">
-        <div className="flex-1 text-center border-r border-slate-200">
+       <div className="bg-white rounded-xl shadow mb-2 shadow-lg shadow-blue-500/10 py-4 justify-between flex flex-col sm:flex-row gap-4">
+        <div className="flex-1 text-center sm:border-r border-slate-200 px-4">
           <p className="text-sm text-[#0068F0]/80 font-bold">Total Uploads</p>
           <p className="text-2xl font-bold text-blue-700">{uploadsSummary.total}</p>
         </div>
-        <div className="flex-1 text-center border-r border-slate-200">
+        <div className="flex-1 text-center sm:border-r border-slate-200 px-4">
           <p className="text-sm text-[#0068F0]/80 font-bold">Uploads This Year</p>
           <p className="text-2xl font-bold text-blue-700">{uploadsSummary.thisYear}</p>
         </div>
-        <div className="flex-1 text-center">
+        <div className="flex-1 text-center px-4">
           <p className="text-sm text-[#0068F0]/80 font-bold">Uploads This Month</p>
           <p className="text-2xl font-bold text-blue-700">{uploadsSummary.thisMonth}</p>
         </div>
        </div>
        <div className="h-full rounded-md p-2 bg-white">
-       <div className="bg-white p-2 rounded-xl border border-blue-200 shadow shadow-blue-500/10 shadow-lg flex gap-4 mb-2 items-center">
+       <div className="bg-white p-2 rounded-xl border border-blue-200 shadow shadow-blue-500/10 shadow-lg flex flex-col md:flex-row gap-4 mb-2 items-stretch md:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input 
@@ -139,8 +139,8 @@ export default function History(){
                 </button>
               )}
             </div>
-          <div className="flex items-center gap-2">
-            <select className="rounded-lg p-2 bg-blue-50 border border-blue-200 text-sm" value={`${sortKey}:${sortOrder}`} onChange={(e)=>{
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <select className="w-full md:w-auto rounded-lg p-2 bg-blue-50 border border-blue-200 text-sm" value={`${sortKey}:${sortOrder}`} onChange={(e)=>{
               const [k,o] = e.target.value.split(":");
               setSortKey(k); setSortOrder(o as 'asc'|'desc');
             }}>
@@ -155,15 +155,16 @@ export default function History(){
 
         {/* Table Container */}
         <div className="bg-white rounded-xl border border-blue-200 overflow-hidden ">
-          <table className="w-full text-left text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] text-left text-sm">
             <thead className="w-full border-b border-slate-100 bg-[#006CFA] ">
               <tr>
-                 <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10 border-r border-slate-200 text-center">Date Upload</th>
-             <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10 border-r border-slate-200 text-center">Date info</th>
+                 <th className=" text-slate-100 uppercase text-[13px] font-bold p-4 sm:p-5 pl-4 sm:pl-10 border-r border-slate-200 text-center">Date Upload</th>
+             <th className="hidden sm:table-cell text-slate-100 uppercase text-[13px] font-bold p-4 sm:p-5 pl-4 sm:pl-10 border-r border-slate-200 text-center">Date info</th>
 
-             <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10  text-center">Provider</th>
+             <th className=" text-slate-100 uppercase text-[13px] font-bold p-4 sm:p-5 pl-4 sm:pl-10  text-center">Provider</th>
           
-             <th className=" text-slate-100 uppercase text-[14px] font-bold p-5 pl-10 text-center  border-r border-slate-200"></th>
+             <th className="hidden sm:table-cell text-slate-100 uppercase text-[13px] font-bold p-4 sm:p-5 pl-4 sm:pl-10 text-center  border-r border-slate-200"></th>
              <th></th>
               </tr>
             </thead>
@@ -178,6 +179,7 @@ export default function History(){
 
             </tbody>
           </table>
+          </div>
       
           {/* Pagination */}
           {/* <div className="px-6 py-4 bg-slate-50/30 flex justify-between items-center border-t border-slate-100">

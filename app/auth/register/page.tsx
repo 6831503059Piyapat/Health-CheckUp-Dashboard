@@ -116,6 +116,30 @@ export default function Register() {
     });
 
     if (response.ok) {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/auth/login`, {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: name,
+            password: password,
+          }),
+        });
+        const result = await res.json();
+
+        if (res.ok) {
+          
+          localStorage.setItem('token', result.access_token);
+          setTimeout(() => router.push('/dashboard'), 1000);
+        } else if (res.status === 401) {
+         
+        } else {
+         
+         
+        }
+      } catch (err) {
+        
+      }
       router.push('/auth/login');
     } else {
       setIsOTPmatch(false);
@@ -156,13 +180,13 @@ export default function Register() {
         <PendingCreate ispending={ispending} isOK={isOK} setIsUipending={setIsUipending} email={email} />
       )}
 
-      <main className="flex-grow flex flex-col items-center justify-center px-4 py-12">
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-8">
         
 
         {/* Form Card */}
-        <div className="bg-white p-8 md:p-10 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.08)] w-full max-w-[550px] border border-gray-100 relative overflow-hidden">
-          <h1 className="text-center text-[#1E40AF] mb-5 text-3xl font-bold tracking-tight mb-2">
-            Register 
+        <div className="bg-white p-6 md:p-10 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.08)] w-full max-w-full sm:max-w-[550px] mx-4 md:mx-0 border border-gray-100 relative overflow-hidden rounded-lg">
+          <h1 className="text-center text-[#1E40AF] mb-4 text-2xl sm:text-3xl font-bold tracking-tight">
+            Register
           </h1>
           <div className="space-y-6">
             {!isOTPSent ? (
@@ -177,7 +201,7 @@ export default function Register() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter username"
-                      className={`w-full pl-12 text-slate-800 pr-4 py-3 bg-[#F3F8FF] border-2 ${errorName ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
+                      className={`w-full pl-12 text-slate-800 pr-4 py-2 sm:py-3 text-sm sm:text-base bg-[#F3F8FF] border-2 ${errorName ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
                     />
                   </div>
                   {errorName && <p className="text-red-500 text-xs mt-1 ml-1">{errorName}</p>}
@@ -193,7 +217,7 @@ export default function Register() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className={`w-full pl-12 pr-4 text-slate-800 py-3 bg-[#F3F8FF] border-2 ${errorEmail ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
+                      className={`w-full pl-12 pr-4 text-slate-800 py-2 sm:py-3 text-sm sm:text-base bg-[#F3F8FF] border-2 ${errorEmail ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
                     />
                   </div>
                   {errorEmail && <p className="text-red-500 text-xs mt-1 ml-1">{errorEmail}</p>}
@@ -210,7 +234,7 @@ export default function Register() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-12 pr-12 py-3 text-slate-800 bg-[#F3F8FF] border-transparent rounded-2xl focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] outline-none transition-all"
+                        className="w-full pl-12 pr-12 py-2 sm:py-3 text-sm sm:text-base text-slate-800 bg-[#F3F8FF] border-transparent rounded-2xl focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] outline-none transition-all"
                       />
                       <button type="button" onClick={() => setIsShowpassword(!isShowpassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                         {isShowpassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
@@ -230,7 +254,7 @@ export default function Register() {
                         value={passwordConfirm}
                         onChange={(e) => setPasswordConfirm(e.target.value)}
                         placeholder="••••••••"
-                        className={`w-full pl-12 text-slate-800 pr-12 py-3.5 bg-[#F3F8FF] border-2 ${errorConfirmPassword ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
+                        className={`w-full pl-12 text-slate-800 pr-12 py-2 sm:py-3 text-sm sm:text-base bg-[#F3F8FF] border-2 ${errorConfirmPassword ? 'border-red-100 focus:border-red-500' : 'border-transparent focus:border-[#2563EB]'} rounded-2xl focus:bg-white outline-none transition-all`}
                       />
                       <button type="button" onClick={() => setIsShowConfirm(!isShowConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                         {isShowConfirm ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
@@ -242,10 +266,10 @@ export default function Register() {
 
                 <button
                   onClick={handleSubmit}
-                  className="w-full bg-[#0052EA] text-white font-bold py-3 rounded-full hover:bg-[#0041C2] shadow-lg shadow-blue-100 transition-all flex items-center justify-center space-x-2 active:scale-95"
+                  className="w-full bg-[#0052EA] text-white font-bold py-3 rounded-full hover:bg-[#0041C2] shadow-lg shadow-blue-100 transition-all flex items-center justify-center space-x-2 active:scale-95 text-sm sm:text-base"
                 >
                   <span>Create Account</span>
-  
+
                   <ArrowRight className="h-5 w-5" />
                 </button>
                  <p className="text-sm text-gray-600 text-center">
@@ -267,7 +291,7 @@ export default function Register() {
                     value={OTPConfirm}
                     onChange={(e) => setOTPConfirm(e.target.value)}
                     placeholder="xxxxxx"
-                    className={`w-full text-slate-800 pl-12 pr-4 py-4 bg-[#F3F8FF] border-2 ${!isOTPmatch ? 'border-red-200' : 'border-[#2563EB]/20'} rounded-2xl text-center text-2xl font-bold tracking-[0.5em] focus:bg-white outline-none transition-all`}
+                    className={`w-full text-slate-800 pl-12 pr-4 py-3 sm:py-4 bg-[#F3F8FF] border-2 ${!isOTPmatch ? 'border-red-200' : 'border-[#2563EB]/20'} rounded-2xl text-center text-xl sm:text-2xl font-bold tracking-[0.5em] focus:bg-white outline-none transition-all`}
                   />
                 </div>
                 {errorOTP && <p className="text-red-500 text-center text-sm">{errorOTP}</p>}

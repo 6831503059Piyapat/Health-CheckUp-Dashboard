@@ -50,18 +50,18 @@ export default function PredictPage() {
 
   return (
     <>
-      <div className="sticky top-0 z-40">
+      <div className="sticky top-0 z-50">
         <AuthNavbar />
       </div>
       <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
         <Navbar />
-        <main className="ml-64 flex-1">
-          <div className="min-h-screen bg-slate-50 p-6 text-gray-700">
-            <h1 className="text-[45px] text-black pl-5 mb-5">Predict</h1>
+        <main className="flex-1 md:ml-64 px-4 sm:px-6 pt-10 sm:pt-8 pb-6 sm:py-8 overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none">
+          <div className="min-h-screen bg-slate-50 text-gray-700">
+            <h1 className="mb-5 text-3xl sm:text-[45px] ml-5 text-black">Predict</h1>
 
-            <div className="rounded-2xl bg-blue-50/80 border border-blue-200 p-6 shadow-sm">
-              <div className="flex flex-wrap gap-4 items-end mb-6">
-                <div>
+            <div className="rounded-2xl bg-blue-50/80 border border-blue-200 p-4 sm:p-6 shadow-sm">
+              <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end mb-6">
+                <div className="w-full sm:w-auto">
                   <p className="text-xs text-slate-500 mb-1">Metric</p>
                   <DropDown
                     data={metrics}
@@ -69,12 +69,12 @@ export default function PredictPage() {
                     setData={setTypeData}
                   />
                 </div>
-                <div>
+                <div className="w-full sm:w-auto">
                   <p className="text-xs text-slate-500 mb-1">Years ahead</p>
                   <select
                     value={horizon}
                     onChange={(e) => setHorizon(Number(e.target.value))}
-                    className="rounded-xl bg-white border border-slate-200 px-4 py-2 text-sm"
+                    className="w-full sm:w-auto rounded-xl bg-white border border-slate-200 px-4 py-2 text-sm"
                   >
                     {[1, 2, 3, 5, 10].map((n) => (
                       <option key={n} value={n}>
@@ -87,7 +87,7 @@ export default function PredictPage() {
 
               <PredictChart typeData={typeData} horizon={horizon} />
 
-              <p className="mt-4 text-xs text-slate-500">
+              <p className="mt-4 text-xs leading-5 text-slate-500">
                 Forecast uses a linear regression over your uploaded records.
                 Accuracy improves with more data points and may not reflect
                 lifestyle or medical changes.

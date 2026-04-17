@@ -202,16 +202,17 @@ const upcomingAppointments = Object.entries(events)
       </div>
       <Navbar />
       
-      <div className="min-h-screen ml-64 p-8 bg-slate-50 font-sans text-slate-900">
-        <h1 className="text-[40px] text-slate-800 mb-6">Calendar</h1>
+      <div className="min-h-screen ml-0 sm:ml-64 pt-10 sm:pt-8 px-4 sm:px-8 pb-4 sm:pb-8 bg-slate-50 font-sans text-slate-900">
+        <h1 className="text-3xl sm:text-[40px] text-slate-800 mb-6 pl-5">Calendar</h1>
         
-        <div className="flex items-start justify-bewteen">
+        <div className="flex flex-col lg:flex-row items-start gap-6 justify-between">
           {/* Main Calendar Section */}
-          <div className="flex-1 bg-white rounded-xl p-4 shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+          <div className="w-full flex justify-center">
+          <div className="flex-1 bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-slate-100 overflow-hidden flex flex-col min-w-0">
             {/* Header Controls */}
-            <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100">
-              <h2 className="text-2xl font-bold text-slate-800">{format(currentMonth, "MMMM yyyy")}</h2>
-              <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-3 sm:px-8 py-4 sm:py-6 border-b border-slate-100">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-800">{format(currentMonth, "MMMM yyyy")}</h2>
+              <div className="flex gap-2 w-full sm:w-auto justify-between sm:justify-start">
                 <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
                   <ChevronLeft className="w-5 h-5 text-slate-600" />
                 </button>
@@ -225,7 +226,7 @@ const upcomingAppointments = Object.entries(events)
             </div>
       
             {/* Grid Header */}
-            <div className="grid grid-cols-7 border-b border-slate-100 bg-slate-50/50">
+            <div className="grid grid-cols-7 border-b border-slate-100 bg-slate-50/50 text-[10px] sm:text-xs">
               {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
                 <div key={day} className="py-3 text-center text-xs font-bold text-slate-400 tracking-widest">{day}</div>
               ))}
@@ -244,18 +245,18 @@ const upcomingAppointments = Object.entries(events)
                     key={idx} 
                     onClick={() => setSelectedDate(day)}
                     onDoubleClick={() => setIsModalOpen(true)}
-                    className={`min-h-[120px] border-r border-b border-slate-50 p-2 transition-all cursor-pointer relative
+                    className={`min-h-[90px] sm:min-h-[120px] border-r border-b border-slate-50 p-1.5 sm:p-2 transition-all cursor-pointer relative
                       ${!isSameMonth(day, monthStart) ? 'bg-slate-50/30 opacity-40' : 'bg-white'} 
                       ${isSelected ? 'bg-blue-50/50 ring-1 ring-inset ring-blue-200' : 'hover:bg-slate-50'}`}
                   >
-                    <span className={`text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full mb-1
+                    <span className={`text-xs sm:text-sm font-semibold w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-full mb-1
                       ${isToday ? 'bg-blue-600 text-white' : 'text-slate-600'}`}>
                       {format(day, "d")}
                     </span>
 
-                    <div className="space-y-1 overflow-y-auto max-h-[80px] custom-scrollbar">
+                    <div className="space-y-1 overflow-y-auto max-h-[72px] sm:max-h-[80px] custom-scrollbar">
                       {dayEvents.map((event) => (
-                        <div key={event._id} className="bg-blue-100 text-blue-700 text-[10px] p-1 rounded border-l-2 border-blue-500 truncate font-medium flex justify-between">
+                        <div key={event._id} className="bg-blue-100 text-blue-700 text-[9px] sm:text-[10px] p-1 rounded border-l-2 border-blue-500 truncate font-medium flex justify-between gap-1">
                           <span>{event.title}</span>
                           <span className="opacity-60">{event.time}</span>
                         </div>
@@ -266,19 +267,19 @@ const upcomingAppointments = Object.entries(events)
               })}
             </div>
           </div>
-
+</div>
           {/* Sidebar (Right) */}
-          <div className="space-y-4">
+          <div className="space-y-4 w-full lg:w-auto">
 
           {/* Upper */}
-          <div className="w-80 ml-8 space-y-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 sticky top-24">
+          <div className="w-full lg:w-80 lg:ml-8 space-y-6">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-slate-100 lg:sticky top-24">
               <h2 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5 text-blue-500" />
                 {format(selectedDate, "do MMMM")}
               </h2>
               
-              <div className="space-y-3 overflow-y-auto h-50">
+              <div className="space-y-3 overflow-y-auto max-h-60 sm:h-50">
                 {(events[format(selectedDate, "yyyy-MM-dd")] || []).length > 0 ? (
                   events[format(selectedDate, "yyyy-MM-dd")].map((event) => (
                     <div key={event._id} className="group flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100 ">
@@ -320,13 +321,13 @@ const upcomingAppointments = Object.entries(events)
           </div>
 
           {/* Under: Upcoming Appointment */}
-<div className="w-80 ml-8 space-y-6">
-  <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 sticky top-[420px]">
+    <div className="w-full lg:w-80 lg:ml-8 space-y-6">
+  <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-slate-100 lg:sticky lg:top-[420px]">
     <h2 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
       <CalendarIcon className="w-5 h-5 text-blue-500" />
       Monthly Upcoming
     </h2>
-    <div className="space-y-3 overflow-y-auto h-75 custom-scrollbar pr-1">
+    <div className="space-y-3 overflow-y-auto max-h-72 sm:h-75 custom-scrollbar pr-1">
       {upcomingAppointments.length > 0 ? (
         upcomingAppointments.map((event) => (
           <div key={event._id} className="group flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100">
@@ -363,10 +364,10 @@ const upcomingAppointments = Object.entries(events)
       {/* --- Add Event Modal --- */}
 {isModalOpen && (
   <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 text-black">
-    <div className="bg-white rounded-md p-8 w-full max-w-md shadow-2xl border border-slate-100">
-      <div className="flex justify-between items-center mb-8">
+    <div className="bg-white rounded-md p-5 sm:p-8 w-full max-w-md shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+      <div className="flex justify-between items-start gap-4 mb-8">
         <div>
-          <h3 className="text-2xl font-bold text-slate-800">New Event</h3>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-800">New Event</h3>
           <p className="text-sm text-slate-600 mt-1">{format(selectedDate, "eeee, do MMMM")}</p>
         </div>
         <button onClick={() => setIsModalOpen(false)} className="p-2 cursor-pointer hover:bg-red-50 hover:text-red-500 rounded-full text-slate-400 transition-colors">
@@ -392,7 +393,7 @@ const upcomingAppointments = Object.entries(events)
         {/* Custom Time Selection UI */}
         <div>
           <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-[2px] mb-3">Select Time</label>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="flex-1 relative group">
               <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
               <select 
@@ -405,7 +406,7 @@ const upcomingAppointments = Object.entries(events)
                 ))}
               </select>
             </div>
-            <span className="text-2xl font-bold text-slate-300">:</span>
+            <span className="hidden sm:block text-2xl font-bold text-slate-300">:</span>
             <div className="flex-1 relative">
               <select 
                 value={minute}
@@ -431,7 +432,7 @@ const upcomingAppointments = Object.entries(events)
   </div>
 )}
 
-<div className="flex gap-4 pt-4">
+<div className="flex flex-col sm:flex-row gap-4 pt-4">
   <button 
     type="button" 
     disabled={isSubmitting}

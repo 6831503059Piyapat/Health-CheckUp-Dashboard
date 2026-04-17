@@ -191,24 +191,25 @@ export default function Historyitem({data}:any){
     };
     return(
         <>
-        <tr className="hover:bg-slate-50/50 " onClick={()=>handleViewbutton() }>
+        <tr className="hover:bg-slate-50/50" onClick={()=>handleViewbutton() }>
             
-                  <td className="px-6 py-4 border-r border-slate-200 text-center justify-center flex">
+                  <td className="px-4 sm:px-6 py-4 border-r border-slate-200 text-center justify-center flex">
                     <div className="flex items-center gap-3">
                         <p className="font-bold text-slate-800">{formatDate(data.dateFile)}</p>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-slate-600 pl-10 font-bold justufy-center border-r border-slate-200 text-center">
+                  <td className="hidden sm:table-cell px-4 sm:px-6 py-4 text-slate-600 pl-4 sm:pl-10 font-bold justufy-center border-r border-slate-200 text-center">
                     <div className="flex items-center gap-3 justify-center">
                         <p className="font-bold text-slate-800"> {formatDate(data.dateupload)}</p>
                     </div>
                     </td>
-                  <td className="px-4 py-4 text-slate-600 pl-10 font-bold justify-center text-center">
+                  <td className="px-4 py-4 text-slate-600 pl-3 sm:pl-10 font-bold justify-center text-center">
                      <div className="flex items-center gap-3">
-                        <p className="font-bold text-slate-800"> {data.provide}</p>
+                      <p className="font-bold text-slate-800"> {data.provide}</p>
+                      <span className="sm:hidden text-slate-400">{isShow ? <ArrowUp size={14} /> : <ArrowDown size={14} />}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-slate-600  font-bold text-center justify-center">
+                  <td className="hidden sm:table-cell px-3 sm:px-4 py-4 text-slate-600  font-bold text-center justify-center">
                      <div className="flex items-center gap-3 text-center justify-start ">
                         <p className="font-bold text-slate-800 text-center "> {isShow?(<ArrowUp className="" size={15}/>):(<ArrowDown className="" size={15}/>)}</p>
                     </div>
@@ -220,23 +221,23 @@ export default function Historyitem({data}:any){
                 {isShow && (
                 <tr className="bg-slate-100/30">
 
-                    <td colSpan={5} className="px-6 py-4">
+                    <td colSpan={5} className="px-3 sm:px-6 py-4">
                         <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 shadow-sm animate-in fade-in slide-in-from-top-2">
                          
                           <div className="mb-5 justify-start border-b border-slate-200 pb-5">
-                            <div className="justify-between flex">
+                            <div className="flex flex-col lg:flex-row justify-between gap-4">
                               <div className="">
                              <h4 className="font-bold text-slate-700 mb-2">Doctor : {data.provide || 'N/A'}</h4>
                              <p className="font-bold text-slate-700 mb-2">Patient name: {data.fullName || 'N/A'}</p>
-                            <div className="flex gap-5 mt-5">
+                            <div className="flex flex-wrap gap-3 sm:gap-5 mt-5">
                             <span className="font-bold flex gap-1 text-slate-600 items-end">Gender: {data.gender}</span>
                            <span className="font-bold flex gap-1 text-slate-600 items-end">Age: {data.age}</span>
                            <span className="flex gap-1 font-bold text-slate-600 items-end">Height: {data.height} <p className="text-[11px]">cm</p></span>
                             <span className="font-bold flex gap-1 text-slate-600 items-end">Weight: {data.weight} <p className="text-[11px]">kg</p></span>
                           </div>
                               </div>
-                            <div className="flex gap-5 justify-end items-center mb-2 px-5 ">
-                              <div className="flex gap-5 p-1 ">
+                            <div className="flex gap-3 sm:gap-5 justify-start lg:justify-end items-center mb-2 px-0 sm:px-5 ">
+                              <div className="flex gap-3 sm:gap-5 p-1 ">
                                 <div className="p-1 border rounded-full shadow-sm cursor-pointer hover:bg-slate-100" onClick={()=>closeFull()}>
                               <FileDown onClick={()=>handleDownload(data)} className="text-slate-800 cursor-pointer hover:text-slate-600  "/>
                                 </div>
@@ -250,7 +251,7 @@ export default function Historyitem({data}:any){
                             
                             
                           </div> 
-                          <div className="flex gap-2 justify-end mb-5 items-center">
+                          <div className="flex flex-wrap gap-2 justify-start sm:justify-end mb-5 items-center">
 
                               <p className="bg-[rgb(0,133,57)] p-1.5 rounded-full"></p>
                               <p className="text-[rgb(0,133,57)] font-bold text-[14px]">Normal</p>
@@ -259,7 +260,36 @@ export default function Historyitem({data}:any){
                               <p className="bg-[#D10000] p-1.5 rounded-full"></p>
                               <p className="text-[#D10000] font-bold text-[14px]">Risk</p>
                             </div>
-                             <div className="grid grid-cols-3  gap-4 text-sm text-slate-600">
+                             <div className="grid grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm text-slate-600 sm:hidden">
+                               {hasValue(data.pulse) && renderMetric('Pulse', 'pulse', data.pulse, 'time/min', { age: data.age })}
+                               {hasValue(data.triglycerides) && renderMetric('TG', 'triglycerides', data.triglycerides, 'mg/dL')}
+                               {hasValue(data.fbs) && renderMetric('FBS', 'fbs', data.fbs, 'mg/dL')}
+                               {hasValue(data.creatinine) && renderMetric('Cr', 'creatinine', data.creatinine, 'mg/dL')}
+                               {hasValue(data.cholesterol) && renderMetric('TC', 'cholesterol', data.cholesterol, 'mg/dL')}
+                               {hasValue(data.sgpt) && renderMetric('ALT', 'alanine', data.sgpt, 'U/L')}
+                               {hasValue(data.hdl) && renderMetric('HDL', 'hdl', data.hdl, 'mg/dL')}
+                               {hasValue(data.hemoglobin) && renderMetric('Hb', 'hemoglobin', data.hemoglobin, 'g/dL', { sex: data.gender?.toLowerCase() })}
+                               {hasValue(data.ldl) && renderMetric('LDL', 'ldl', data.ldl, 'mg/dL')}
+                               {hasValue(data.wbc) && renderMetric('WBC', 'wbc', data.wbc, 'cell/uL')}
+                               {hasValue(data.bmi) && renderMetric('BMI', 'bmi', data.bmi)}
+                               {hasValue(data.bloodPressure) && renderMetric('BP', 'blood pressure', data.bloodPressure,'mmHg')}
+                               {hasValue(data.platelets) && renderMetric('Plt', 'platelet', data.platelets, 'cell/uL')}
+                               {hasValue(data.temperature) && renderMetric('Temp', 'temperature', data.temperature, 'C')}
+                               {hasValue(data.heartRate) && renderMetric('HR', 'heart rate', data.heartRate, 'bpm', { age: data.age })}
+                               {hasValue(data.respiratoryRate) && renderMetric('RR', 'respiratory rate', data.respiratoryRate, 'min')}
+                               {hasValue(data.spo2) && renderMetric('SpO2', 'spo2', data.spo2, '%RA')}
+                               {hasValue(data.rbc) && renderMetric('RBC', 'rbc', data.rbc, 'cell/uL')}
+                               {hasValue(data.hematocrit) && renderMetric('Hct', 'hematocrit', data.hematocrit, 'cell/uL')}
+                               {hasValue(data.mcv) && renderMetric('MCV', 'mcv', data.mcv, 'cell/uL')}
+                               {hasValue(data.hba1c) && renderMetric('HbA1c', 'hba1c', data.hba1c, '%')}
+                               {hasValue(data.sgot) && renderMetric('SGOT', 'sgot', data.sgot)}
+                               {hasValue(data.alp) && renderMetric('ALP', 'alp', data.alp, 'cell/uL')}
+                               {hasValue(data.total_bilirubin) && renderMetric('TBil', 'total bilirubin', data.total_bilirubin)}
+                               {hasValue(data.albumin) && renderMetric('Albumin', 'albumin', data.albumin)}
+                               {hasValue(data.ggt) && renderMetric('GGT', 'ggt', data.ggt)}
+                               {hasValue(data.direct_bilirubin) && renderMetric('DBil', 'direct bilirubin', data.direct_bilirubin)}
+                              </div>
+                              <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 text-sm text-slate-600">
                                {hasValue(data.pulse) && renderMetric('Pulse', 'pulse', data.pulse, 'time/min', { age: data.age })}
                                {hasValue(data.triglycerides) && renderMetric('Triglyceride (TG)', 'triglycerides', data.triglycerides, 'mg/dL')}
                                {hasValue(data.fbs) && renderMetric('Fasting Blood Sugar (FBS)', 'fbs', data.fbs, 'mg/dL')}
@@ -297,24 +327,30 @@ export default function Historyitem({data}:any){
             )}
             {isFull && (
               <tr className="">
-                <td className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/60 p-6">
-                <div className="relative bg-white rounded-lg w-full max-w-10xl h-[90vh] overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none p-6">
-                  <div className=" flex px-4 py-1.5 bg-white justify-between items-start border-b ">
-                    <h2 className="text-xl font-bold">Record Details, {data.dateFile ? formatDate(data.dateFile) : 'N/A'}</h2>
-                    <div className="flex gap-5 justify-end px-10 py-1 items-center mb-2 ">
+                <td className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/60 p-3 sm:p-6">
+                <div className="relative bg-white rounded-lg w-full max-w-10xl h-[90vh] overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none p-4 sm:p-6">
+                  <button
+                    onClick={closeFull}
+                    className="absolute right-3 top-5 z-10 rounded-full bg-white px-3 py-1 text-sm font-semibold text-red-500 hover:bg-slate-50 sm:right-5 sm:top-5"
+                  >
+                    <span className="flex items-center gap-2">
+                      <X className="text-red-500" size={18} />
+                      Close
+                    </span>
+                  </button>
+                  <div className="flex flex-col sm:flex-row px-2 sm:px-4 py-1.5 bg-white justify-between items-start gap-4 border-b pr-24 sm:pr-28">
+                    <h2 className="text-lg sm:text-xl font-bold">Record Details, {data.dateFile ? formatDate(data.dateFile) : 'N/A'}</h2>
+                    <div className="flex gap-3 sm:gap-5 justify-end px-0 sm:px-10 py-1 items-center mb-2 ">
                      <div className="rounded-full p-1 hover:bg-slate-100 cursor-pointer"> 
                       <FileDown onClick={()=>handleDownload(data)} className="text-slate-800 cursor-pointer"/>                            </div>
                      </div>
-                    <div className="flex gap-2 cursor-pointer  items-center justify-center">
-                      <button onClick={closeFull} className="px-3 py-1 rounded  text-red-500 items-center flex cursor-pointer gap-2"><X className="text-red-500" size={20}/>Close</button>
-                    </div>
                   </div>
                   
                   <div className="mt-4 text-slate-700">
                     
                     <h4 className="font-semibold">Doctor : {data.provide || 'N/A'}</h4>
                     <p><strong>Patient name:</strong> {data.fullName || 'N/A'}</p>
-                    <div className="grid grid-cols-2 gap-6 mt-4 text-sm text-slate-700">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4 text-sm text-slate-700">
                       <div className="">
                         
                         {hasValue(data.pulse) && renderMetric('Pulse', 'pulse', data.pulse, 'time/min', { age: data.age })}

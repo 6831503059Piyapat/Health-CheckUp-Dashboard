@@ -416,12 +416,12 @@ export default function UploadPage() {
         </div>
       <div className="flex min-h-screen bg-slate-50">
         <Navbar />
-        <main className="ml-64 flex-1 flex items-center justify-center">
-          <div className="text-center space-y-4">
+        <main className="flex-1 md:ml-64 flex items-center justify-center px-4 sm:px-6 py-10 sm:py-16">
+          <div className="text-center space-y-4 max-w-md">
             <CheckCircle className="mx-auto text-green-500" size={64} />
             <h2 className="text-2xl font-bold text-slate-800">Saved successfully</h2>
             <p className="text-slate-500">Your health data has been recorded.</p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button onClick={() => { setForm(emptyForm); setFile(null); setExtractedText(''); setStep('upload'); setSaveOk(false); }} className="px-5 py-2 rounded-lg border border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-100">Upload another</button>
               <button onClick={() => router.push('/dashboard')} className="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">Go to Dashboard</button>
             </div>
@@ -434,38 +434,38 @@ export default function UploadPage() {
 
   return (
     <>
-    <div className="sticky top-0">
+    <div className="sticky top-0 z-50">
         <AuthNavbar/>
       </div>
     <div className="flex min-h-screen bg-slate-50 text-slate-900">
       <Navbar />
-      <main className="ml-64 flex-1 p-8 overflow-y-auto">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-2xl font-bold text-slate-800 mb-1">Upload Health Report</h1>
-          <p className="text-slate-500 text-sm mb-6">Upload a medical report PDF or image. AI will extract the data for you to review before saving.</p>
+      <main className="flex-1 md:ml-64 px-4 sm:px-6 py-6 sm:py-8  overflow-y-auto">
+        <div className="max-w-5xl mx-auto w-full">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2 mt-5">Upload Health Report</h1>
+          <p className="text-slate-500 text-sm mb-6 max-w-2xl">Upload a medical report PDF or image. AI will extract the data for you to review before saving.</p>
 
           {/* Step indicator */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className={`flex items-center gap-2 text-sm font-semibold ${step === 'upload' ? 'text-blue-600' : 'text-slate-400'}`}>
+          <div className="flex items-center gap-2 sm:gap-3 mb-8">
+            <div className={`flex items-center gap-2 text-xs sm:text-sm font-semibold ${step === 'upload' ? 'text-blue-600' : 'text-slate-400'}`}>
               <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step === 'upload' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>1</span>
-              Upload File
+              <span className="hidden sm:inline">Upload File</span>
             </div>
             <div className="flex-1 h-px bg-slate-200" />
-            <div className={`flex items-center gap-2 text-sm font-semibold ${step === 'review' ? 'text-blue-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 text-xs sm:text-sm font-semibold ${step === 'review' ? 'text-blue-600' : 'text-slate-400'}`}>
               <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step === 'review' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>2</span>
-              Review & Save
+              <span className="hidden sm:inline">Review & Save</span>
             </div>
           </div>
 
           {step === 'upload' && (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 space-y-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-8 space-y-6">
               {/* Drop zone */}
               <div
                 onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`border-2 border-dashed rounded-xl p-12 flex flex-col items-center justify-center cursor-pointer transition-colors ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'}`}
+                className={`border-2 border-dashed rounded-xl p-8 sm:p-12 flex flex-col items-center justify-center cursor-pointer transition-colors text-center ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'}`}
               >
                 <UploadCloud size={48} className={isDragging ? 'text-blue-500' : 'text-slate-400'} />
                 <p className="mt-4 font-semibold text-slate-700">Drag & drop your file here</p>
@@ -475,7 +475,7 @@ export default function UploadPage() {
 
               {/* Selected file */}
               {file && (
-                <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3">
+                <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 min-w-0">
                   <FileText size={20} className="text-blue-500 shrink-0" />
                   <span className="text-sm text-slate-700 font-medium flex-1 truncate">{file.name}</span>
                   <span className="text-xs text-slate-400">{(file.size / 1024).toFixed(0)} KB</span>
@@ -499,16 +499,16 @@ export default function UploadPage() {
             <div className="space-y-6">
               {/* AI extracted text */}
               {extractedText && (
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6">
                   <h2 className="font-semibold text-slate-700 mb-3">AI Extracted Text</h2>
                   <pre className="text-xs text-slate-600 bg-slate-50 rounded-lg p-4 whitespace-pre-wrap max-h-48 overflow-y-auto border border-slate-100">{extractedText}</pre>
                 </div>
               )}
 
               {/* Form */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 space-y-6">
                 <h2 className="font-semibold text-slate-700">Patient Information</h2>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {field('Full Name', 'fullName')}
                   {field('Gender', 'gender')}
                   {field('Age', 'age')}
@@ -520,9 +520,9 @@ export default function UploadPage() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 space-y-6">
                 <h2 className="font-semibold text-slate-700">Vital Signs</h2>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {field('Pulse (bpm)', 'pulse')}
                   {field('Temperature (°C)', 'temperature')}
                   {field('Heart Rate (bpm)', 'heartRate')}
@@ -532,9 +532,9 @@ export default function UploadPage() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 space-y-6">
                 <h2 className="font-semibold text-slate-700">Blood Tests</h2>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {field('FBS (mg/dL)', 'fbs')}
                   {field('Cholesterol (mg/dL)', 'cholesterol')}
                   {field('HDL (mg/dL)', 'hdl')}
@@ -558,7 +558,7 @@ export default function UploadPage() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-3">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 space-y-3">
                 <h2 className="font-semibold text-slate-700">Medical History</h2>
                 <textarea
                   value={form.history}
@@ -570,8 +570,8 @@ export default function UploadPage() {
               </div>
 
               {/* AI Suggest */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-3">
-                <div className="flex items-center justify-between">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <h2 className="font-semibold text-slate-700">AI Health Suggestion</h2>
                   <button
                     onClick={handleSuggest}
@@ -590,7 +590,7 @@ export default function UploadPage() {
                 )}
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button onClick={() => setStep('upload')} className="px-6 py-3 rounded-xl border border-slate-200 text-sm font-medium hover:bg-slate-100">
                   Back
                 </button>

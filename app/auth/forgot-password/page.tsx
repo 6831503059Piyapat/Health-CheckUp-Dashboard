@@ -118,20 +118,20 @@ export default function ForgotPassword() {
   return (
     <>
     <AuthNavbar/>
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-3 sm:p-4">
     
-      <main className="flex-grow flex flex-col items-center justify-center px-4 py-12">
+      <main className="w-full max-w-2xl flex-grow flex flex-col items-center justify-center px-0 sm:px-4 py-8 sm:py-12">
       
         {/* Login Card */}
-        <div className="bg-white p-8  shadow shadow-xl w-full max-w-[500px]">
-          <h1 className="text-center text-[#1E40AF] mb-5 text-3xl font-bold tracking-tight mb-2">
+        <div className="bg-white p-5 sm:p-8 shadow shadow-xl w-full max-w-[500px] rounded-xl">
+          <h1 className="text-center text-[#1E40AF] mb-5 text-2xl sm:text-3xl font-bold tracking-tight mb-2">
           {step === "reset" && "Reset Password"}
           {step === "email" && "Forgot Password"}
             
           
           </h1>
           {step === "email" && (
-          <h1 className='text-slate-600 mb-2'>
+          <h1 className='text-slate-600 mb-2 text-sm sm:text-base'>
             Enter your email to receive a reset code
           </h1>
           )}

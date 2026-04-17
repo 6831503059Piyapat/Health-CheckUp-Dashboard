@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft,ChevronDown,ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 import { Skeleton } from '@heroui/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,7 @@ export default function AuthNavbar({ isLoading, userData }: Props) {
  const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(false);
   const [profileData, setProfileData] = useState<any>(null);
   const [showLogoutCard, setShowLogoutCard] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const profileRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(()=>{
@@ -45,15 +46,23 @@ export default function AuthNavbar({ isLoading, userData }: Props) {
       },[pathname])
   return (
     <div className="w-full bg-white border-b border-slate-100  font-sans">
-      <div className="w-full px-5 mx-auto py-3 flex items-center justify-between">
-        <Link href="/dashboard" className="flex items-center gap-3 p-2 ">
+      <div className="w-full px-4 sm:px-5 mx-auto py-2 sm:py-3 flex items-center justify-between gap-3">
+        <Link href="/dashboard" className="flex items-center gap-3 p-2 min-w-0">
           <div className="bg-blue-600 p-2 rounded-md text-white">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M2 12L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </div>
-          <span className="font-bold text-blue-800">LifeMarkers</span>
+          <span className="font-bold text-blue-800 text-sm sm:text-base truncate">LifeMarkers</span>
         </Link>
+        <button
+          type="button"
+          className="sm:hidden inline-flex items-center justify-center rounded-md p-2 text-slate-700 hover:bg-slate-100"
+          aria-label="Open menu"
+          onClick={() => setShowMobileMenu(true)}
+        >
+          <Menu size={20} />
+        </button>
       { pathname !== '/auth/login' && pathname !== '/auth/register' && pathname !== '/' && pathname != '/auth/forgot-password' ? (
-        <div className="px-4 cursor-default relative" ref={profileRef}>
+        <div className="hidden sm:flex px-4 cursor-default relative" ref={profileRef}>
           <div
             role="button"
             tabIndex={0}
@@ -92,23 +101,57 @@ export default function AuthNavbar({ isLoading, userData }: Props) {
         </div>
       ):(
         <>
-          <div className="flex items-center gap-4">
-          <div className="gap-4 flex">
-            <Link href="/auth/login" className="text-sm text-slate-600 hover:text-slate-800 inline-flex items-center gap-2">Login</Link>
-            <Link href="/auth/register" className="bg-blue-700 p-2 rounded-md text-sm text-slate-100 hover:bg-blue-800 inline-flex items-center gap-2">Get Started</Link>
-          </div>
-         
-        </div>
-          {/* Logout card shown on click — kept mounted for smooth transitions */}
-          <div
-            className={`absolute right-0 mt-5 w-50 bg-white border rounded-md shadow-lg z-50 transform transition-all duration-150 ease-in-out origin-top-right
-              ${showLogoutCard ? 'opacity-100 translate-y-1 scale-100 pointer-events-auto' : 'opacity-0 translate-y-0 scale-100 pointer-events-none'}`}
-            aria-hidden={!showLogoutCard}
-          >
-           
+          <div className="hidden sm:flex items-center gap-4">
+            <div className="gap-4 flex">
+              <Link href="/auth/login" className="text-sm text-slate-600 hover:text-slate-800 inline-flex items-center gap-2">Login</Link>
+              <Link href="/auth/register" className="bg-blue-700 p-2 rounded-md text-sm text-slate-100 hover:bg-blue-800 inline-flex items-center gap-2">Get Started</Link>
+            </div>
           </div>
           </>
        )}
+
+      {showMobileMenu && (
+        <div className="fixed inset-0 z-50 bg-black/40 sm:hidden z-52">
+          <div className="absolute right-0 top-0 h-full w-72 max-w-[85vw] bg-white p-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Menu</p>
+                <h3 className="text-base font-bold text-slate-900">LifeMarkers</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowMobileMenu(false)}
+                className="rounded-md p-2 hover:bg-slate-100 text-slate-700"
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {pathname !== '/auth/login' && pathname !== '/auth/register' && pathname !== '/' && pathname !== '/auth/forgot-password' ? (
+              <div className="space-y-4">
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400 mb-2">Account</p>
+                  <p className="font-semibold text-slate-900 truncate">{isLoadingProfile ? 'Loading…' : profileData?.name || 'User'}</p>
+                  <p className="text-sm text-slate-500 truncate">{isLoadingProfile ? 'Loading…' : profileData?.email || ''}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { localStorage.removeItem('token'); router.push('/auth/login'); setShowMobileMenu(false); }}
+                  className="w-full rounded-xl bg-red-50 px-4 py-3 text-left text-sm font-semibold text-red-600"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <Link href="/auth/login" onClick={() => setShowMobileMenu(false)} className="rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Login</Link>
+                <Link href="/auth/register" onClick={() => setShowMobileMenu(false)} className="rounded-xl bg-blue-700 px-4 py-3 text-sm font-semibold text-white">Get Started</Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       
 
