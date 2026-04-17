@@ -327,11 +327,11 @@ export default function Historyitem({data}:any){
             )}
             {isFull && (
               <tr className="">
-                <td className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/60 p-3 sm:p-6">
-                <div className="relative bg-white rounded-lg w-full max-w-10xl h-[90vh] overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none p-4 sm:p-6">
+                <td className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/60 p-1 sm:p-6">
+                <div className="relative bg-white border border-10 rounded-lg w-full max-w-10xl h-[90vh] overflow-y-auto [ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:display-none p-4 sm:p-6">
                   <button
                     onClick={closeFull}
-                    className="absolute right-3 top-5 z-10 rounded-full bg-white px-3 py-1 text-sm font-semibold text-red-500 hover:bg-slate-50 sm:right-5 sm:top-5"
+                    className="absolute right-3 top-5 z-10 rounded-full cursor-pointer bg-white px-3 py-1 text-sm font-semibold text-red-500  sm:right-5 sm:top-5"
                   >
                     <span className="flex items-center gap-2">
                       <X className="text-red-500" size={18} />
