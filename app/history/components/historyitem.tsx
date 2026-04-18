@@ -176,9 +176,8 @@ export default function Historyitem({data}:any){
       const res = await fetch(`${process.env.NEXT_PUBLIC_PORT}/pdf`,{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data:data}),
+        body: JSON.stringify(data),
       });
-  
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
   
