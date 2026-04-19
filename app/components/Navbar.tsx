@@ -51,7 +51,7 @@ export default function Navbar() {
         <button
           aria-label="Open sidebar"
           onClick={() => setShowMobileMenu(true)}
-          className="fixed top-18 left-4 z-49 p-2 bg-white rounded-md shadow-md sm:hidden"
+          className="fixed top-23 left-4 z-49 p-2 bg-white rounded-md shadow-md sm:hidden"
         >
           <Menu size={18} className="text-black"/>
         </button>

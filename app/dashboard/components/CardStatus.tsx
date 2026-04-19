@@ -80,7 +80,7 @@ const CardStatus: React.FC<Props> = ({ typeData, setTypeData, dataFetchData,setI
 
   function typeDataRisk(typeDisease?: string) {
     if (!dataFetchData || dataFetchData.length === 0) return 'No data';
-    const d = dataFetchData[0]?.suggestionData;
+    const d = dataFetchData[dataFetchData.length - 1]?.suggestionData;
     switch (typeDisease) {
       case 'Body Mass Index':
         return d?.bmi_suggestion?.Risk_of_disease || 'No data';
