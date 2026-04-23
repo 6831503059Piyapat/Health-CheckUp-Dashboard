@@ -24,9 +24,11 @@ import {
 import ChartLanding from "./components/ChartLanding";
 import ChartLandingPre from "./components/ChartLadingPre";
 
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT } },
 };
 
 const stagger = {
@@ -147,7 +149,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.2 }}
             className="relative"
           >
             <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-blue-500/20 via-cyan-400/20 to-transparent blur-2xl" />
