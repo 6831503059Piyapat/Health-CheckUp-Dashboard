@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -10,7 +11,6 @@ import {
   Check,
   ChevronDown,
   FileUp,
-  HeartPulse,
   LineChart,
   Lock,
   Quote,
@@ -52,13 +52,16 @@ export default function Home() {
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/70 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 lg:px-10">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 shadow-lg shadow-blue-500/30">
-              <HeartPulse className="h-5 w-5 text-white" strokeWidth={2.5} />
-            </div>
-            <span className="text-[20px] font-bold tracking-tight text-blue-800">
-              LifeMarkers
-            </span>
+          <Link href="/" className="flex items-center" aria-label="LifeMarkers home">
+            <Image
+              src="/LifeMaker.png"
+              alt="LifeMarkers"
+              width={160}
+              height={40}
+              priority
+              sizes="160px"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex">
@@ -725,11 +728,15 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
           <div className="grid gap-10 md:grid-cols-4">
             <div className="md:col-span-2">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500">
-                  <HeartPulse className="h-5 w-5 text-white" strokeWidth={2.5} />
-                </div>
-                <span className="text-[20px] font-bold tracking-tight text-blue-800">LifeMarkers</span>
+              <Link href="/" className="flex items-center" aria-label="LifeMarkers home">
+                <Image
+                  src="/LifeMaker.png"
+                  alt="LifeMarkers"
+                  width={180}
+                  height={48}
+                  sizes="180px"
+                  className="h-11 w-auto object-contain"
+                />
               </Link>
               <p className="mt-4 max-w-sm text-sm text-slate-600">
                 The smartest way to understand your health history. Built for patients, loved by
