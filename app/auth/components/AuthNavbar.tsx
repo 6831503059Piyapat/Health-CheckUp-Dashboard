@@ -46,11 +46,17 @@ export default function AuthNavbar({ isLoading, userData }: Props) {
       },[pathname])
   return (
     <div className="w-full bg-white border-b border-slate-100  font-sans">
-      <div className="w-full px-4 sm:px-5 mx-auto py-2 sm:py-3 flex items-center justify-between gap-3">
-        <Link href="/dashboard" className="flex items-center min-w-0">
-          
-            <Image src="/LifeMarkerLogo.png" alt="LifeMarkers Logo" className='w-full' width={100} height={30} />
-          
+      <div className="w-full px-5 mx-auto py-3 flex items-center justify-between">
+        <Link href="/dashboard" className="flex items-center p-2" aria-label="LifeMarkers home">
+          <Image
+            src="/LifeMaker.png"
+            alt="LifeMarkers"
+            width={160}
+            height={40}
+            priority
+            sizes="160px"
+            className="h-10 w-auto object-contain"
+          />
         </Link>
         <button
           type="button"
